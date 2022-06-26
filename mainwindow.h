@@ -2,7 +2,8 @@
 #define MAINWINDOW_H_SENTRY
 
 #include "dictionarywidget.h"
-#include <QMainWindgow>
+#include <QMainWindow>
+#include <QItemSelection>
 
 class MainWindow: public QMainWindow
 {
@@ -21,6 +22,6 @@ private:
 	QAction *openAct;
 	QAction *saveAct;
 	QAction *exitAct;
-}
+};
 
 #endif

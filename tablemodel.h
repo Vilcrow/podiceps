@@ -1,38 +1,38 @@
-#ifndef TABELMODEL_H_SENTRY
+#ifndef TABLEMODEL_H_SENTRY
 #define TABLEMODEL_H_SENTRY
 
 #include <QAbstractTableModel>
+#include <QModelIndex>
 #include <QList>
 #include <QString>
 
-class Word {
+struct Word {
 	QString original;
 	QString translation;
-	QString status;
+	QString status = QObject::tr("new");
 	QString date;
-public:
-	Word(const QString originalArg, const QString translationArg,
-		 const QString statusArg = tr("new"));
-	inline QString& getOriginal() const { return original; }
-	inline QString& getTranslation() const { return translation; }
-	inline QString& getStatus() const { return status; }
-	inline QString& getDate() const { return date; }
-	bool operator==(const Word &other) const;
+	bool operator==(const Word &other) const
+	{
+		return original    == other.original &&
+			   translation == other.translation &&
+			   status      == other.status &&
+			   date        == other.date;
+	}
 };
 
 inline QDataStream &operator<<(QDataStream &stream, const Word &word)
 {
-	return stream << word.getOriginal() << word.getTranslation()
-				  << word.getStatus() << word.getDate();
+	return stream << word.original << word.translation
+				  << word.status << word.date;
 }
 
 inline QDataStream &operator>>(QDataStream &stream, Word &word)
 {
-	return stream >> word.getOriginal() >> word.getTranslation()
-				  >> word.getStatus() >> word.getDate();
+	return stream >> word.original >> word.translation
+				  >> word.status >> word.date;
 }
 
-class TableModel : public QAbstractTabelModel {
+class TableModel : public QAbstractTableModel {
 	Q_OBJECT
 public:
 	TableModel(QObject *parent = nullptr);

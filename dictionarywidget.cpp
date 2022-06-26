@@ -1,14 +1,17 @@
+#include <QMessageBox>
 #include "dictionarywidget.h"
+#include "mainwindow.h"
 
 DictionaryWidget::DictionaryWidget()
 {
-	tableModel = new TableModel();
-	mainLayout = new QVBoxLayout();
-	mainLayout->addWidget(tableModel);
+	table = new TableModel(this);
+	setupTable();
+	mainLayout = new QVBoxLayout(this);
+	mainLayout->addWidget(tableView);
 	createLineEditWidgets();
-	mainLayout->setLayout(gridLayout);
+	mainLayout->addLayout(gridLayout);
 	createButtons();
-	mainLayout->setLayout(buttonsLayout);
+	mainLayout->addLayout(buttonsLayout);
 }
 
 void DictionaryWidget::createLineEditWidgets()
@@ -36,9 +39,49 @@ void DictionaryWidget::createButtons()
 {
 	buttonsLayout = new QHBoxLayout();
 	addButton = new QPushButton(tr("Add"));
-	buttonLayout->addWidget(addButton);
+	buttonsLayout->addWidget(addButton);
 	editButton = new QPushButton(tr("Edit"));
-	buttonLayout->addWidget(editButton);
-	quitButton = new QPushButton(tr("Quit"));
-	buttonLayout->addWidget(quitButton);
+	buttonsLayout->addWidget(editButton);
+}
+
+void DictionaryWidget::setupTable()
+{
+	proxyModel = new QSortFilterProxyModel(this);
+	proxyModel->setSourceModel(table);
+	proxyModel->setFilterRegExp(QRegExp("*", Qt::CaseInsensitive));	//?????
+	proxyModel->setFilterKeyColumn(0);
+	tableView = new QTableView;
+	tableView->setModel(proxyModel);
+	tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+	tableView->horizontalHeader()->setStretchLastSection(true);
+	tableView->verticalHeader()->hide();
+	tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+	tableView->setSortingEnabled(true);
+}
+
+void DictionaryWidget::readFromFile(const QString &fileName)
+{
+	QFile file(fileName);
+	if(!file.open(QIODevice::ReadOnly)) {
+		QMessageBox::information(this, tr("Unable to open file"), file.errorString());
+		return;
+	}
+	QList<Word> words;
+	QDataStream in(&file);
+	in >> words;
+	if(words.isEmpty()) {
+		QMessageBox::information(this, tr("No words in file"),
+			tr("The file you are attempting to open contains no words."));
+	}
+	else {
+		for(const auto &word: qAsConst(words))
+			addEntry(word.original, word.translation, word.status, word.date);
+	}
+}
+
+void DictionaryWidget::addEntry(QString originalArg, QString translationArg,
+								QString statusArg, QString dateArg)
+{
+
 }
