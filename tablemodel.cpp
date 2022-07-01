@@ -98,6 +98,8 @@ bool TableModel::setData(const QModelIndex &index, const QVariant &value, int ro
 			word.status = value.toString();
 		else if(index.column() == 3)
 			word.date = value.toString();
+		else
+			return false;
 		words.replace(row, word);
 		emit dataChanged(index, index, {role});
 		return true;

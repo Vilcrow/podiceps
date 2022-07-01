@@ -1,17 +1,14 @@
 #include <QMessageBox>
+#include <QDateTime>
 #include "dictionarywidget.h"
 #include "mainwindow.h"
 
 DictionaryWidget::DictionaryWidget()
 {
-	table = new TableModel(this);
-	setupTable();
 	mainLayout = new QVBoxLayout(this);
-	mainLayout->addWidget(tableView);
+	setupTable();
 	createLineEditWidgets();
-	mainLayout->addLayout(gridLayout);
 	createButtons();
-	mainLayout->addLayout(buttonsLayout);
 }
 
 void DictionaryWidget::createLineEditWidgets()
@@ -33,19 +30,24 @@ void DictionaryWidget::createLineEditWidgets()
 	gridLayout->addWidget(translationLineEdit, 1, 1, Qt::AlignLeft);
 	gridLayout->addWidget(statusLineEdit, 1, 2, Qt::AlignLeft);
 	gridLayout->addWidget(dateLineEdit, 1, 3, Qt::AlignLeft);
+	mainLayout->addLayout(gridLayout);
 }
 
 void DictionaryWidget::createButtons()
 {
 	buttonsLayout = new QHBoxLayout();
 	addButton = new QPushButton(tr("Add"));
+	connect(addButton, &QAbstractButton::clicked,
+			this, &DictionaryWidget::addEntrySlot);
 	buttonsLayout->addWidget(addButton);
 	editButton = new QPushButton(tr("Edit"));
 	buttonsLayout->addWidget(editButton);
+	mainLayout->addLayout(buttonsLayout);
 }
 
 void DictionaryWidget::setupTable()
 {
+	table = new TableModel(this);
 	proxyModel = new QSortFilterProxyModel(this);
 	proxyModel->setSourceModel(table);
 	proxyModel->setFilterRegExp(QRegExp("*", Qt::CaseInsensitive));	//?????
@@ -58,6 +60,7 @@ void DictionaryWidget::setupTable()
 	tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 	tableView->setSortingEnabled(true);
+	mainLayout->addWidget(tableView);
 }
 
 void DictionaryWidget::readFromFile(const QString &fileName)
@@ -80,8 +83,38 @@ void DictionaryWidget::readFromFile(const QString &fileName)
 	}
 }
 
-void DictionaryWidget::addEntry(QString originalArg, QString translationArg,
-								QString statusArg, QString dateArg)
+void DictionaryWidget::addEntry(QString original, QString translation,
+								QString status, QString date)
 {
+	if(!table->getWords().contains({ original, translation, status, date })) {
+		table->insertRows(0, 1, QModelIndex());
+		QModelIndex index = table->index(0, 0, QModelIndex());
+		table->setData(index, original, Qt::EditRole);
+		index = table->index(0, 1, QModelIndex());
+		table->setData(index, translation, Qt::EditRole);
+		index = table->index(0, 2, QModelIndex());
+		table->setData(index, status, Qt::EditRole);
+		index = table->index(0, 3, QModelIndex());
+		table->setData(index, date, Qt::EditRole);
+	}
+	else {
+		QMessageBox::information(this, tr("Duplicate word"),
+							tr("The word \"%1\" already exists.").arg(original));
+	}
+}
 
+void DictionaryWidget::addEntrySlot()
+{
+	QString original = originalLineEdit->text();
+	QString translation = translationLineEdit->text();
+	QString status = statusLineEdit->text();
+	QString date = QDateTime::currentDateTime().toString("dd-MM-yyyy");
+	addEntry(original, translation, status, date);
+}
+
+void DictionaryWidget::editEntry()
+{
+	QString newWord = "333";
+	QModelIndex index = table->index(0, 1, QModelIndex());
+	table->setData(index, newWord, Qt::EditRole);
 }

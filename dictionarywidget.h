@@ -17,8 +17,11 @@ class DictionaryWidget : public QWidget {
 public:
 	DictionaryWidget();
 	void readFromFile(const QString &fileName);
-	void addEntry(QString originalArg, QString translationArg,
-					QString statusArg, QString dateArg);
+	void addEntry(QString original, QString translation,
+					QString status, QString date);
+private slots:
+	void addEntrySlot();
+	void editEntry();
 private:
 	TableModel *table;
 	QLabel *originalLabel;
@@ -37,6 +40,7 @@ private:
 	QHBoxLayout *buttonsLayout;
 	QSortFilterProxyModel *proxyModel;
 	QTableView *tableView;
+
 	void createLineEditWidgets();
 	void createButtons();
 	void setupTable();
