@@ -1,3 +1,22 @@
+/*
+podiceps2 - pocket dictionary
+
+Copyright (C) 2022 S.V.I 'Vilcrow', <vilcrow.net>
+--------------------------------------------------------------------------------
+LICENCE:
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+--------------------------------------------------------------------------------
+*/
+
 #include <QMessageBox>
 #include <QDateTime>
 #include "dictionarywidget.h"
@@ -21,15 +40,16 @@ void DictionaryWidget::createLineEditWidgets()
 	translationLineEdit = new QLineEdit();
 	statusLineEdit = new QLineEdit();
 	dateLineEdit = new QLineEdit();
+	dateLineEdit->setReadOnly(true);
 	gridLayout = new QGridLayout();
-	gridLayout->addWidget(originalLabel, 0, 0, Qt::AlignLeft);
-	gridLayout->addWidget(translationLabel, 0, 1, Qt::AlignLeft);
-	gridLayout->addWidget(statusLabel, 0, 2, Qt::AlignLeft);
-	gridLayout->addWidget(dateLabel, 0, 3, Qt::AlignLeft);
-	gridLayout->addWidget(originalLineEdit, 1, 0, Qt::AlignLeft);
-	gridLayout->addWidget(translationLineEdit, 1, 1, Qt::AlignLeft);
-	gridLayout->addWidget(statusLineEdit, 1, 2, Qt::AlignLeft);
-	gridLayout->addWidget(dateLineEdit, 1, 3, Qt::AlignLeft);
+	gridLayout->addWidget(originalLabel, 0, 0, Qt::AlignCenter);
+	gridLayout->addWidget(translationLabel, 0, 1, Qt::AlignCenter);
+	gridLayout->addWidget(statusLabel, 0, 2, Qt::AlignCenter);
+	gridLayout->addWidget(dateLabel, 0, 3, Qt::AlignCenter);
+	gridLayout->addWidget(originalLineEdit, 1, 0);
+	gridLayout->addWidget(translationLineEdit, 1, 1);
+	gridLayout->addWidget(statusLineEdit, 1, 2);
+	gridLayout->addWidget(dateLineEdit, 1, 3);
 	mainLayout->addLayout(gridLayout);
 }
 
@@ -50,7 +70,6 @@ void DictionaryWidget::setupTable()
 	table = new TableModel(this);
 	proxyModel = new QSortFilterProxyModel(this);
 	proxyModel->setSourceModel(table);
-	proxyModel->setFilterRegExp(QRegExp("*", Qt::CaseInsensitive));	//?????
 	proxyModel->setFilterKeyColumn(0);
 	tableView = new QTableView;
 	tableView->setModel(proxyModel);
@@ -81,6 +100,17 @@ void DictionaryWidget::readFromFile(const QString &fileName)
 		for(const auto &word: qAsConst(words))
 			addEntry(word.original, word.translation, word.status, word.date);
 	}
+}
+
+void DictionaryWidget::writeToFile(const QString &fileName)
+{
+	QFile file(fileName);
+	if(!file.open(QIODevice::WriteOnly)) {
+		QMessageBox::information(this, tr("Unable to open file"), file.errorString());
+		return;
+	}
+	QDataStream out(&file);
+	out << table->getWords();
 }
 
 void DictionaryWidget::addEntry(QString original, QString translation,

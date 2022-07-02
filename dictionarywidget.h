@@ -1,3 +1,22 @@
+/*
+podiceps2 - pocket dictionary
+
+Copyright (C) 2022 S.V.I 'Vilcrow', <vilcrow.net>
+--------------------------------------------------------------------------------
+LICENCE:
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+--------------------------------------------------------------------------------
+*/
+
 #ifndef DICTIONARYWIDGET_H_SENTRY
 #define DICTIONARYWIDGET_H_SENTRY
 
@@ -17,6 +36,7 @@ class DictionaryWidget : public QWidget {
 public:
 	DictionaryWidget();
 	void readFromFile(const QString &fileName);
+	void writeToFile(const QString &fileName);
 	void addEntry(QString original, QString translation,
 					QString status, QString date);
 private slots:
@@ -24,6 +44,7 @@ private slots:
 	void editEntry();
 private:
 	TableModel *table;
+	QTableView *tableView;
 	QLabel *originalLabel;
 	QLabel *translationLabel;
 	QLabel *statusLabel;
@@ -39,7 +60,6 @@ private:
 	QGridLayout *gridLayout;
 	QHBoxLayout *buttonsLayout;
 	QSortFilterProxyModel *proxyModel;
-	QTableView *tableView;
 
 	void createLineEditWidgets();
 	void createButtons();
