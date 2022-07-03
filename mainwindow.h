@@ -23,6 +23,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "dictionarywidget.h"
 #include <QMainWindow>
 #include <QItemSelection>
+#include <QStatusBar>
 
 class MainWindow: public QMainWindow
 {
@@ -30,17 +31,26 @@ class MainWindow: public QMainWindow
 public:
 	MainWindow();
 private slots:
-	void updateActions(const QItemSelection &selection);
+	//void updateActions(const QItemSelection &selection);
 	void openFile();
 	void saveFile();
+	void showMessage(const QString &msg);
+	void openStatistics();
+	void openHelp();
+	void openAbout();
 private:
 	void createMenus();
 
 	DictionaryWidget *dictWidget;
+	QStatusBar *statusBar;
 	QMenu *fileMenu;
 	QAction *openAct;
 	QAction *saveAct;
 	QAction *exitAct;
+	QMenu *toolsMenu;
+	QAction *openStatisticsAct;
+	QAction *openHelpAct;
+	QAction *openAboutAct;
 };
 
 #endif

@@ -41,16 +41,16 @@ void DictionaryWidget::createLineEditWidgets()
 	statusLineEdit = new QLineEdit();
 	dateLineEdit = new QLineEdit();
 	dateLineEdit->setReadOnly(true);
-	gridLayout = new QGridLayout();
-	gridLayout->addWidget(originalLabel, 0, 0, Qt::AlignCenter);
-	gridLayout->addWidget(translationLabel, 0, 1, Qt::AlignCenter);
-	gridLayout->addWidget(statusLabel, 0, 2, Qt::AlignCenter);
-	gridLayout->addWidget(dateLabel, 0, 3, Qt::AlignCenter);
-	gridLayout->addWidget(originalLineEdit, 1, 0);
-	gridLayout->addWidget(translationLineEdit, 1, 1);
-	gridLayout->addWidget(statusLineEdit, 1, 2);
-	gridLayout->addWidget(dateLineEdit, 1, 3);
-	mainLayout->addLayout(gridLayout);
+	inputLayout = new QGridLayout();
+	inputLayout->addWidget(originalLabel, 0, 0, Qt::AlignCenter);
+	inputLayout->addWidget(translationLabel, 0, 1, Qt::AlignCenter);
+	inputLayout->addWidget(statusLabel, 0, 2, Qt::AlignCenter);
+	inputLayout->addWidget(dateLabel, 0, 3, Qt::AlignCenter);
+	inputLayout->addWidget(originalLineEdit, 1, 0);
+	inputLayout->addWidget(translationLineEdit, 1, 1);
+	inputLayout->addWidget(statusLineEdit, 1, 2);
+	inputLayout->addWidget(dateLineEdit, 1, 3);
+	mainLayout->addLayout(inputLayout);
 }
 
 void DictionaryWidget::createButtons()
@@ -61,7 +61,18 @@ void DictionaryWidget::createButtons()
 			this, &DictionaryWidget::addEntrySlot);
 	buttonsLayout->addWidget(addButton);
 	editButton = new QPushButton(tr("Edit"));
+	connect(editButton, &QAbstractButton::clicked,
+			this, &DictionaryWidget::editEntry);
 	buttonsLayout->addWidget(editButton);
+	findButton = new QPushButton(tr("Find"));
+	connect(addButton, &QAbstractButton::clicked,
+			this, &DictionaryWidget::findEntry);
+	buttonsLayout->addWidget(findButton);
+	deleteButton = new QPushButton(tr("Delete"));
+	connect(deleteButton, &QAbstractButton::clicked,
+			this, &DictionaryWidget::removeEntry);
+	//deleteButton->setEnabled(false);
+	buttonsLayout->addWidget(deleteButton);
 	mainLayout->addLayout(buttonsLayout);
 }
 
@@ -75,6 +86,10 @@ void DictionaryWidget::setupTable()
 	tableView->setModel(proxyModel);
 	tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 	tableView->horizontalHeader()->setStretchLastSection(true);
+	tableView->horizontalHeader()->setMinimumSectionSize(100);
+	tableView->setColumnWidth(0, 150);
+	tableView->setColumnWidth(1, 150);
+	tableView->setColumnWidth(2, 100);
 	tableView->verticalHeader()->hide();
 	tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	tableView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -126,10 +141,11 @@ void DictionaryWidget::addEntry(QString original, QString translation,
 		table->setData(index, status, Qt::EditRole);
 		index = table->index(0, 3, QModelIndex());
 		table->setData(index, date, Qt::EditRole);
+		emit sendMessage(tr("Done"));
 	}
 	else {
-		QMessageBox::information(this, tr("Duplicate word"),
-							tr("The word \"%1\" already exists.").arg(original));
+		emit sendMessage(tr("Duplicate word. " 
+							"The word \"%1\" already exists.").arg(original));
 	}
 }
 
@@ -144,7 +160,24 @@ void DictionaryWidget::addEntrySlot()
 
 void DictionaryWidget::editEntry()
 {
-	QString newWord = "333";
-	QModelIndex index = table->index(0, 1, QModelIndex());
-	table->setData(index, newWord, Qt::EditRole);
+	QString newOriginal = originalLineEdit->text();
+	QModelIndex index = table->index(0, 0, QModelIndex());
+	table->setData(index, newOriginal, Qt::EditRole);
+}
+
+void DictionaryWidget::findEntry()
+{
+
+}
+
+void DictionaryWidget::removeEntry()
+{
+	QSortFilterProxyModel *proxy = static_cast<QSortFilterProxyModel*>
+												(tableView->model());
+	QItemSelectionModel *selectionModel = tableView->selectionModel();
+	QModelIndexList indexes = selectionModel->selectedRows();
+	foreach(QModelIndex index, indexes) {
+		int row = proxy->mapToSource(index).row();
+		table->removeRows(row, 1, QModelIndex());
+	}
 }

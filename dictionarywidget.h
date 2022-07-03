@@ -39,27 +39,37 @@ public:
 	void writeToFile(const QString &fileName);
 	void addEntry(QString original, QString translation,
 					QString status, QString date);
+	//QPushButton* getDeleteButton() { return deleteButton; }
+signals:
+	void sendMessage(const QString &msg);
 private slots:
 	void addEntrySlot();
 	void editEntry();
+	void findEntry();
+	void removeEntry();
 private:
 	TableModel *table;
 	QTableView *tableView;
+	QSortFilterProxyModel *proxyModel;
+
 	QLabel *originalLabel;
 	QLabel *translationLabel;
 	QLabel *statusLabel;
 	QLabel *dateLabel;
+
 	QLineEdit *originalLineEdit;
 	QLineEdit *translationLineEdit;
 	QLineEdit *statusLineEdit;
 	QLineEdit *dateLineEdit;
+
 	QPushButton *addButton;
 	QPushButton *editButton;
+	QPushButton *findButton;
 	QPushButton *deleteButton;
+
 	QVBoxLayout *mainLayout;
-	QGridLayout *gridLayout;
+	QGridLayout *inputLayout;
 	QHBoxLayout *buttonsLayout;
-	QSortFilterProxyModel *proxyModel;
 
 	void createLineEditWidgets();
 	void createButtons();
