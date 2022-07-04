@@ -39,9 +39,11 @@ public:
 	void writeToFile(const QString &fileName);
 	void addEntry(QString original, QString translation,
 					QString status, QString date);
-	//QPushButton* getDeleteButton() { return deleteButton; }
+	QPushButton* getEditButton() { return editButton; }
+	QPushButton* getDeleteButton() { return deleteButton; }
 signals:
 	void sendMessage(const QString &msg);
+	void selectionChanged(const QItemSelection &selected);
 private slots:
 	void addEntrySlot();
 	void editEntry();

@@ -62,6 +62,10 @@ void MainWindow::createMenus()
 	toolsMenu->addAction(openAboutAct);
 	connect(openAboutAct, &QAction::triggered, this,
 			&MainWindow::openAbout);
+/*need fix
+	connect(dictWidget, &DictionaryWidget::selectionChanged,
+			this, &MainWindow::updateActions);
+*/
 }
 
 void MainWindow::openFile()
@@ -77,18 +81,20 @@ void MainWindow::saveFile()
 	if(!fileName.isEmpty())
 		dictWidget->writeToFile(fileName);
 }
-/*
+
 void MainWindow::updateActions(const QItemSelection &selection)
 {
 	QModelIndexList indexes = selection.indexes();
 	if(!indexes.isEmpty()) {
 		dictWidget->getDeleteButton()->setEnabled(true);
+		dictWidget->getEditButton()->setEnabled(true);
 	}
 	else {
 		dictWidget->getDeleteButton()->setEnabled(false);
+		dictWidget->getEditButton()->setEnabled(false);
 	}
 }
-*/
+
 void MainWindow::showMessage(const QString &msg)
 {
 	statusBar->showMessage(msg);

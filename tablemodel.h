@@ -28,14 +28,11 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 struct Word {
 	QString original;
 	QString translation;
-	QString status = QObject::tr("new");
+	QString status;
 	QString date;
 	bool operator==(const Word &other) const
 	{
-		return original    == other.original &&
-			   translation == other.translation &&
-			   status      == other.status &&
-			   date        == other.date;
+		return original == other.original;
 	}
 };
 

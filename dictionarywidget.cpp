@@ -61,6 +61,8 @@ void DictionaryWidget::createButtons()
 			this, &DictionaryWidget::addEntrySlot);
 	buttonsLayout->addWidget(addButton);
 	editButton = new QPushButton(tr("Edit"));
+	editButton->setCheckable(true);
+	editButton->setEnabled(false);
 	connect(editButton, &QAbstractButton::clicked,
 			this, &DictionaryWidget::editEntry);
 	buttonsLayout->addWidget(editButton);
@@ -71,7 +73,7 @@ void DictionaryWidget::createButtons()
 	deleteButton = new QPushButton(tr("Delete"));
 	connect(deleteButton, &QAbstractButton::clicked,
 			this, &DictionaryWidget::removeEntry);
-	//deleteButton->setEnabled(false);
+	deleteButton->setEnabled(false);
 	buttonsLayout->addWidget(deleteButton);
 	mainLayout->addLayout(buttonsLayout);
 }
@@ -95,6 +97,9 @@ void DictionaryWidget::setupTable()
 	tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 	tableView->setSortingEnabled(true);
 	mainLayout->addWidget(tableView);
+	connect(tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
+			this, &DictionaryWidget::selectionChanged);
+	emit selectionChanged(tableView->selectionModel()->selection());
 }
 
 void DictionaryWidget::readFromFile(const QString &fileName)
@@ -154,8 +159,13 @@ void DictionaryWidget::addEntrySlot()
 	QString original = originalLineEdit->text();
 	QString translation = translationLineEdit->text();
 	QString status = statusLineEdit->text();
+	if(status.isEmpty())
+		status = tr("new");
 	QString date = QDateTime::currentDateTime().toString("dd-MM-yyyy");
-	addEntry(original, translation, status, date);
+	if(!original.isEmpty())
+		addEntry(original, translation, status, date);
+	else
+		emit sendMessage(tr("Enter the original word"));
 }
 
 void DictionaryWidget::editEntry()
