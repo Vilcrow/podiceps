@@ -61,7 +61,6 @@ void DictionaryWidget::createButtons()
 			this, &DictionaryWidget::addEntrySlot);
 	buttonsLayout->addWidget(addButton);
 	editButton = new QPushButton(tr("Edit"));
-	editButton->setCheckable(true);
 	editButton->setEnabled(false);
 	connect(editButton, &QAbstractButton::clicked,
 			this, &DictionaryWidget::editEntry);
@@ -98,8 +97,7 @@ void DictionaryWidget::setupTable()
 	tableView->setSortingEnabled(true);
 	mainLayout->addWidget(tableView);
 	connect(tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
-			this, &DictionaryWidget::selectionChanged);
-	emit selectionChanged(tableView->selectionModel()->selection());
+			this, &DictionaryWidget::updateActions);
 }
 
 void DictionaryWidget::readFromFile(const QString &fileName)
@@ -159,8 +157,9 @@ void DictionaryWidget::addEntrySlot()
 	QString original = originalLineEdit->text();
 	QString translation = translationLineEdit->text();
 	QString status = statusLineEdit->text();
-	if(status.isEmpty())
+	if(status.isEmpty()) //user didn't specify the status
 		status = tr("new");
+	//get current date
 	QString date = QDateTime::currentDateTime().toString("dd-MM-yyyy");
 	if(!original.isEmpty())
 		addEntry(original, translation, status, date);
@@ -170,9 +169,30 @@ void DictionaryWidget::addEntrySlot()
 
 void DictionaryWidget::editEntry()
 {
-	QString newOriginal = originalLineEdit->text();
-	QModelIndex index = table->index(0, 0, QModelIndex());
-	table->setData(index, newOriginal, Qt::EditRole);
+	QString original = originalLineEdit->text();
+	if(original.isEmpty()) {
+		emit sendMessage(tr("Enter the original word"));
+		return;
+	}
+	QString translation = translationLineEdit->text();
+	QString status = statusLineEdit->text();
+	QString date = ""; //formal variable
+	QModelIndexList indexes = tableView->selectionModel()->selectedRows();
+	int row = -1;
+	for(auto index : indexes) {
+		row = proxyModel->mapToSource(index).row();
+		QModelIndex originalIndex = table->index(row, 0, QModelIndex());
+		if(original != table->data(originalIndex, Qt::DisplayRole) &&
+			table->getWords().contains({ original, translation, status, date })) {
+			emit sendMessage(tr("The word \"%1\" already exists.").arg(original));
+			return;
+	}
+		table->setData(originalIndex, original, Qt::EditRole);
+		QModelIndex translationIndex = table->index(row, 1, QModelIndex());
+		table->setData(translationIndex, translation, Qt::EditRole);
+		QModelIndex statusIndex = table->index(row, 2, QModelIndex());
+		table->setData(statusIndex, status, Qt::EditRole);
+	}
 }
 
 void DictionaryWidget::findEntry()
@@ -182,12 +202,47 @@ void DictionaryWidget::findEntry()
 
 void DictionaryWidget::removeEntry()
 {
-	QSortFilterProxyModel *proxy = static_cast<QSortFilterProxyModel*>
-												(tableView->model());
-	QItemSelectionModel *selectionModel = tableView->selectionModel();
-	QModelIndexList indexes = selectionModel->selectedRows();
-	foreach(QModelIndex index, indexes) {
-		int row = proxy->mapToSource(index).row();
+	QModelIndexList indexes = tableView->selectionModel()->selectedRows();
+	for(auto index : indexes) {
+		int row = proxyModel->mapToSource(index).row();
 		table->removeRows(row, 1, QModelIndex());
+	}
+}
+
+void DictionaryWidget::updateActions()
+{
+	QModelIndexList indexes = tableView->selectionModel()->selectedRows();
+	if(!indexes.isEmpty()) {
+		QString original, translation, status, date;
+		int row = -1;
+		for(auto index : indexes) {
+			row = proxyModel->mapToSource(index).row();
+			QModelIndex originalIndex = table->index(row, 0, QModelIndex());
+			QVariant varOriginal = table->data(originalIndex, Qt::DisplayRole);
+			original = varOriginal.toString();
+			QModelIndex translationIndex = table->index(row, 1, QModelIndex());
+			QVariant varTranslation = table->data(translationIndex, Qt::DisplayRole);
+			translation = varTranslation.toString();
+			QModelIndex statusIndex = table->index(row, 2, QModelIndex());
+			QVariant varStatus = table->data(statusIndex, Qt::DisplayRole);
+			status = varStatus.toString();
+			QModelIndex dateIndex = table->index(row, 3, QModelIndex());
+			QVariant varDate = table->data(dateIndex, Qt::DisplayRole);
+			date = varDate.toString();
+		}
+		originalLineEdit->setText(original);	
+		translationLineEdit->setText(translation);	
+		statusLineEdit->setText(status);	
+		dateLineEdit->setText(date);	
+		deleteButton->setEnabled(true);
+		editButton->setEnabled(true);
+	}
+	else { //dictionary is empty or the row don't selected
+		originalLineEdit->setText("");	
+		translationLineEdit->setText("");	
+		statusLineEdit->setText("");	
+		dateLineEdit->setText("");	
+		deleteButton->setEnabled(false);
+		editButton->setEnabled(false);
 	}
 }

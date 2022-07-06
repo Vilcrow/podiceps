@@ -81,7 +81,7 @@ void MainWindow::saveFile()
 	if(!fileName.isEmpty())
 		dictWidget->writeToFile(fileName);
 }
-
+/* moved to DictionaryWidget
 void MainWindow::updateActions(const QItemSelection &selection)
 {
 	QModelIndexList indexes = selection.indexes();
@@ -94,7 +94,7 @@ void MainWindow::updateActions(const QItemSelection &selection)
 		dictWidget->getEditButton()->setEnabled(false);
 	}
 }
-
+*/
 void MainWindow::showMessage(const QString &msg)
 {
 	statusBar->showMessage(msg);

@@ -43,8 +43,8 @@ public:
 	QPushButton* getDeleteButton() { return deleteButton; }
 signals:
 	void sendMessage(const QString &msg);
-	void selectionChanged(const QItemSelection &selected);
 private slots:
+	void updateActions();
 	void addEntrySlot();
 	void editEntry();
 	void findEntry();

@@ -30,8 +30,6 @@ class MainWindow: public QMainWindow
 	Q_OBJECT
 public:
 	MainWindow();
-public slots:
-	void updateActions(const QItemSelection &selection);
 private slots:
 	void openFile();
 	void saveFile();
