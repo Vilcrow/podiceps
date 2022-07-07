@@ -50,7 +50,7 @@ private slots:
 	void findEntry();
 	void removeEntry();
 private:
-	TableModel *table;
+	TableModel *tableModel;
 	QTableView *tableView;
 	QSortFilterProxyModel *proxyModel;
 
@@ -76,6 +76,7 @@ private:
 	void createLineEditWidgets();
 	void createButtons();
 	void setupTable();
+	bool isEditLinesEmpty();
 };
 
 #endif

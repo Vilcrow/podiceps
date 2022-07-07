@@ -29,6 +29,8 @@ MainWindow::MainWindow()
 	setCentralWidget(dictWidget);
 	statusBar = new QStatusBar;
 	setStatusBar(statusBar);
+	//setMinimumHeight(500);
+	//setMinimumWidth(500); don't work. Why?
 	connect(dictWidget, &DictionaryWidget::sendMessage, this, &MainWindow::showMessage);
 }
 

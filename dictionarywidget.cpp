@@ -40,7 +40,6 @@ void DictionaryWidget::createLineEditWidgets()
 	translationLineEdit = new QLineEdit();
 	statusLineEdit = new QLineEdit();
 	dateLineEdit = new QLineEdit();
-	dateLineEdit->setReadOnly(true);
 	inputLayout = new QGridLayout();
 	inputLayout->addWidget(originalLabel, 0, 0, Qt::AlignCenter);
 	inputLayout->addWidget(translationLabel, 0, 1, Qt::AlignCenter);
@@ -66,7 +65,7 @@ void DictionaryWidget::createButtons()
 			this, &DictionaryWidget::editEntry);
 	buttonsLayout->addWidget(editButton);
 	findButton = new QPushButton(tr("Find"));
-	connect(addButton, &QAbstractButton::clicked,
+	connect(findButton, &QAbstractButton::clicked,
 			this, &DictionaryWidget::findEntry);
 	buttonsLayout->addWidget(findButton);
 	deleteButton = new QPushButton(tr("Delete"));
@@ -79,9 +78,9 @@ void DictionaryWidget::createButtons()
 
 void DictionaryWidget::setupTable()
 {
-	table = new TableModel(this);
+	tableModel = new TableModel(this);
 	proxyModel = new QSortFilterProxyModel(this);
-	proxyModel->setSourceModel(table);
+	proxyModel->setSourceModel(tableModel);
 	proxyModel->setFilterKeyColumn(0);
 	tableView = new QTableView;
 	tableView->setModel(proxyModel);
@@ -128,22 +127,22 @@ void DictionaryWidget::writeToFile(const QString &fileName)
 		return;
 	}
 	QDataStream out(&file);
-	out << table->getWords();
+	out << tableModel->getWords();
 }
 
 void DictionaryWidget::addEntry(QString original, QString translation,
 								QString status, QString date)
 {
-	if(!table->getWords().contains({ original, translation, status, date })) {
-		table->insertRows(0, 1, QModelIndex());
-		QModelIndex index = table->index(0, 0, QModelIndex());
-		table->setData(index, original, Qt::EditRole);
-		index = table->index(0, 1, QModelIndex());
-		table->setData(index, translation, Qt::EditRole);
-		index = table->index(0, 2, QModelIndex());
-		table->setData(index, status, Qt::EditRole);
-		index = table->index(0, 3, QModelIndex());
-		table->setData(index, date, Qt::EditRole);
+	if(!tableModel->getWords().contains({ original, translation, status, date })) {
+		tableModel->insertRows(0, 1, QModelIndex());
+		QModelIndex index = tableModel->index(0, 0, QModelIndex());
+		tableModel->setData(index, original, Qt::EditRole);
+		index = tableModel->index(0, 1, QModelIndex());
+		tableModel->setData(index, translation, Qt::EditRole);
+		index = tableModel->index(0, 2, QModelIndex());
+		tableModel->setData(index, status, Qt::EditRole);
+		index = tableModel->index(0, 3, QModelIndex());
+		tableModel->setData(index, date, Qt::EditRole);
 		emit sendMessage(tr("Done"));
 	}
 	else {
@@ -181,23 +180,52 @@ void DictionaryWidget::editEntry()
 	int row = -1;
 	for(auto index : indexes) {
 		row = proxyModel->mapToSource(index).row();
-		QModelIndex originalIndex = table->index(row, 0, QModelIndex());
-		if(original != table->data(originalIndex, Qt::DisplayRole) &&
-			table->getWords().contains({ original, translation, status, date })) {
+		QModelIndex originalIndex = tableModel->index(row, 0, QModelIndex());
+		if(original != tableModel->data(originalIndex, Qt::DisplayRole) &&
+			tableModel->getWords().contains({ original, translation, status, date })) {
 			emit sendMessage(tr("The word \"%1\" already exists.").arg(original));
 			return;
 	}
-		table->setData(originalIndex, original, Qt::EditRole);
-		QModelIndex translationIndex = table->index(row, 1, QModelIndex());
-		table->setData(translationIndex, translation, Qt::EditRole);
-		QModelIndex statusIndex = table->index(row, 2, QModelIndex());
-		table->setData(statusIndex, status, Qt::EditRole);
+		tableModel->setData(originalIndex, original, Qt::EditRole);
+		QModelIndex translationIndex = tableModel->index(row, 1, QModelIndex());
+		tableModel->setData(translationIndex, translation, Qt::EditRole);
+		QModelIndex statusIndex = tableModel->index(row, 2, QModelIndex());
+		tableModel->setData(statusIndex, status, Qt::EditRole);
 	}
 }
 
 void DictionaryWidget::findEntry()
 {
-
+	if(isEditLinesEmpty()) {
+		proxyModel->setFilterRegExp("");
+		proxyModel->setFilterKeyColumn(0);
+		sendMessage(tr("The filter is cleared"));
+		return;
+	}
+	int columnFind = -1; //which column will we search for
+	QRegExp::PatternSyntax syntax = QRegExp::PatternSyntax(QRegExp::FixedString);
+	QRegExp regExp;
+	if(!originalLineEdit->text().isEmpty()) {
+		regExp = QRegExp(originalLineEdit->text(), Qt::CaseInsensitive, syntax);
+		columnFind = 0;
+	}
+	else if(!translationLineEdit->text().isEmpty()) {
+		regExp = QRegExp(translationLineEdit->text(), Qt::CaseInsensitive, syntax);
+		columnFind = 1;
+	}
+	else if(!statusLineEdit->text().isEmpty()) {
+		regExp = QRegExp(statusLineEdit->text(), Qt::CaseInsensitive, syntax);
+		columnFind = 2;
+	}
+	else if(!dateLineEdit->text().isEmpty()) {
+		regExp = QRegExp(dateLineEdit->text(), Qt::CaseInsensitive, syntax);
+		columnFind = 3;
+	}
+	proxyModel->setFilterKeyColumn(columnFind);
+	proxyModel->setFilterRegExp(regExp);
+	sendMessage(tr("The filter \"%1\" (%2) is set").arg(regExp.pattern())
+					.arg(tableModel->headerData(columnFind, Qt::Horizontal,
+					Qt::DisplayRole).toString()));
 }
 
 void DictionaryWidget::removeEntry()
@@ -205,7 +233,7 @@ void DictionaryWidget::removeEntry()
 	QModelIndexList indexes = tableView->selectionModel()->selectedRows();
 	for(auto index : indexes) {
 		int row = proxyModel->mapToSource(index).row();
-		table->removeRows(row, 1, QModelIndex());
+		tableModel->removeRows(row, 1, QModelIndex());
 	}
 }
 
@@ -217,17 +245,17 @@ void DictionaryWidget::updateActions()
 		int row = -1;
 		for(auto index : indexes) {
 			row = proxyModel->mapToSource(index).row();
-			QModelIndex originalIndex = table->index(row, 0, QModelIndex());
-			QVariant varOriginal = table->data(originalIndex, Qt::DisplayRole);
+			QModelIndex originalIndex = tableModel->index(row, 0, QModelIndex());
+			QVariant varOriginal = tableModel->data(originalIndex, Qt::DisplayRole);
 			original = varOriginal.toString();
-			QModelIndex translationIndex = table->index(row, 1, QModelIndex());
-			QVariant varTranslation = table->data(translationIndex, Qt::DisplayRole);
+			QModelIndex translationIndex = tableModel->index(row, 1, QModelIndex());
+			QVariant varTranslation = tableModel->data(translationIndex, Qt::DisplayRole);
 			translation = varTranslation.toString();
-			QModelIndex statusIndex = table->index(row, 2, QModelIndex());
-			QVariant varStatus = table->data(statusIndex, Qt::DisplayRole);
+			QModelIndex statusIndex = tableModel->index(row, 2, QModelIndex());
+			QVariant varStatus = tableModel->data(statusIndex, Qt::DisplayRole);
 			status = varStatus.toString();
-			QModelIndex dateIndex = table->index(row, 3, QModelIndex());
-			QVariant varDate = table->data(dateIndex, Qt::DisplayRole);
+			QModelIndex dateIndex = tableModel->index(row, 3, QModelIndex());
+			QVariant varDate = tableModel->data(dateIndex, Qt::DisplayRole);
 			date = varDate.toString();
 		}
 		originalLineEdit->setText(original);	
@@ -245,4 +273,14 @@ void DictionaryWidget::updateActions()
 		deleteButton->setEnabled(false);
 		editButton->setEnabled(false);
 	}
+}
+
+bool DictionaryWidget::isEditLinesEmpty()
+{
+	if(originalLineEdit->text().isEmpty() &&
+	   translationLineEdit->text().isEmpty() &&
+	   statusLineEdit->text().isEmpty() &&
+	   dateLineEdit->text().isEmpty())
+		return true;
+	return false;
 }
