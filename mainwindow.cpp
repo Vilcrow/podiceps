@@ -24,9 +24,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 MainWindow::MainWindow()
 {
 	setWindowTitle("podiceps2");
-	createMenus();
 	dictWidget = new DictionaryWidget;
 	setCentralWidget(dictWidget);
+	createMenus();
 	statusBar = new QStatusBar;
 	setStatusBar(statusBar);
 	//setMinimumHeight(500);
@@ -59,15 +59,15 @@ void MainWindow::createMenus()
 	toolsMenu->addAction(openHelpAct);
 	connect(openHelpAct, &QAction::triggered, this,
 			&MainWindow::openHelp);
+	clearInputAct = new QAction(tr("&Clear input"), this);
+	clearInputAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
+	toolsMenu->addAction(clearInputAct);
+	connect(clearInputAct, &QAction::triggered, dictWidget, &DictionaryWidget::clearInput);
 	toolsMenu->addSeparator();
 	openAboutAct = new QAction(tr("&About"), this);
 	toolsMenu->addAction(openAboutAct);
 	connect(openAboutAct, &QAction::triggered, this,
 			&MainWindow::openAbout);
-/*need fix
-	connect(dictWidget, &DictionaryWidget::selectionChanged,
-			this, &MainWindow::updateActions);
-*/
 }
 
 void MainWindow::openFile()
@@ -83,20 +83,7 @@ void MainWindow::saveFile()
 	if(!fileName.isEmpty())
 		dictWidget->writeToFile(fileName);
 }
-/* moved to DictionaryWidget
-void MainWindow::updateActions(const QItemSelection &selection)
-{
-	QModelIndexList indexes = selection.indexes();
-	if(!indexes.isEmpty()) {
-		dictWidget->getDeleteButton()->setEnabled(true);
-		dictWidget->getEditButton()->setEnabled(true);
-	}
-	else {
-		dictWidget->getDeleteButton()->setEnabled(false);
-		dictWidget->getEditButton()->setEnabled(false);
-	}
-}
-*/
+
 void MainWindow::showMessage(const QString &msg)
 {
 	statusBar->showMessage(msg);

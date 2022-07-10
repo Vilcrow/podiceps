@@ -49,6 +49,8 @@ private slots:
 	void editEntry();
 	void findEntry();
 	void removeEntry();
+public slots:
+	void clearInput();
 private:
 	TableModel *tableModel;
 	QTableView *tableView;

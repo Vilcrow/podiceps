@@ -284,3 +284,12 @@ bool DictionaryWidget::isEditLinesEmpty()
 		return true;
 	return false;
 }
+
+void DictionaryWidget::clearInput()
+{
+	originalLineEdit->setText("");	
+	translationLineEdit->setText("");	
+	statusLineEdit->setText("");	
+	dateLineEdit->setText("");	
+	originalLineEdit->setFocus(Qt::OtherFocusReason);
+}

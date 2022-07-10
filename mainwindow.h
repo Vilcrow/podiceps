@@ -50,6 +50,7 @@ private:
 	QAction *openStatisticsAct;
 	QAction *openHelpAct;
 	QAction *openAboutAct;
+	QAction *clearInputAct;
 };
 
 #endif
