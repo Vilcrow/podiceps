@@ -21,6 +21,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <QDateTime>
 #include "dictionarywidget.h"
 #include "mainwindow.h"
+#include "tablemodel.h"
 
 DictionaryWidget::DictionaryWidget()
 {
@@ -103,7 +104,8 @@ void DictionaryWidget::readFromFile(const QString &fileName)
 {
 	QFile file(fileName);
 	if(!file.open(QIODevice::ReadOnly)) {
-		QMessageBox::information(this, tr("Unable to open file"), file.errorString());
+		QMessageBox::information(this, tr("Unable to open file"),
+											file.errorString());
 		return;
 	}
 	QList<Word> words;
@@ -123,7 +125,8 @@ void DictionaryWidget::writeToFile(const QString &fileName)
 {
 	QFile file(fileName);
 	if(!file.open(QIODevice::WriteOnly)) {
-		QMessageBox::information(this, tr("Unable to open file"), file.errorString());
+		QMessageBox::information(this, tr("Unable to open file"),
+											file.errorString());
 		return;
 	}
 	QDataStream out(&file);
@@ -133,7 +136,8 @@ void DictionaryWidget::writeToFile(const QString &fileName)
 void DictionaryWidget::addEntry(QString original, QString translation,
 								QString status, QString date)
 {
-	if(!tableModel->getWords().contains({ original, translation, status, date })) {
+	if(!tableModel->getWords().contains({ original, translation,
+											status, date })) {
 		tableModel->insertRows(0, 1, QModelIndex());
 		QModelIndex index = tableModel->index(0, 0, QModelIndex());
 		tableModel->setData(index, original, Qt::EditRole);
@@ -182,7 +186,8 @@ void DictionaryWidget::editEntry()
 		row = proxyModel->mapToSource(index).row();
 		QModelIndex originalIndex = tableModel->index(row, 0, QModelIndex());
 		if(original != tableModel->data(originalIndex, Qt::DisplayRole) &&
-			tableModel->getWords().contains({ original, translation, status, date })) {
+			tableModel->getWords().contains({ original, translation,
+													status, date })) {
 			emit sendMessage(tr("The word \"%1\" already exists.").arg(original));
 			return;
 	}
@@ -210,7 +215,8 @@ void DictionaryWidget::findEntry()
 		columnFind = 0;
 	}
 	else if(!translationLineEdit->text().isEmpty()) {
-		regExp = QRegExp(translationLineEdit->text(), Qt::CaseInsensitive, syntax);
+		regExp = QRegExp(translationLineEdit->text(), Qt::CaseInsensitive,
+																syntax);
 		columnFind = 1;
 	}
 	else if(!statusLineEdit->text().isEmpty()) {
@@ -245,11 +251,15 @@ void DictionaryWidget::updateActions()
 		int row = -1;
 		for(auto index : indexes) {
 			row = proxyModel->mapToSource(index).row();
-			QModelIndex originalIndex = tableModel->index(row, 0, QModelIndex());
-			QVariant varOriginal = tableModel->data(originalIndex, Qt::DisplayRole);
+			QModelIndex originalIndex = tableModel->index(row, 0,
+													QModelIndex());
+			QVariant varOriginal = tableModel->data(originalIndex,
+													Qt::DisplayRole);
 			original = varOriginal.toString();
-			QModelIndex translationIndex = tableModel->index(row, 1, QModelIndex());
-			QVariant varTranslation = tableModel->data(translationIndex, Qt::DisplayRole);
+			QModelIndex translationIndex = tableModel->index(row, 1,
+													QModelIndex());
+			QVariant varTranslation = tableModel->data(translationIndex,
+													Qt::DisplayRole);
 			translation = varTranslation.toString();
 			QModelIndex statusIndex = tableModel->index(row, 2, QModelIndex());
 			QVariant varStatus = tableModel->data(statusIndex, Qt::DisplayRole);
@@ -292,4 +302,56 @@ void DictionaryWidget::clearInput()
 	statusLineEdit->setText("");	
 	dateLineEdit->setText("");	
 	originalLineEdit->setFocus(Qt::OtherFocusReason);
+}
+//to import a text file of the podiceps
+void DictionaryWidget::importFromFile(const QString &fileName)
+{
+	QFile file(fileName);
+	if(!file.open(QIODevice::ReadOnly)) {
+		QMessageBox::information(this, tr("Unable to open file"),
+											file.errorString());
+		return;
+	}
+	QList<Word> words;
+	QTextStream in(&file);
+	while(!in.atEnd()) {
+		QString line = in.readLine();
+		QStringList list = line.split('|');
+		if(list.size() != 5) { //first element is empty
+			QMessageBox::information(this, tr("Incorrect string"),
+												list.join('|'));
+			return;
+		}
+		Word word;
+		word.original = list[1]; //skip the empty element in list
+		word.translation = list[2];
+		word.status = list[3];
+		word.date = list[4];
+		words << word;
+	}
+	if(words.isEmpty()) {
+		QMessageBox::information(this, tr("No words in file"),
+			tr("The file you are attempting to open contains no words."));
+	}
+	else {
+		for(const auto &word: qAsConst(words))
+			addEntry(word.original, word.translation, word.status, word.date);
+	}
+}
+//to export to a text file in a "|original|translation|status|date\n" format
+void DictionaryWidget::exportToFile(const QString &fileName)
+{
+	QFile file(fileName);
+	if(!file.open(QIODevice::WriteOnly)) {
+		QMessageBox::information(this, tr("Unable to open file"),
+											file.errorString());
+		return;
+	}
+	QTextStream out(&file);
+	QList<Word> words = tableModel->getWords();
+	for(auto w : words) {
+		out << QString("|%1|%2|%3|%4\n").arg(w.original)
+						.arg(w.translation).arg(w.status).arg(w.date);
+	}
+	file.close();
 }

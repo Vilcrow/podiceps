@@ -30,6 +30,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <QSortFilterProxyModel>
 #include <QTableView>
 #include <QHeaderView>
+#include <QTextStream>
 
 class DictionaryWidget : public QWidget {
 	Q_OBJECT
@@ -37,6 +38,8 @@ public:
 	DictionaryWidget();
 	void readFromFile(const QString &fileName);
 	void writeToFile(const QString &fileName);
+	void importFromFile(const QString &fileName);
+	void exportToFile(const QString &fileName);
 	void addEntry(QString original, QString translation,
 					QString status, QString date);
 	QPushButton* getEditButton() { return editButton; }

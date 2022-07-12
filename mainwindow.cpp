@@ -46,6 +46,15 @@ void MainWindow::createMenus()
 	fileMenu->addAction(saveAct);
 	connect(saveAct, &QAction::triggered, this, &MainWindow::saveFile);
 	fileMenu->addSeparator();
+	importAct = new QAction(tr("&Import..."), this);
+	importAct->setShortcut(Qt::CTRL + Qt::Key_I);
+	fileMenu->addAction(importAct);
+	connect(importAct, &QAction::triggered, this, &MainWindow::importFile);
+	exportAct = new QAction(tr("&Export..."), this);
+	exportAct->setShortcut(Qt::CTRL + Qt::Key_E);
+	fileMenu->addAction(exportAct);
+	connect(exportAct, &QAction::triggered, this, &MainWindow::exportFile);
+	fileMenu->addSeparator();
 	exitAct = new QAction(tr("E&xit"), this);
 	exitAct->setShortcut(Qt::CTRL + Qt::Key_W);
 	fileMenu->addAction(exitAct);
@@ -102,4 +111,18 @@ void MainWindow::openHelp()
 void MainWindow::openAbout()
 {
 
+}
+
+void MainWindow::importFile()
+{
+	QString fileName = QFileDialog::getOpenFileName(this);
+	if(!fileName.isEmpty())
+		dictWidget->importFromFile(fileName);
+}
+
+void MainWindow::exportFile()
+{
+	QString fileName = QFileDialog::getSaveFileName(this);
+	if(!fileName.isEmpty())
+		dictWidget->exportToFile(fileName);
 }
