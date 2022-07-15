@@ -64,17 +64,17 @@ void MainWindow::createMenus()
 	toolsMenu->addAction(openStatisticsAct);
 	connect(openStatisticsAct, &QAction::triggered, this,
 			&MainWindow::openStatistics);
-	openHelpAct = new QAction(tr("&Help"), this);
-	toolsMenu->addAction(openHelpAct);
-	connect(openHelpAct, &QAction::triggered, this,
-			&MainWindow::openHelp);
 	clearInputAct = new QAction(tr("&Clear input"), this);
 	clearInputAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
 	toolsMenu->addAction(clearInputAct);
 	connect(clearInputAct, &QAction::triggered, dictWidget, &DictionaryWidget::clearInput);
-	toolsMenu->addSeparator();
+	helpMenu = menuBar()->addMenu(tr("&Help"));
+	openTutorialAct = new QAction(tr("&Tutorial"), this);
+	helpMenu->addAction(openTutorialAct);
+	connect(openTutorialAct, &QAction::triggered, this,
+			&MainWindow::openTutorial);
 	openAboutAct = new QAction(tr("&About"), this);
-	toolsMenu->addAction(openAboutAct);
+	helpMenu->addAction(openAboutAct);
 	connect(openAboutAct, &QAction::triggered, this,
 			&MainWindow::openAbout);
 }
@@ -103,7 +103,7 @@ void MainWindow::openStatistics()
 
 }
 
-void MainWindow::openHelp()
+void MainWindow::openTutorial()
 {
 
 }

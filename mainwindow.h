@@ -37,7 +37,7 @@ private slots:
 	void exportFile();
 	void showMessage(const QString &msg);
 	void openStatistics();
-	void openHelp();
+	void openTutorial();
 	void openAbout();
 private:
 	void createMenus();
@@ -52,9 +52,10 @@ private:
 	QAction *exitAct;
 	QMenu *toolsMenu;
 	QAction *openStatisticsAct;
-	QAction *openHelpAct;
-	QAction *openAboutAct;
 	QAction *clearInputAct;
+	QMenu *helpMenu;
+	QAction *openTutorialAct;
+	QAction *openAboutAct;
 };
 
 #endif

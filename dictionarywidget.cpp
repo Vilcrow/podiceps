@@ -116,6 +116,9 @@ void DictionaryWidget::readFromFile(const QString &fileName)
 			tr("The file you are attempting to open contains no words."));
 	}
 	else {
+		//clean current table
+		tableModel->removeRows(0, tableModel->rowCount(QModelIndex()),
+														QModelIndex());
 		for(const auto &word: qAsConst(words))
 			addEntry(word.original, word.translation, word.status, word.date);
 	}
@@ -334,6 +337,9 @@ void DictionaryWidget::importFromFile(const QString &fileName)
 			tr("The file you are attempting to open contains no words."));
 	}
 	else {
+		//clean current table
+		tableModel->removeRows(0, tableModel->rowCount(QModelIndex()),
+														QModelIndex());
 		for(const auto &word: qAsConst(words))
 			addEntry(word.original, word.translation, word.status, word.date);
 	}
