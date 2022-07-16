@@ -23,12 +23,15 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "mainwindow.h"
 #include "tablemodel.h"
 
-DictionaryWidget::DictionaryWidget()
+DictionaryWidget::DictionaryWidget() : dictionarySettings("Vilcrow", "podiceps2")
 {
+	readSettings();
 	mainLayout = new QVBoxLayout(this);
 	setupTable();
 	createLineEditWidgets();
 	createButtons();
+	if(!lastFileName.isEmpty())
+		readFromFile(lastFileName);
 }
 
 void DictionaryWidget::createLineEditWidgets()
@@ -121,6 +124,7 @@ void DictionaryWidget::readFromFile(const QString &fileName)
 														QModelIndex());
 		for(const auto &word: qAsConst(words))
 			addEntry(word.original, word.translation, word.status, word.date);
+		lastFileName = fileName;
 	}
 }
 
@@ -166,7 +170,7 @@ void DictionaryWidget::addEntrySlot()
 	if(status.isEmpty()) //user didn't specify the status
 		status = tr("new");
 	//get current date
-	QString date = QDateTime::currentDateTime().toString("dd-MM-yyyy");
+	QString date = QDateTime::currentDateTime().toString("yyyy-MM-dd");
 	if(!original.isEmpty())
 		addEntry(original, translation, status, date);
 	else
@@ -300,6 +304,7 @@ bool DictionaryWidget::isEditLinesEmpty()
 
 void DictionaryWidget::clearInput()
 {
+	tableView->selectionModel()->clear();
 	originalLineEdit->setText("");	
 	translationLineEdit->setText("");	
 	statusLineEdit->setText("");	
@@ -329,7 +334,10 @@ void DictionaryWidget::importFromFile(const QString &fileName)
 		word.original = list[1]; //skip the empty element in list
 		word.translation = list[2];
 		word.status = list[3];
-		word.date = list[4];
+		//change format "dd-MM-yyyy" to "yyyy-MM-dd"
+		QDateTime oldDate = QDateTime::fromString(list[4], "dd-MM-yyyy");
+		QString newDate = oldDate.toString("yyyy-MM-dd");
+		word.date = newDate;
 		words << word;
 	}
 	if(words.isEmpty()) {
@@ -342,6 +350,7 @@ void DictionaryWidget::importFromFile(const QString &fileName)
 														QModelIndex());
 		for(const auto &word: qAsConst(words))
 			addEntry(word.original, word.translation, word.status, word.date);
+		lastFileName = fileName;
 	}
 }
 //to export to a text file in a "|original|translation|status|date\n" format
@@ -356,8 +365,38 @@ void DictionaryWidget::exportToFile(const QString &fileName)
 	QTextStream out(&file);
 	QList<Word> words = tableModel->getWords();
 	for(auto w : words) {
+		//change format "yyyy-MM-dd" to "dd-MM-yyyy"
+		QDateTime newDate = QDateTime::fromString(w.date, "yyyy-MM-dd");
+		QString oldDate = newDate.toString("dd-MM-yyyy");
 		out << QString("|%1|%2|%3|%4\n").arg(w.original)
-						.arg(w.translation).arg(w.status).arg(w.date);
+						.arg(w.translation).arg(w.status).arg(oldDate);
 	}
 	file.close();
+}
+
+void DictionaryWidget::readSettings()
+{
+	dictionarySettings.beginGroup("/Settings");
+	lastFileName = dictionarySettings.value("/last_file_name", "").toString();
+	dictionarySettings.endGroup();
+}
+
+void DictionaryWidget::writeSettings()
+{
+	dictionarySettings.beginGroup("/Settings");
+	dictionarySettings.setValue("last_file_name", lastFileName);
+	dictionarySettings.endGroup();
+}
+
+DictionaryWidget::~DictionaryWidget()
+{
+	writeSettings();
+}
+
+void DictionaryWidget::createNewFile()
+{
+	//clean current table
+	tableModel->removeRows(0, tableModel->rowCount(QModelIndex()),
+													QModelIndex());
+	clearInput();
 }

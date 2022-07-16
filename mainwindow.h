@@ -24,12 +24,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <QMainWindow>
 #include <QItemSelection>
 #include <QStatusBar>
+#include <QSettings>
 
 class MainWindow: public QMainWindow
 {
 	Q_OBJECT
 public:
 	MainWindow();
+	void readSettings();
+	void writeSettings();
+	virtual ~MainWindow();
 private slots:
 	void openFile();
 	void saveFile();
@@ -41,12 +45,13 @@ private slots:
 	void openAbout();
 private:
 	void createMenus();
-
+	QSettings mainWindowSettings;
 	DictionaryWidget *dictWidget;
 	QStatusBar *statusBar;
 	QMenu *fileMenu;
+	QAction *newAct;
 	QAction *openAct;
-	QAction *saveAct;
+	QAction *saveAsAct;
 	QAction *importAct;
 	QAction *exportAct;
 	QAction *exitAct;

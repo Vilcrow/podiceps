@@ -21,8 +21,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <QFileDialog>
 #include "mainwindow.h"
 
-MainWindow::MainWindow()
+MainWindow::MainWindow() : mainWindowSettings("Vilcrow", "podiceps2")
 {
+	readSettings();
 	setWindowTitle("podiceps2");
 	dictWidget = new DictionaryWidget;
 	setCentralWidget(dictWidget);
@@ -37,14 +38,18 @@ MainWindow::MainWindow()
 void MainWindow::createMenus()
 {
 	fileMenu = menuBar()->addMenu(tr("&File"));
+	newAct = new QAction(tr("&New..."), this);
+	newAct->setShortcut(Qt::CTRL + Qt::Key_N);
+	fileMenu->addAction(newAct);
+	connect(newAct, &QAction::triggered, dictWidget, &DictionaryWidget::createNewFile);
 	openAct = new QAction(tr("&Open..."), this);
 	openAct->setShortcut(Qt::CTRL + Qt::Key_O);
 	fileMenu->addAction(openAct);
 	connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
-	saveAct = new QAction(tr("&Save As..."), this);
-	saveAct->setShortcut(Qt::CTRL + Qt::Key_S);
-	fileMenu->addAction(saveAct);
-	connect(saveAct, &QAction::triggered, this, &MainWindow::saveFile);
+	saveAsAct = new QAction(tr("&Save As..."), this);
+	saveAsAct->setShortcut(Qt::CTRL + Qt::Key_S);
+	fileMenu->addAction(saveAsAct);
+	connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveFile);
 	fileMenu->addSeparator();
 	importAct = new QAction(tr("&Import..."), this);
 	importAct->setShortcut(Qt::CTRL + Qt::Key_I);
@@ -125,4 +130,25 @@ void MainWindow::exportFile()
 	QString fileName = QFileDialog::getSaveFileName(this);
 	if(!fileName.isEmpty())
 		dictWidget->exportToFile(fileName);
+}
+
+void MainWindow::readSettings()
+{
+/*
+	mainSettings.beginGroup("/Settings");
+	mainSettings.endGroup();
+*/
+}
+
+void MainWindow::writeSettings()
+{
+/*
+	mainSettings.beginGroup("/Settings");
+	mainSettings.endGroup();
+*/
+}
+
+MainWindow::~MainWindow()
+{
+	writeSettings();
 }

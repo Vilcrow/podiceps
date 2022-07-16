@@ -31,11 +31,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <QTableView>
 #include <QHeaderView>
 #include <QTextStream>
+#include <QSettings>
 
 class DictionaryWidget : public QWidget {
 	Q_OBJECT
 public:
 	DictionaryWidget();
+	virtual ~DictionaryWidget();
 	void readFromFile(const QString &fileName);
 	void writeToFile(const QString &fileName);
 	void importFromFile(const QString &fileName);
@@ -44,6 +46,8 @@ public:
 					QString status, QString date);
 	QPushButton* getEditButton() { return editButton; }
 	QPushButton* getDeleteButton() { return deleteButton; }
+	void readSettings();
+	void writeSettings();
 signals:
 	void sendMessage(const QString &msg);
 private slots:
@@ -54,7 +58,11 @@ private slots:
 	void removeEntry();
 public slots:
 	void clearInput();
+	void createNewFile();
 private:
+	QSettings dictionarySettings;
+	QString lastFileName;
+
 	TableModel *tableModel;
 	QTableView *tableView;
 	QSortFilterProxyModel *proxyModel;
