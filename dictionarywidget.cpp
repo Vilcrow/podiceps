@@ -23,15 +23,20 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "mainwindow.h"
 #include "tablemodel.h"
 
-DictionaryWidget::DictionaryWidget() : dictionarySettings("Vilcrow", "podiceps2")
+DictionaryWidget::DictionaryWidget()
+						: dictionarySettings("Vilcrow", "podiceps2")
+						, changesSaved(true)
 {
 	readSettings();
 	mainLayout = new QVBoxLayout(this);
 	setupTable();
 	createLineEditWidgets();
 	createButtons();
-	if(!lastFileName.isEmpty())
+	if(!lastFileName.isEmpty()) {
 		readFromFile(lastFileName);
+		//////////////////////////////////////////////////don't work
+		sendMessage(tr("The file \"%1\" is open").arg(lastFileName));
+	}
 }
 
 void DictionaryWidget::createLineEditWidgets()
@@ -112,12 +117,17 @@ void DictionaryWidget::readFromFile(const QString &fileName)
 		return;
 	}
 	QList<Word> words;
-	QDataStream in(&file);
-	in >> words;
-	if(words.isEmpty()) {
-		QMessageBox::information(this, tr("No words in file"),
-			tr("The file you are attempting to open contains no words."));
+	try {
+		QDataStream in(&file);
+		in >> words;
 	}
+	catch(...) {
+		QMessageBox::information(this, tr("Unable to open file"),
+											tr("Invalid format"));
+		return;
+	}
+	if(words.isEmpty())
+		sendMessage(tr("The file no words"));
 	else {
 		//clean current table
 		tableModel->removeRows(0, tableModel->rowCount(QModelIndex()),
@@ -126,6 +136,7 @@ void DictionaryWidget::readFromFile(const QString &fileName)
 			addEntry(word.original, word.translation, word.status, word.date);
 		lastFileName = fileName;
 	}
+	sendMessage(tr("The file \"%1\" is open").arg(lastFileName));
 }
 
 void DictionaryWidget::writeToFile(const QString &fileName)
@@ -138,6 +149,8 @@ void DictionaryWidget::writeToFile(const QString &fileName)
 	}
 	QDataStream out(&file);
 	out << tableModel->getWords();
+	lastFileName = fileName;
+	sendMessage(tr("The file \"%1\" saved").arg(lastFileName));
 }
 
 void DictionaryWidget::addEntry(QString original, QString translation,
@@ -154,6 +167,8 @@ void DictionaryWidget::addEntry(QString original, QString translation,
 		tableModel->setData(index, status, Qt::EditRole);
 		index = tableModel->index(0, 3, QModelIndex());
 		tableModel->setData(index, date, Qt::EditRole);
+		changesSaved = false;
+		emit updateMenus();
 		emit sendMessage(tr("Done"));
 	}
 	else {
@@ -204,6 +219,8 @@ void DictionaryWidget::editEntry()
 		QModelIndex statusIndex = tableModel->index(row, 2, QModelIndex());
 		tableModel->setData(statusIndex, status, Qt::EditRole);
 	}
+	changesSaved = false;
+	emit updateMenus();
 }
 
 void DictionaryWidget::findEntry()
@@ -248,6 +265,8 @@ void DictionaryWidget::removeEntry()
 		int row = proxyModel->mapToSource(index).row();
 		tableModel->removeRows(row, 1, QModelIndex());
 	}
+	changesSaved = false;
+	emit updateMenus();
 }
 
 void DictionaryWidget::updateActions()
@@ -350,8 +369,8 @@ void DictionaryWidget::importFromFile(const QString &fileName)
 														QModelIndex());
 		for(const auto &word: qAsConst(words))
 			addEntry(word.original, word.translation, word.status, word.date);
-		lastFileName = fileName;
 	}
+	changesSaved = false;
 }
 //to export to a text file in a "|original|translation|status|date\n" format
 void DictionaryWidget::exportToFile(const QString &fileName)
@@ -398,5 +417,6 @@ void DictionaryWidget::createNewFile()
 	//clean current table
 	tableModel->removeRows(0, tableModel->rowCount(QModelIndex()),
 													QModelIndex());
+	lastFileName = "";
 	clearInput();
 }

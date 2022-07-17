@@ -44,24 +44,29 @@ public:
 	void exportToFile(const QString &fileName);
 	void addEntry(QString original, QString translation,
 					QString status, QString date);
-	QPushButton* getEditButton() { return editButton; }
-	QPushButton* getDeleteButton() { return deleteButton; }
+	int getRowCount() const { return tableModel->rowCount(QModelIndex()); }
+	bool isSaved() const { return changesSaved; }
+	void setSaved(const bool flag) { changesSaved = flag; }
+	QString getLastFileName() const { return lastFileName; }
+	void setLastFileName(const QString &newLast) { lastFileName = newLast; }
 	void readSettings();
 	void writeSettings();
 signals:
 	void sendMessage(const QString &msg);
+	void updateMenus();
+public slots:
+	void clearInput();
+	void createNewFile();
 private slots:
 	void updateActions();
 	void addEntrySlot();
 	void editEntry();
 	void findEntry();
 	void removeEntry();
-public slots:
-	void clearInput();
-	void createNewFile();
 private:
 	QSettings dictionarySettings;
 	QString lastFileName;
+	bool changesSaved;
 
 	TableModel *tableModel;
 	QTableView *tableView;

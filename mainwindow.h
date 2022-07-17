@@ -34,8 +34,11 @@ public:
 	void readSettings();
 	void writeSettings();
 	virtual ~MainWindow();
+public slots:
+	void updateActions();
 private slots:
 	void openFile();
+	void saveChanges();
 	void saveFile();
 	void importFile(); //import the podicepses .txt to binary
 	void exportFile();
@@ -43,18 +46,26 @@ private slots:
 	void openStatistics();
 	void openTutorial();
 	void openAbout();
+	void openPreferences();
 private:
 	void createMenus();
+	void createFileMenu();
+	void createEditMenu();
+	void createToolsMenu();
+	void createHelpMenu();
 	QSettings mainWindowSettings;
 	DictionaryWidget *dictWidget;
 	QStatusBar *statusBar;
 	QMenu *fileMenu;
 	QAction *newAct;
 	QAction *openAct;
+	QAction *saveAct;
 	QAction *saveAsAct;
 	QAction *importAct;
 	QAction *exportAct;
 	QAction *exitAct;
+	QMenu *editMenu;
+	QAction *preferencesAct;
 	QMenu *toolsMenu;
 	QAction *openStatisticsAct;
 	QAction *clearInputAct;
