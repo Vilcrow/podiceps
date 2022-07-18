@@ -35,6 +35,9 @@ MainWindow::MainWindow() : mainWindowSettings("Vilcrow", "podiceps2")
 			this, &MainWindow::showMessage);
 	connect(dictWidget, &DictionaryWidget::updateMenus,
 			this, &MainWindow::updateActions);
+	if(!dictWidget->getLastFileName().isEmpty())
+		showMessage(tr("The file \"%1\" is open")
+						.arg(dictWidget->getLastFileName()));
 }
 
 void MainWindow::createMenus()

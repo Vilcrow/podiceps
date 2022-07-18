@@ -32,11 +32,8 @@ DictionaryWidget::DictionaryWidget()
 	setupTable();
 	createLineEditWidgets();
 	createButtons();
-	if(!lastFileName.isEmpty()) {
+	if(!lastFileName.isEmpty())
 		readFromFile(lastFileName);
-		//////////////////////////////////////////////////don't work
-		sendMessage(tr("The file \"%1\" is open").arg(lastFileName));
-	}
 }
 
 void DictionaryWidget::createLineEditWidgets()
@@ -112,8 +109,8 @@ void DictionaryWidget::readFromFile(const QString &fileName)
 {
 	QFile file(fileName);
 	if(!file.open(QIODevice::ReadOnly)) {
-		QMessageBox::information(this, tr("Unable to open file"),
-											file.errorString());
+		sendMessage(tr("Unable to open file: %1").arg(lastFileName));
+		lastFileName = "";
 		return;
 	}
 	QList<Word> words;

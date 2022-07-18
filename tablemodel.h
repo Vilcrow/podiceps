@@ -34,6 +34,22 @@ struct Word {
 	{
 		return original == other.original;
 	}
+	bool operator>(const Word &other) const
+	{
+		return original > other.original;
+	}
+	bool operator<(const Word &other) const
+	{
+		return original < other.original;
+	}
+	bool operator>=(const Word &other) const
+	{
+		return original >= other.original;
+	}
+	bool operator<=(const Word &other) const
+	{
+		return original <= other.original;
+	}
 };
 
 inline QDataStream &operator<<(QDataStream &stream, const Word &word)
