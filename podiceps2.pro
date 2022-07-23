@@ -4,8 +4,10 @@ requires(qtConfig(listview))
 SOURCES = dictionarywidget.cpp \
 		  main.cpp \
 		  mainwindow.cpp \
-		  tablemodel.cpp
+		  tablemodel.cpp \
+		  savedialog.cpp
 
 HEADERS = dictionarywidget.h \
 		  mainwindow.h \
-		  tablemodel.h
+		  tablemodel.h \
+		  savedialog.h

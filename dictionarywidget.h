@@ -39,7 +39,7 @@ public:
 	DictionaryWidget();
 	virtual ~DictionaryWidget();
 	void readFromFile(const QString &fileName);
-	void writeToFile(const QString &fileName);
+	void writeToFile (const QString &fileName);
 	void importFromFile(const QString &fileName);
 	void exportToFile(const QString &fileName);
 	void addEntry(QString original, QString translation,

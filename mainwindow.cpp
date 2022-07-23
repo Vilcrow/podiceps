@@ -20,6 +20,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include <QMenuBar>
 #include <QFileDialog>
 #include "mainwindow.h"
+#include "savedialog.h"
 
 MainWindow::MainWindow() : mainWindowSettings("Vilcrow", "podiceps2")
 {
@@ -55,7 +56,7 @@ void MainWindow::createFileMenu()
 	newAct->setShortcut(Qt::CTRL + Qt::Key_N);
 	fileMenu->addAction(newAct);
 	connect(newAct, &QAction::triggered,
-			dictWidget, &DictionaryWidget::createNewFile);
+			this, &MainWindow::createFile);
 	connect(newAct, &QAction::triggered, this, &MainWindow::updateActions);
 	openAct = new QAction(tr("&Open..."), this);
 	openAct->setShortcut(Qt::CTRL + Qt::Key_O);
@@ -82,7 +83,7 @@ void MainWindow::createFileMenu()
 	exitAct = new QAction(tr("E&xit"), this);
 	exitAct->setShortcut(Qt::CTRL + Qt::Key_W);
 	fileMenu->addAction(exitAct);
-	connect(exitAct, &QAction::triggered, this, &QWidget::close);
+	connect(exitAct, &QAction::triggered, this, &MainWindow::quitApp);
 }
 
 void MainWindow::createEditMenu()
@@ -124,6 +125,11 @@ void MainWindow::createHelpMenu()
 
 void MainWindow::openFile()
 {
+	if(!dictWidget->isSaved()) {
+		SaveDialog sDialog;
+		if(sDialog.exec())
+			saveChanges();
+	}
 	QString fileName = QFileDialog::getOpenFileName(this);
 	if(!fileName.isEmpty())
 		dictWidget->readFromFile(fileName);
@@ -187,6 +193,11 @@ void MainWindow::openAbout()
 
 void MainWindow::importFile()
 {
+	if(!dictWidget->isSaved()) {
+		SaveDialog sDialog;
+		if(sDialog.exec())
+			saveChanges();
+	}
 	QString fileName = QFileDialog::getOpenFileName(this);
 	if(!fileName.isEmpty()) {
 		dictWidget->importFromFile(fileName);
@@ -264,4 +275,24 @@ void MainWindow::updateActions()
 		saveAsAct->setEnabled(false);
 		exportAct->setEnabled(false);
 	}
+}
+
+void MainWindow::createFile()
+{
+	if(!dictWidget->isSaved()) {
+		SaveDialog sDialog;
+		if(sDialog.exec())
+			saveChanges();
+	}
+	dictWidget->createNewFile();
+}
+
+void MainWindow::quitApp()
+{
+	if(!dictWidget->isSaved()) {
+		SaveDialog sDialog;
+		if(sDialog.exec())
+			saveChanges();
+	}
+	close();
 }

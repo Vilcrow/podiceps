@@ -22,6 +22,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #include "dictionarywidget.h"
 #include "mainwindow.h"
 #include "tablemodel.h"
+#include "savedialog.h"
 
 DictionaryWidget::DictionaryWidget()
 						: dictionarySettings("Vilcrow", "podiceps2")
@@ -107,6 +108,8 @@ void DictionaryWidget::setupTable()
 
 void DictionaryWidget::readFromFile(const QString &fileName)
 {
+	if(fileName.isEmpty())
+		return; //fix me
 	QFile file(fileName);
 	if(!file.open(QIODevice::ReadOnly)) {
 		sendMessage(tr("Unable to open file: %1").arg(lastFileName));
@@ -138,6 +141,8 @@ void DictionaryWidget::readFromFile(const QString &fileName)
 
 void DictionaryWidget::writeToFile(const QString &fileName)
 {
+	if(fileName.isEmpty())
+		return; //fix me
 	QFile file(fileName);
 	if(!file.open(QIODevice::WriteOnly)) {
 		QMessageBox::information(this, tr("Unable to open file"),
@@ -164,9 +169,9 @@ void DictionaryWidget::addEntry(QString original, QString translation,
 		tableModel->setData(index, status, Qt::EditRole);
 		index = tableModel->index(0, 3, QModelIndex());
 		tableModel->setData(index, date, Qt::EditRole);
-		changesSaved = false;
+		//changesSaved = false;
+		//emit sendMessage(tr("Done")); moved to addEntrySlot
 		emit updateMenus();
-		emit sendMessage(tr("Done"));
 	}
 	else {
 		emit sendMessage(tr("Duplicate word. " 
@@ -183,8 +188,11 @@ void DictionaryWidget::addEntrySlot()
 		status = tr("new");
 	//get current date
 	QString date = QDateTime::currentDateTime().toString("yyyy-MM-dd");
-	if(!original.isEmpty())
+	if(!original.isEmpty()) {
 		addEntry(original, translation, status, date);
+		changesSaved = false;
+		emit sendMessage(tr("Done"));
+	}
 	else
 		emit sendMessage(tr("Enter the original word"));
 }
@@ -330,6 +338,8 @@ void DictionaryWidget::clearInput()
 //to import a text file of the podiceps
 void DictionaryWidget::importFromFile(const QString &fileName)
 {
+	if(fileName.isEmpty())
+		return; //fix me
 	QFile file(fileName);
 	if(!file.open(QIODevice::ReadOnly)) {
 		QMessageBox::information(this, tr("Unable to open file"),
@@ -372,6 +382,8 @@ void DictionaryWidget::importFromFile(const QString &fileName)
 //to export to a text file in a "|original|translation|status|date\n" format
 void DictionaryWidget::exportToFile(const QString &fileName)
 {
+	if(fileName.isEmpty())
+		return; //fix me
 	QFile file(fileName);
 	if(!file.open(QIODevice::WriteOnly)) {
 		QMessageBox::information(this, tr("Unable to open file"),

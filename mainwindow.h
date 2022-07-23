@@ -37,6 +37,7 @@ public:
 public slots:
 	void updateActions();
 private slots:
+	void createFile();
 	void openFile();
 	void saveChanges();
 	void saveFile();
@@ -47,6 +48,7 @@ private slots:
 	void openTutorial();
 	void openAbout();
 	void openPreferences();
+	void quitApp();
 private:
 	void createMenus();
 	void createFileMenu();
