@@ -99,10 +99,11 @@ void MainWindow::createEditMenu()
 void MainWindow::createToolsMenu()
 {
 	toolsMenu = menuBar()->addMenu(tr("&Tools"));
-	openStatisticsAct = new QAction(tr("&Statistics"), this);
-	toolsMenu->addAction(openStatisticsAct);
-	connect(openStatisticsAct, &QAction::triggered, this,
-			&MainWindow::openStatistics);
+	showStatisticsAct = new QAction(tr("&Statistics"), this);
+	showStatisticsAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N);
+	toolsMenu->addAction(showStatisticsAct);
+	connect(showStatisticsAct, &QAction::triggered, this,
+			&MainWindow::showStatistics);
 	clearInputAct = new QAction(tr("&Clear input"), this);
 	clearInputAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
 	toolsMenu->addAction(clearInputAct);
@@ -150,8 +151,11 @@ void MainWindow::showMessage(const QString &msg)
 	statusBar->showMessage(msg);
 }
 
-void MainWindow::openStatistics()
+void MainWindow::showStatistics()
 {
+	int count = dictWidget->getRowCount();
+	statusBar->showMessage(tr("Word count: %1").arg(count));
+/*
 	QDialog *statisticsDialog = new QDialog(this);
 	statisticsDialog->setFixedSize(500, 500);
 	statisticsDialog->setWindowTitle(tr("Statistics"));
@@ -161,6 +165,7 @@ void MainWindow::openStatistics()
 	vLayout->addWidget(wordCount);
 	statisticsDialog->setLayout(vLayout);
 	statisticsDialog->exec();
+*/
 }
 
 void MainWindow::openTutorial()

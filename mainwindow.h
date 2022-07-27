@@ -44,7 +44,7 @@ private slots:
 	void importFile(); //import the podicepses .txt to binary
 	void exportFile();
 	void showMessage(const QString &msg);
-	void openStatistics();
+	void showStatistics();
 	void openTutorial();
 	void openAbout();
 	void openPreferences();
@@ -69,7 +69,7 @@ private:
 	QMenu *editMenu;
 	QAction *preferencesAct;
 	QMenu *toolsMenu;
-	QAction *openStatisticsAct;
+	QAction *showStatisticsAct;
 	QAction *clearInputAct;
 	QMenu *helpMenu;
 	QAction *openTutorialAct;
