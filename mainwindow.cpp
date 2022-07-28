@@ -91,6 +91,7 @@ void MainWindow::createEditMenu()
 	editMenu = menuBar()->addMenu(tr("&Edit"));
 	preferencesAct = new QAction(tr("&Preferences"), this);
 	preferencesAct->setShortcut(Qt::CTRL + Qt::Key_P);
+	preferencesAct->setEnabled(false);
 	editMenu->addAction(preferencesAct);
 	connect(preferencesAct, &QAction::triggered,
 			this, &MainWindow::openPreferences);
@@ -116,6 +117,7 @@ void MainWindow::createHelpMenu()
 	helpMenu = menuBar()->addMenu(tr("&Help"));
 	openTutorialAct = new QAction(tr("&Tutorial"), this);
 	helpMenu->addAction(openTutorialAct);
+	helpMenu->setEnabled(false);
 	connect(openTutorialAct, &QAction::triggered, this,
 			&MainWindow::openTutorial);
 	openAboutAct = new QAction(tr("&About"), this);
@@ -155,17 +157,6 @@ void MainWindow::showStatistics()
 {
 	int count = dictWidget->getRowCount();
 	statusBar->showMessage(tr("Word count: %1").arg(count));
-/*
-	QDialog *statisticsDialog = new QDialog(this);
-	statisticsDialog->setFixedSize(500, 500);
-	statisticsDialog->setWindowTitle(tr("Statistics"));
-	QLabel *wordCount = new QLabel(tr("Word count: %1")
-							.arg(dictWidget->getRowCount()));
-	QVBoxLayout *vLayout = new QVBoxLayout;
-	vLayout->addWidget(wordCount);
-	statisticsDialog->setLayout(vLayout);
-	statisticsDialog->exec();
-*/
 }
 
 void MainWindow::openTutorial()

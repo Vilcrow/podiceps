@@ -169,8 +169,6 @@ void DictionaryWidget::addEntry(QString original, QString translation,
 		tableModel->setData(index, status, Qt::EditRole);
 		index = tableModel->index(0, 3, QModelIndex());
 		tableModel->setData(index, date, Qt::EditRole);
-		//changesSaved = false;
-		//emit sendMessage(tr("Done")); moved to addEntrySlot
 		emit updateMenus();
 	}
 	else {
