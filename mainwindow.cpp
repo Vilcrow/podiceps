@@ -117,7 +117,7 @@ void MainWindow::createHelpMenu()
 	helpMenu = menuBar()->addMenu(tr("&Help"));
 	openTutorialAct = new QAction(tr("&Tutorial"), this);
 	helpMenu->addAction(openTutorialAct);
-	helpMenu->setEnabled(false);
+	openTutorialAct->setEnabled(false);
 	connect(openTutorialAct, &QAction::triggered, this,
 			&MainWindow::openTutorial);
 	openAboutAct = new QAction(tr("&About"), this);
