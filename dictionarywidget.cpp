@@ -19,6 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QMessageBox>
 #include <QDateTime>
+#include <QFile>
 #include "dictionarywidget.h"
 #include "mainwindow.h"
 #include "tablemodel.h"
