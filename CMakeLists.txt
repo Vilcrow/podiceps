@@ -9,11 +9,11 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(Qt5Widgets REQUIRED)
 
 add_executable(podiceps2
-    dictionarywidget.cpp
+    dictionary_widget.cpp
     main.cpp
-    mainwindow.cpp 
-    savedialog.cpp
-    tablemodel.cpp
+    main_window.cpp
+    save_dialog.cpp
+    table_model.cpp
 )
 
 qt5_use_modules(podiceps2 Widgets)

@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  main.cpp                                                              */
+/*  save_dialog.h                                                         */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                               podiceps2                                */
@@ -22,13 +22,24 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#include "main_window.h"
-#include <QApplication>
+#ifndef SAVE_DIALOG_VIL_H
+#define SAVE_DIALOG_VIL_H
 
-int main(int argc, char **argv)
+#include <QDialog>
+#include <QWidget>
+#include <QLabel>
+#include <QPushButton>
+
+class SaveDialog : public QDialog
 {
-	QApplication app(argc, argv);
-	MainWindow mainWindow;
-	mainWindow.show();
-	return app.exec();
-}
+	Q_OBJECT
+public:
+	SaveDialog(QWidget *parent = 0);
+private:
+	QLabel *infoLabel;
+	QPushButton *saveButton;
+	QPushButton *noButton;
+	//QPushButton *cancelButton;
+};
+
+#endif

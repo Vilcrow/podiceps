@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  main.cpp                                                              */
+/*  main_window.h                                                         */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                               podiceps2                                */
@@ -22,13 +22,63 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#include "main_window.h"
-#include <QApplication>
+#ifndef MAIN_WINDOW_VIL_H
+#define MAIN_WINDOW_VIL_H
 
-int main(int argc, char **argv)
+#include "dictionary_widget.h"
+#include <QMainWindow>
+#include <QItemSelection>
+#include <QStatusBar>
+#include <QSettings>
+
+class MainWindow: public QMainWindow
 {
-	QApplication app(argc, argv);
-	MainWindow mainWindow;
-	mainWindow.show();
-	return app.exec();
-}
+	Q_OBJECT
+public:
+	MainWindow();
+	void readSettings();
+	void writeSettings();
+	virtual ~MainWindow();
+public slots:
+	void updateActions();
+private slots:
+	void createFile();
+	void openFile();
+	void saveChanges();
+	void saveFile();
+	void importFile(); //import the podicepses .txt to binary
+	void exportFile();
+	void showMessage(const QString &msg);
+	void showStatistics();
+	void openTutorial();
+	void openAbout();
+	void openPreferences();
+	void quitApp();
+private:
+	void createMenus();
+	void createFileMenu();
+	void createEditMenu();
+	void createToolsMenu();
+	void createHelpMenu();
+	QSettings mainWindowSettings;
+	DictionaryWidget *dictWidget;
+	QStatusBar *statusBar;
+	QMenu *fileMenu;
+	QAction *newAct;
+	QAction *openAct;
+	QAction *saveAct;
+	QAction *saveAsAct;
+	QAction *importAct;
+	QAction *exportAct;
+	QAction *exitAct;
+	QMenu *editMenu;
+	QAction *preferencesAct;
+	QMenu *toolsMenu;
+	QAction *showStatisticsAct;
+	QAction *clearInputAct;
+	QMenu *helpMenu;
+	QAction *openTutorialAct;
+	QAction *openAboutAct;
+};
+
+#endif
