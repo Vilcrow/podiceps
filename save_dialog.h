@@ -35,11 +35,15 @@ class SaveDialog : public QDialog
 	Q_OBJECT
 public:
 	SaveDialog(QWidget *parent = 0);
+	bool isCancelled() const { return cancelled; }
 private:
 	QLabel *infoLabel;
 	QPushButton *saveButton;
 	QPushButton *noButton;
-	//QPushButton *cancelButton;
+	QPushButton *cancelButton;
+
+	bool cancelled;
+	void cancel();
 };
 
 #endif

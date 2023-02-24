@@ -35,24 +35,19 @@ struct Word {
 	QString translation;
 	QString status;
 	QString date;
-	bool operator==(const Word &other) const
-	{
+	bool operator==(const Word &other) const {
 		return original == other.original;
 	}
-	bool operator>(const Word &other) const
-	{
+	bool operator>(const Word &other) const {
 		return original > other.original;
 	}
-	bool operator<(const Word &other) const
-	{
+	bool operator<(const Word &other) const {
 		return original < other.original;
 	}
-	bool operator>=(const Word &other) const
-	{
+	bool operator>=(const Word &other) const {
 		return original >= other.original;
 	}
-	bool operator<=(const Word &other) const
-	{
+	bool operator<=(const Word &other) const {
 		return original <= other.original;
 	}
 };

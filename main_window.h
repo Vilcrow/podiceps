@@ -60,9 +60,11 @@ private:
 	void createEditMenu();
 	void createToolsMenu();
 	void createHelpMenu();
+
 	QSettings mainWindowSettings;
 	DictionaryWidget *dictWidget;
 	QStatusBar *statusBar;
+
 	QMenu *fileMenu;
 	QAction *newAct;
 	QAction *openAct;
@@ -71,11 +73,14 @@ private:
 	QAction *importAct;
 	QAction *exportAct;
 	QAction *exitAct;
+
 	QMenu *editMenu;
 	QAction *preferencesAct;
+
 	QMenu *toolsMenu;
 	QAction *showStatisticsAct;
 	QAction *clearInputAct;
+
 	QMenu *helpMenu;
 	QAction *openTutorialAct;
 	QAction *openAboutAct;

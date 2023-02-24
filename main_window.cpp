@@ -246,8 +246,9 @@ void MainWindow::saveChanges()
 	QString fileName;
 	if(dictWidget->getLastFileName().isEmpty())
 		QFileDialog::getSaveFileName(this);
-	else
+	else {
 		fileName = dictWidget->getLastFileName();
+	}
 	if(!fileName.isEmpty()) {
 		dictWidget->writeToFile(fileName);
 		dictWidget->setSaved(true);
@@ -282,8 +283,9 @@ void MainWindow::createFile()
 {
 	if(!dictWidget->isSaved()) {
 		SaveDialog sDialog;
-		if(sDialog.exec())
+		if(sDialog.exec()) {
 			saveChanges();
+		}
 	}
 	dictWidget->createNewFile();
 }
@@ -292,8 +294,13 @@ void MainWindow::quitApp()
 {
 	if(!dictWidget->isSaved()) {
 		SaveDialog sDialog;
-		if(sDialog.exec())
+		int result = sDialog.exec();
+		if(result == QDialog::Accepted) {
 			saveChanges();
+		}
+		else if(sDialog.isCancelled()) {
+			return;
+		}
 	}
 	close();
 }

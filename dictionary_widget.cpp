@@ -30,9 +30,7 @@
 #include <QDateTime>
 #include <QFile>
 
-DictionaryWidget::DictionaryWidget()
-						: dictionarySettings("Vilcrow", "podiceps2")
-						, changesSaved(true)
+DictionaryWidget::DictionaryWidget() : dictionarySettings("Vilcrow", "podiceps2")
 {
 	readSettings();
 	mainLayout = new QVBoxLayout(this);
@@ -41,6 +39,7 @@ DictionaryWidget::DictionaryWidget()
 	createButtons();
 	if(!lastFileName.isEmpty())
 		readFromFile(lastFileName);
+	changesSaved = true;
 }
 
 void DictionaryWidget::createLineEditWidgets()
@@ -195,10 +194,13 @@ void DictionaryWidget::addEntrySlot()
 	if(!original.isEmpty()) {
 		addEntry(original, translation, status, date);
 		changesSaved = false;
+		originalLineEdit->setStyleSheet("");
 		emit sendMessage(tr("Done"));
 	}
-	else
+	else {
+		originalLineEdit->setStyleSheet("border: 1px solid red");
 		emit sendMessage(tr("Enter the original word"));
+	}
 }
 
 void DictionaryWidget::editEntry()
@@ -334,6 +336,7 @@ void DictionaryWidget::clearInput()
 {
 	tableView->selectionModel()->clear();
 	originalLineEdit->setText("");	
+	originalLineEdit->setStyleSheet("");
 	translationLineEdit->setText("");	
 	statusLineEdit->setText("");	
 	dateLineEdit->setText("");	

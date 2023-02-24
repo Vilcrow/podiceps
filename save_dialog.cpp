@@ -32,18 +32,25 @@ SaveDialog::SaveDialog(QWidget *parent) : QDialog(parent)
 	infoLabel = new QLabel(tr("Save changes to the current file?"));
 	saveButton = new QPushButton(tr("Save"));
 	noButton = new QPushButton(tr("No"));
-	//cancelButton = new QPushButton(tr("Cancel"));
+	cancelButton = new QPushButton(tr("Cancel"));
+	cancelled = false;
 	
 	QVBoxLayout *vLayout = new QVBoxLayout;
 	vLayout->addWidget(infoLabel);
 	QHBoxLayout *hLayout = new QHBoxLayout;
 	hLayout->addWidget(saveButton);
 	hLayout->addWidget(noButton);
-	//hLayout->addWidget(cancelButton);
+	hLayout->addWidget(cancelButton);
 	vLayout->addLayout(hLayout);
 	setLayout(vLayout);
 
 	connect(saveButton, &QAbstractButton::clicked, this, &QDialog::accept);
 	connect(noButton, &QAbstractButton::clicked, this, &QDialog::reject);
-	//connect(cancelButton, &QAbstractionButton::clicked, ...);
+	connect(cancelButton, &QAbstractButton::clicked, this, &SaveDialog::cancel);
+}
+
+void SaveDialog::cancel()
+{
+	cancelled = true;
+	reject();
 }
