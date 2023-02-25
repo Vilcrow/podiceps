@@ -27,25 +27,6 @@
 #include <QMenuBar>
 #include <QFileDialog>
 
-MainWindow::MainWindow() : mainWindowSettings("Vilcrow", "podiceps2")
-{
-	readSettings();
-	setWindowTitle("podiceps2");
-	dictWidget = new DictionaryWidget;
-	setCentralWidget(dictWidget);
-	createMenus();
-	statusBar = new QStatusBar;
-	setStatusBar(statusBar);
-	updateActions();
-	connect(dictWidget, &DictionaryWidget::sendMessage,
-			this, &MainWindow::showMessage);
-	connect(dictWidget, &DictionaryWidget::updateMenus,
-			this, &MainWindow::updateActions);
-	if(!dictWidget->getLastFileName().isEmpty())
-		showMessage(tr("The file \"%1\" is open")
-						.arg(dictWidget->getLastFileName()));
-}
-
 void MainWindow::createMenus()
 {
 	createFileMenu();
@@ -60,8 +41,7 @@ void MainWindow::createFileMenu()
 	newAct = new QAction(tr("&New..."), this);
 	newAct->setShortcut(Qt::CTRL + Qt::Key_N);
 	fileMenu->addAction(newAct);
-	connect(newAct, &QAction::triggered,
-			this, &MainWindow::createFile);
+	connect(newAct, &QAction::triggered, this, &MainWindow::createFile);
 	connect(newAct, &QAction::triggered, this, &MainWindow::updateActions);
 	openAct = new QAction(tr("&Open..."), this);
 	openAct->setShortcut(Qt::CTRL + Qt::Key_O);
@@ -108,8 +88,8 @@ void MainWindow::createToolsMenu()
 	showStatisticsAct = new QAction(tr("&Statistics"), this);
 	showStatisticsAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N);
 	toolsMenu->addAction(showStatisticsAct);
-	connect(showStatisticsAct, &QAction::triggered, this,
-			&MainWindow::showStatistics);
+	connect(showStatisticsAct, &QAction::triggered,
+			this, &MainWindow::showStatistics);
 	clearInputAct = new QAction(tr("&Clear input"), this);
 	clearInputAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
 	toolsMenu->addAction(clearInputAct);
@@ -123,24 +103,25 @@ void MainWindow::createHelpMenu()
 	openTutorialAct = new QAction(tr("&Tutorial"), this);
 	helpMenu->addAction(openTutorialAct);
 	openTutorialAct->setEnabled(false);
-	connect(openTutorialAct, &QAction::triggered, this,
-			&MainWindow::openTutorial);
+	connect(openTutorialAct, &QAction::triggered,
+			this, &MainWindow::openTutorial);
 	openAboutAct = new QAction(tr("&About"), this);
 	helpMenu->addAction(openAboutAct);
-	connect(openAboutAct, &QAction::triggered, this,
-			&MainWindow::openAbout);
+	connect(openAboutAct, &QAction::triggered, this, &MainWindow::openAbout);
 }
 
 void MainWindow::openFile()
 {
 	if(!dictWidget->isSaved()) {
 		SaveDialog sDialog;
-		if(sDialog.exec())
+		if(sDialog.exec()) {
 			saveChanges();
+		}
 	}
 	QString fileName = QFileDialog::getOpenFileName(this);
-	if(!fileName.isEmpty())
+	if(!fileName.isEmpty()) {
 		dictWidget->readFromFile(fileName);
+	}
 }
 
 void MainWindow::saveFile()
@@ -148,8 +129,6 @@ void MainWindow::saveFile()
 	QString fileName = QFileDialog::getSaveFileName(this);
 	if(!fileName.isEmpty()) {
 		dictWidget->writeToFile(fileName);
-		dictWidget->setSaved(true);
-		dictWidget->setLastFileName(fileName);
 	}
 }
 
@@ -184,7 +163,8 @@ void MainWindow::openAbout()
 							+ tr("License: GPL-3.0-or-later"));
 	QPushButton *closeButton = new QPushButton(tr("Close"));
 	closeButton->setFixedWidth(100);
-	connect(closeButton, &QAbstractButton::clicked, aboutWindow, &QDialog::accept);
+	connect(closeButton, &QAbstractButton::clicked,
+			aboutWindow, &QDialog::accept);
 	QVBoxLayout *vLayout = new QVBoxLayout;
 	vLayout->addWidget(aboutLabel);
 	vLayout->addWidget(closeButton, Qt::AlignCenter);
@@ -196,8 +176,9 @@ void MainWindow::importFile()
 {
 	if(!dictWidget->isSaved()) {
 		SaveDialog sDialog;
-		if(sDialog.exec())
+		if(sDialog.exec()) {
 			saveChanges();
+		}
 	}
 	QString fileName = QFileDialog::getOpenFileName(this);
 	if(!fileName.isEmpty()) {
@@ -231,11 +212,6 @@ void MainWindow::writeSettings()
 */
 }
 
-MainWindow::~MainWindow()
-{
-	writeSettings();
-}
-
 void MainWindow::openPreferences()
 {
 
@@ -243,17 +219,16 @@ void MainWindow::openPreferences()
 
 void MainWindow::saveChanges()
 {
-	QString fileName;
-	if(dictWidget->getLastFileName().isEmpty())
-		QFileDialog::getSaveFileName(this);
-	else {
-		fileName = dictWidget->getLastFileName();
+	QString fileName = dictWidget->getLastFileName();
+	if(fileName.isEmpty()) {
+		fileName = QFileDialog::getSaveFileName(this);
 	}
-	if(!fileName.isEmpty()) {
-		dictWidget->writeToFile(fileName);
-		dictWidget->setSaved(true);
+
+	if(fileName.isEmpty()) {
+		return;
 	}
-	dictWidget->setSaved(true);
+
+	dictWidget->writeToFile(fileName);
 	updateActions();
 }
 
@@ -261,19 +236,23 @@ void MainWindow::updateActions()
 {
 	if(dictWidget->getRowCount() != 0) {
 		newAct->setEnabled(true);
-		if(!dictWidget->isSaved() && !dictWidget->getLastFileName().isEmpty())
+		if(!dictWidget->isSaved() && !dictWidget->getLastFileName().isEmpty()) {
 			saveAct->setEnabled(true);
-		else
+		}
+		else {
 			saveAct->setEnabled(false);
+		}
 		saveAsAct->setEnabled(true);
 		exportAct->setEnabled(true);
 	}
 	else {
 		newAct->setEnabled(false);
-		if(!dictWidget->isSaved() && !dictWidget->getLastFileName().isEmpty())
+		if(!dictWidget->isSaved() && !dictWidget->getLastFileName().isEmpty()) {
 			saveAct->setEnabled(true);
-		else
+		}
+		else {
 			saveAct->setEnabled(false);
+		}
 		saveAsAct->setEnabled(false);
 		exportAct->setEnabled(false);
 	}
@@ -298,9 +277,49 @@ void MainWindow::quitApp()
 		if(result == QDialog::Accepted) {
 			saveChanges();
 		}
-		else if(sDialog.isCancelled()) {
+		else if(sDialog.isCancelled() || !dictWidget->isSaved()) {
 			return;
 		}
 	}
 	close();
+}
+/*
+bool MainWindow::trySaveChanges()
+{
+	bool ret = false;
+	SaveDialog sDialog;
+	int result = sDialog.exec();
+	if(result == QDialog::Accepted) {
+		saveChanges();
+		ret = true;
+	}
+	else if(sDialog.isCancelled()) {
+		ret = false;
+	}
+	return ret;
+}
+*/
+MainWindow::MainWindow() : mainWindowSettings("Vilcrow", "podiceps2")
+{
+	readSettings();
+	setWindowTitle("podiceps2");
+	dictWidget = new DictionaryWidget;
+	setCentralWidget(dictWidget);
+	createMenus();
+	statusBar = new QStatusBar;
+	setStatusBar(statusBar);
+	updateActions();
+	connect(dictWidget, &DictionaryWidget::sendMessage,
+			this, &MainWindow::showMessage);
+	connect(dictWidget, &DictionaryWidget::updateMenus,
+			this, &MainWindow::updateActions);
+	if(!dictWidget->getLastFileName().isEmpty()) {
+		QString last = dictWidget->getLastFileName();
+		showMessage(tr("The file \"%1\" is open").arg(last));
+	}
+}
+
+MainWindow::~MainWindow()
+{
+	writeSettings();
 }

@@ -26,21 +26,10 @@
 #include "main_window.h"
 #include "table_model.h"
 #include "save_dialog.h"
+#include "word_line.h"
 #include <QMessageBox>
 #include <QDateTime>
 #include <QFile>
-
-DictionaryWidget::DictionaryWidget() : dictionarySettings("Vilcrow", "podiceps2")
-{
-	readSettings();
-	mainLayout = new QVBoxLayout(this);
-	setupTable();
-	createLineEditWidgets();
-	createButtons();
-	if(!lastFileName.isEmpty())
-		readFromFile(lastFileName);
-	changesSaved = true;
-}
 
 void DictionaryWidget::createLineEditWidgets()
 {
@@ -48,10 +37,12 @@ void DictionaryWidget::createLineEditWidgets()
 	translationLabel = new QLabel(tr("Translation"));
 	statusLabel = new QLabel(tr("Status"));
 	dateLabel = new QLabel(tr("Date"));
+
 	originalLineEdit = new QLineEdit();
 	translationLineEdit = new QLineEdit();
 	statusLineEdit = new QLineEdit();
 	dateLineEdit = new QLineEdit();
+
 	inputLayout = new QGridLayout();
 	inputLayout->addWidget(originalLabel, 0, 0, Qt::AlignCenter);
 	inputLayout->addWidget(translationLabel, 0, 1, Qt::AlignCenter);
@@ -67,33 +58,40 @@ void DictionaryWidget::createLineEditWidgets()
 void DictionaryWidget::createButtons()
 {
 	buttonsLayout = new QHBoxLayout();
+
 	addButton = new QPushButton(tr("Add"));
 	connect(addButton, &QAbstractButton::clicked,
 			this, &DictionaryWidget::addEntrySlot);
 	buttonsLayout->addWidget(addButton);
+
 	editButton = new QPushButton(tr("Edit"));
 	editButton->setEnabled(false);
 	connect(editButton, &QAbstractButton::clicked,
 			this, &DictionaryWidget::editEntry);
 	buttonsLayout->addWidget(editButton);
+
 	findButton = new QPushButton(tr("Find"));
 	connect(findButton, &QAbstractButton::clicked,
 			this, &DictionaryWidget::findEntry);
 	buttonsLayout->addWidget(findButton);
+
 	deleteButton = new QPushButton(tr("Delete"));
 	connect(deleteButton, &QAbstractButton::clicked,
 			this, &DictionaryWidget::removeEntry);
 	deleteButton->setEnabled(false);
 	buttonsLayout->addWidget(deleteButton);
+
 	mainLayout->addLayout(buttonsLayout);
 }
 
 void DictionaryWidget::setupTable()
 {
 	tableModel = new TableModel(this);
+
 	proxyModel = new QSortFilterProxyModel(this);
 	proxyModel->setSourceModel(tableModel);
 	proxyModel->setFilterKeyColumn(0);
+
 	tableView = new QTableView;
 	tableView->setModel(proxyModel);
 	tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -106,6 +104,7 @@ void DictionaryWidget::setupTable()
 	tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 	tableView->setSortingEnabled(true);
+
 	mainLayout->addWidget(tableView);
 	connect(tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
 			this, &DictionaryWidget::updateActions);
@@ -113,73 +112,83 @@ void DictionaryWidget::setupTable()
 
 void DictionaryWidget::readFromFile(const QString &fileName)
 {
-	if(fileName.isEmpty())
-		return; //fix me
+	if(fileName.isEmpty()) {
+		return; // Fix me.
+	}
+
 	QFile file(fileName);
 	if(!file.open(QIODevice::ReadOnly)) {
 		sendMessage(tr("Unable to open file: %1").arg(lastFileName));
 		lastFileName = "";
 		return;
 	}
-	QList<Word> words;
+
+	QList<WordLine> words;
 	try {
 		QDataStream in(&file);
 		in >> words;
 	}
 	catch(...) {
 		QMessageBox::information(this, tr("Unable to open file"),
-											tr("Invalid format"));
+									   tr("Invalid format"));
 		return;
 	}
+
 	if(words.isEmpty())
 		sendMessage(tr("The file no words"));
 	else {
-		//clean current table
+		// Clean current table.
 		tableModel->removeRows(0, tableModel->rowCount(QModelIndex()),
-														QModelIndex());
-		for(const auto &word: qAsConst(words))
-			addEntry(word.original, word.translation, word.status, word.date);
+							   QModelIndex());
+		for(const auto &word: qAsConst(words)) {
+			addEntry(word);
+		}
 		lastFileName = fileName;
 	}
+
 	sendMessage(tr("The file \"%1\" is open").arg(lastFileName));
 }
 
 void DictionaryWidget::writeToFile(const QString &fileName)
 {
-	if(fileName.isEmpty())
-		return; //fix me
+	if(fileName.isEmpty()) {
+		return; // Fix me.
+	}
+
 	QFile file(fileName);
 	if(!file.open(QIODevice::WriteOnly)) {
 		QMessageBox::information(this, tr("Unable to open file"),
-											file.errorString());
+								 file.errorString());
 		return;
 	}
+
 	QDataStream out(&file);
 	out << tableModel->getWords();
+
 	lastFileName = fileName;
+	changesSaved = true;
+
 	sendMessage(tr("The file \"%1\" saved").arg(lastFileName));
 }
 
-void DictionaryWidget::addEntry(QString original, QString translation,
-								QString status, QString date)
+QString DictionaryWidget::addEntry(const WordLine &word)
 {
-	if(!tableModel->getWords().contains({ original, translation,
-											status, date })) {
+	if(!tableModel->getWords().contains(word)) {
 		tableModel->insertRows(0, 1, QModelIndex());
 		QModelIndex index = tableModel->index(0, 0, QModelIndex());
-		tableModel->setData(index, original, Qt::EditRole);
+		tableModel->setData(index, word.getOriginal(), Qt::EditRole);
 		index = tableModel->index(0, 1, QModelIndex());
-		tableModel->setData(index, translation, Qt::EditRole);
+		tableModel->setData(index, word.getTranslation(), Qt::EditRole);
 		index = tableModel->index(0, 2, QModelIndex());
-		tableModel->setData(index, status, Qt::EditRole);
+		tableModel->setData(index, word.getStatus(), Qt::EditRole);
 		index = tableModel->index(0, 3, QModelIndex());
-		tableModel->setData(index, date, Qt::EditRole);
+		tableModel->setData(index, word.getDate(), Qt::EditRole);
 		emit updateMenus();
+		return QString(tr("Done"));
 	}
-	else {
-		emit sendMessage(tr("Duplicate word. " 
-							"The word \"%1\" already exists.").arg(original));
-	}
+
+	return QString(tr("Duplicate word. The word \"%1\" already exists.")
+				   .arg(word.getOriginal()));
 }
 
 void DictionaryWidget::addEntrySlot()
@@ -187,15 +196,18 @@ void DictionaryWidget::addEntrySlot()
 	QString original = originalLineEdit->text();
 	QString translation = translationLineEdit->text();
 	QString status = statusLineEdit->text();
-	if(status.isEmpty()) //user didn't specify the status
+	// User didn't specify the status.
+	if(status.isEmpty()) {
 		status = tr("new");
-	//get current date
+	}
+	// Get current date.
 	QString date = QDateTime::currentDateTime().toString("yyyy-MM-dd");
 	if(!original.isEmpty()) {
-		addEntry(original, translation, status, date);
+		WordLine word(original, translation, status, date);
+		QString result = addEntry(word);
 		changesSaved = false;
 		originalLineEdit->setStyleSheet("");
-		emit sendMessage(tr("Done"));
+		emit sendMessage(result);
 	}
 	else {
 		originalLineEdit->setStyleSheet("border: 1px solid red");
@@ -212,7 +224,7 @@ void DictionaryWidget::editEntry()
 	}
 	QString translation = translationLineEdit->text();
 	QString status = statusLineEdit->text();
-	QString date = ""; //formal variable
+	QString date = ""; // Formal variable.
 	QModelIndexList indexes = tableView->selectionModel()->selectedRows();
 	int row = -1;
 	for(auto index : indexes) {
@@ -242,7 +254,7 @@ void DictionaryWidget::findEntry()
 		sendMessage(tr("The filter is cleared"));
 		return;
 	}
-	int columnFind = -1; //which column will we search for
+	int columnFind = -1; // Which column will we search for.
 	QRegExp::PatternSyntax syntax = QRegExp::PatternSyntax(QRegExp::FixedString);
 	QRegExp regExp;
 	if(!originalLineEdit->text().isEmpty()) {
@@ -251,7 +263,7 @@ void DictionaryWidget::findEntry()
 	}
 	else if(!translationLineEdit->text().isEmpty()) {
 		regExp = QRegExp(translationLineEdit->text(), Qt::CaseInsensitive,
-																syntax);
+						 syntax);
 		columnFind = 1;
 	}
 	else if(!statusLineEdit->text().isEmpty()) {
@@ -264,9 +276,10 @@ void DictionaryWidget::findEntry()
 	}
 	proxyModel->setFilterKeyColumn(columnFind);
 	proxyModel->setFilterRegExp(regExp);
+	QString col = tableModel->headerData(columnFind, Qt::Horizontal,
+										 Qt::DisplayRole).toString();
 	sendMessage(tr("The filter \"%1\" (%2) is set").arg(regExp.pattern())
-					.arg(tableModel->headerData(columnFind, Qt::Horizontal,
-					Qt::DisplayRole).toString()));
+												   .arg(col));
 }
 
 void DictionaryWidget::removeEntry()
@@ -312,7 +325,7 @@ void DictionaryWidget::updateActions()
 		deleteButton->setEnabled(true);
 		editButton->setEnabled(true);
 	}
-	else { //dictionary is empty or the row don't selected
+	else { // Dictionary is empty or the row don't selected.
 		originalLineEdit->setText("");	
 		translationLineEdit->setText("");	
 		statusLineEdit->setText("");	
@@ -327,8 +340,9 @@ bool DictionaryWidget::isEditLinesEmpty()
 	if(originalLineEdit->text().isEmpty() &&
 	   translationLineEdit->text().isEmpty() &&
 	   statusLineEdit->text().isEmpty() &&
-	   dateLineEdit->text().isEmpty())
+	   dateLineEdit->text().isEmpty()) {
 		return true;
+	}
 	return false;
 }
 
@@ -342,35 +356,34 @@ void DictionaryWidget::clearInput()
 	dateLineEdit->setText("");	
 	originalLineEdit->setFocus(Qt::OtherFocusReason);
 }
-//to import a text file of the podiceps
+
+// To import a text file of the podiceps.
 void DictionaryWidget::importFromFile(const QString &fileName)
 {
-	if(fileName.isEmpty())
-		return; //fix me
+	if(fileName.isEmpty()) {
+		return; // Fix me.
+	}
 	QFile file(fileName);
 	if(!file.open(QIODevice::ReadOnly)) {
 		QMessageBox::information(this, tr("Unable to open file"),
-											file.errorString());
+								 file.errorString());
 		return;
 	}
-	QList<Word> words;
+	QList<WordLine> words;
 	QTextStream in(&file);
 	while(!in.atEnd()) {
 		QString line = in.readLine();
 		QStringList list = line.split('|');
-		if(list.size() != 5) { //first element is empty
+		if(list.size() != 5) { // First element is empty.
 			QMessageBox::information(this, tr("Incorrect string"),
-												list.join('|'));
+									 list.join('|'));
 			return;
 		}
-		Word word;
-		word.original = list[1]; //skip the empty element in list
-		word.translation = list[2];
-		word.status = list[3];
-		//change format "dd-MM-yyyy" to "yyyy-MM-dd"
+		WordLine word(list[1], list[2], list[3]);
+		// Change format "dd-MM-yyyy" to "yyyy-MM-dd".
 		QDateTime oldDate = QDateTime::fromString(list[4], "dd-MM-yyyy");
 		QString newDate = oldDate.toString("yyyy-MM-dd");
-		word.date = newDate;
+		word.setDate(newDate);
 		words << word;
 	}
 	if(words.isEmpty()) {
@@ -378,34 +391,42 @@ void DictionaryWidget::importFromFile(const QString &fileName)
 			tr("The file you are attempting to open contains no words."));
 	}
 	else {
-		//clean current table
+		// Clean current table.
 		tableModel->removeRows(0, tableModel->rowCount(QModelIndex()),
 														QModelIndex());
-		for(const auto &word: qAsConst(words))
-			addEntry(word.original, word.translation, word.status, word.date);
+		for(const auto &word: qAsConst(words)) {
+			addEntry(word);
+		}
 	}
 	changesSaved = false;
 }
-//to export to a text file in a "|original|translation|status|date\n" format
+
+// To export to a text file in a "|original|translation|status|date\n" format.
 void DictionaryWidget::exportToFile(const QString &fileName)
 {
-	if(fileName.isEmpty())
-		return; //fix me
+	if(fileName.isEmpty()) {
+		return; // Fix me.
+	}
+
 	QFile file(fileName);
 	if(!file.open(QIODevice::WriteOnly)) {
 		QMessageBox::information(this, tr("Unable to open file"),
-											file.errorString());
+								 file.errorString());
 		return;
 	}
+
 	QTextStream out(&file);
-	QList<Word> words = tableModel->getWords();
+	QList<WordLine> words = tableModel->getWords();
 	for(auto w : words) {
-		//change format "yyyy-MM-dd" to "dd-MM-yyyy"
-		QDateTime newDate = QDateTime::fromString(w.date, "yyyy-MM-dd");
+		// Change format "yyyy-MM-dd" to "dd-MM-yyyy".
+		QDateTime newDate = QDateTime::fromString(w.getDate(), "yyyy-MM-dd");
 		QString oldDate = newDate.toString("dd-MM-yyyy");
-		out << QString("|%1|%2|%3|%4\n").arg(w.original)
-						.arg(w.translation).arg(w.status).arg(oldDate);
+		out << QString("|%1|%2|%3|%4\n").arg(w.getOriginal())
+										.arg(w.getTranslation())
+										.arg(w.getStatus())
+										.arg(oldDate);
 	}
+
 	file.close();
 }
 
@@ -423,16 +444,31 @@ void DictionaryWidget::writeSettings()
 	dictionarySettings.endGroup();
 }
 
+void DictionaryWidget::createNewFile()
+{
+	// Clean current table.
+	tableModel->removeRows(0, tableModel->rowCount(QModelIndex()),
+						   QModelIndex());
+	lastFileName = "";
+	clearInput();
+}
+
+DictionaryWidget::DictionaryWidget() : dictionarySettings("Vilcrow", "podiceps2")
+{
+	mainLayout = new QVBoxLayout(this);
+	readSettings();
+	setupTable();
+	createLineEditWidgets();
+	createButtons();
+
+	if(!lastFileName.isEmpty()) {
+		readFromFile(lastFileName);
+	}
+
+	changesSaved = true;
+}
+
 DictionaryWidget::~DictionaryWidget()
 {
 	writeSettings();
-}
-
-void DictionaryWidget::createNewFile()
-{
-	//clean current table
-	tableModel->removeRows(0, tableModel->rowCount(QModelIndex()),
-													QModelIndex());
-	lastFileName = "";
-	clearInput();
 }

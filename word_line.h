@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  save_dialog.h                                                         */
+/*  word_line.h                                                           */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                               podiceps2                                */
@@ -22,29 +22,56 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef SAVE_DIALOG_VIL_H
-#define SAVE_DIALOG_VIL_H
+#ifndef WORD_LINE_VIL_H
+#define WORD_LINE_VIL_H
 
-#include <QDialog>
-#include <QWidget>
-#include <QLabel>
-#include <QPushButton>
+#include <QString>
+#include <QObject>
 
-class SaveDialog : public QDialog
-{
-	Q_OBJECT
+class WordLine {
 public:
-	bool isCancelled() const { return cancelled; }
+	QString getOriginal() const { return original; }
+	QString getTranslation() const { return translation; }
+	QString getStatus() const { return status; }
+	QString getDate() const { return date; }
 
-	SaveDialog(QWidget *parent = 0);
+	void setOriginal(const QString &pOriginal) { original = pOriginal; }
+	void setTranslation(const QString &pTranslation) {
+		translation = pTranslation;
+	}
+	void setStatus(const QString &pStatus) { status = pStatus; }
+	void setDate(const QString &pDate) { date = pDate; }
+
+	bool operator==(const WordLine &other) const;
+	bool operator>(const WordLine &other) const;
+	bool operator<(const WordLine &other) const;
+	bool operator>=(const WordLine &other) const;
+	bool operator<=(const WordLine &other) const;
+
+	QDataStream& operator<<(QDataStream &stream) const;
+	QDataStream& operator>>(QDataStream &stream);
+
+	WordLine();
+	WordLine(const QString pOriginal,
+			 const QString pTranslation = QString(),
+			 const QString pStatus = QString(QObject::tr("new")),
+			 const QString pDate = QString()
+			);
 private:
-	QLabel *infoLabel;
-	QPushButton *saveButton;
-	QPushButton *noButton;
-	QPushButton *cancelButton;
-
-	bool cancelled;
-	void cancel();
+	QString original;
+	QString translation;
+	QString status;
+	QString date;
 };
+
+inline QDataStream &operator<<(QDataStream &stream, const WordLine &word)
+{
+	return stream << word;
+}
+
+inline QDataStream &operator>>(QDataStream &stream, WordLine &word)
+{
+	return stream >> word;
+}
 
 #endif

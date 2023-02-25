@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  save_dialog.h                                                         */
+/*  word_line.cpp                                                         */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                               podiceps2                                */
@@ -22,29 +22,53 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef SAVE_DIALOG_VIL_H
-#define SAVE_DIALOG_VIL_H
+#include "word_line.h"
 
-#include <QDialog>
-#include <QWidget>
-#include <QLabel>
-#include <QPushButton>
-
-class SaveDialog : public QDialog
+bool WordLine::operator==(const WordLine &other) const
 {
-	Q_OBJECT
-public:
-	bool isCancelled() const { return cancelled; }
+	return original == other.original;
+}
 
-	SaveDialog(QWidget *parent = 0);
-private:
-	QLabel *infoLabel;
-	QPushButton *saveButton;
-	QPushButton *noButton;
-	QPushButton *cancelButton;
+bool WordLine::operator>(const WordLine &other) const
+{
+	return original > other.original;
+}
 
-	bool cancelled;
-	void cancel();
-};
+bool WordLine::operator<(const WordLine &other) const
+{
+	return original < other.original;
+}
 
-#endif
+bool WordLine::operator>=(const WordLine &other) const
+{
+	return original >= other.original;
+}
+
+bool WordLine::operator<=(const WordLine &other) const
+{
+	return original <= other.original;
+}
+
+QDataStream& WordLine::operator<<(QDataStream &stream) const
+{
+	return stream << original << translation << status << date;
+}
+
+QDataStream& WordLine::operator>>(QDataStream &stream)
+{
+	return stream >> original >> translation >> status >> date;
+}
+
+WordLine::WordLine()
+{
+
+}
+
+WordLine::WordLine(const QString pOriginal, const QString pTranslation,
+				   const QString pStatus, const QString pDate)
+{
+	original = pOriginal;
+	translation = pTranslation;
+	status = pStatus;
+	date = pDate;
+}

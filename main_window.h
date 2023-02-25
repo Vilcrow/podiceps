@@ -35,9 +35,10 @@ class MainWindow: public QMainWindow
 {
 	Q_OBJECT
 public:
-	MainWindow();
 	void readSettings();
 	void writeSettings();
+
+	MainWindow();
 	virtual ~MainWindow();
 public slots:
 	void updateActions();

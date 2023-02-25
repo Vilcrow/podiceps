@@ -24,17 +24,6 @@
 
 #include "table_model.h"
 
-TableModel::TableModel(QObject *parent) : QAbstractTableModel(parent)
-{
-
-}
-
-TableModel::TableModel(QList<Word> words, QObject *parent)
-			: QAbstractTableModel(parent), words(words)
-{
-
-}
-
 int TableModel::rowCount(const QModelIndex &parent) const
 {
 	Q_UNUSED(parent);
@@ -49,29 +38,40 @@ int TableModel::columnCount(const QModelIndex &parent) const
 
 QVariant TableModel::data(const QModelIndex &index, int role) const
 {
-	if(!index.isValid())
+	if(!index.isValid()) {
 		return QVariant();
-	if(index.row() >= words.size() || index.row() < 0)
-		return QVariant();
-	if(role == Qt::DisplayRole) {
-		const auto &word = words.at(index.row());
-		if(index.column() == 0)
-			return word.original;
-		else if(index.column() == 1)
-			return word.translation;
-		else if(index.column() == 2)
-			return word.status;
-		else if(index.column() == 3)
-			return word.date;
 	}
+
+	if(index.row() >= words.size() || index.row() < 0) {
+		return QVariant();
+	}
+
+	if(role == Qt::DisplayRole) {
+		const WordLine &word = words.at(index.row());
+		if(index.column() == 0) {
+			return word.getOriginal();
+		}
+		else if(index.column() == 1) {
+			return word.getTranslation();
+		}
+		else if(index.column() == 2) {
+			return word.getStatus();
+		}
+		else if(index.column() == 3) {
+			return word.getDate();
+		}
+	}
+
 	return QVariant();
 }
 
 QVariant TableModel::headerData(int section, Qt::Orientation orientation,
 								int role) const
 {
-	if(role != Qt::DisplayRole)
+	if(role != Qt::DisplayRole) {
 		return QVariant();
+	}
+
 	if(orientation == Qt::Horizontal) {
 		switch(section) {
 		case 0:
@@ -86,54 +86,83 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation,
 			return QVariant();
 		}
 	}
+
 	return QVariant();
 }
 
 bool TableModel::insertRows(int position, int rows, const QModelIndex &index)
 {
 	Q_UNUSED(index);
+
 	beginInsertRows(QModelIndex(), position, position + rows - 1);
-	for(int row = 0; row < rows; ++row)
-		words.insert(position, { QString(), QString(), QString(), QString() });
+	for(int row = 0; row < rows; ++row) {
+		WordLine word;
+		words.insert(position, word);
+	}
 	endInsertRows();
+
 	return true;
 }
 
 bool TableModel::removeRows(int position, int rows, const QModelIndex &index)
 {
 	Q_UNUSED(index);
+
 	beginRemoveRows(QModelIndex(), position, position + rows - 1);
-	for(int row = 0; row < rows; ++row)
+	for(int row = 0; row < rows; ++row) {
 		words.removeAt(position);
+	}
 	endRemoveRows();
+
 	return true;
 }
 
-bool TableModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool TableModel::setData(const QModelIndex &index, const QVariant &value,
+						 int role)
 {
 	if(index.isValid() && role == Qt::EditRole) {
 		int row = index.row();
-		auto word = words.value(row);
-		if(index.column() == 0)
-			word.original = value.toString();
-		else if(index.column() == 1)
-			word.translation = value.toString();
-		else if(index.column() == 2)
-			word.status = value.toString();
-		else if(index.column() == 3)
-			word.date = value.toString();
-		else
+		WordLine word = words.value(row);
+		if(index.column() == 0) {
+			word.setOriginal(value.toString());
+		}
+		else if(index.column() == 1) {
+			word.setTranslation(value.toString());
+		}
+		else if(index.column() == 2) {
+			word.setStatus(value.toString());
+		}
+		else if(index.column() == 3) {
+			word.setDate(value.toString());
+		}
+		else {
 			return false;
+		}
 		words.replace(row, word);
 		emit dataChanged(index, index, {role});
+
 		return true;
 	}
+
 	return false;
 }
 
 Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 {
-	if(!index.isValid())
+	if(!index.isValid()) {
 		return Qt::ItemIsEnabled;
+	}
+
 	return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+}
+
+TableModel::TableModel(QObject *parent) : QAbstractTableModel(parent)
+{
+
+}
+
+TableModel::TableModel(QList<WordLine> words, QObject *parent)
+			: QAbstractTableModel(parent), words(words)
+{
+
 }

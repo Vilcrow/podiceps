@@ -41,21 +41,25 @@
 class DictionaryWidget : public QWidget {
 	Q_OBJECT
 public:
-	DictionaryWidget();
-	virtual ~DictionaryWidget();
+	QString addEntry(const WordLine &word);
+
 	void readFromFile(const QString &fileName);
 	void writeToFile (const QString &fileName);
+	void setLastFileName(const QString &newLast) { lastFileName = newLast; }
 	void importFromFile(const QString &fileName);
 	void exportToFile(const QString &fileName);
-	void addEntry(QString original, QString translation,
-					QString status, QString date);
-	int getRowCount() const { return tableModel->rowCount(QModelIndex()); }
+
 	bool isSaved() const { return changesSaved; }
 	void setSaved(const bool flag) { changesSaved = flag; }
+
 	QString getLastFileName() const { return lastFileName; }
-	void setLastFileName(const QString &newLast) { lastFileName = newLast; }
+	int getRowCount() const { return tableModel->rowCount(QModelIndex()); }
+
 	void readSettings();
 	void writeSettings();
+
+	DictionaryWidget();
+	virtual ~DictionaryWidget();
 signals:
 	void sendMessage(const QString &msg);
 	void updateMenus();

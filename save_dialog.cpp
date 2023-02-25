@@ -26,6 +26,12 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+void SaveDialog::cancel()
+{
+	cancelled = true;
+	reject();
+}
+
 SaveDialog::SaveDialog(QWidget *parent) : QDialog(parent)
 {
 	setWindowTitle(tr("Save changes"));
@@ -47,10 +53,4 @@ SaveDialog::SaveDialog(QWidget *parent) : QDialog(parent)
 	connect(saveButton, &QAbstractButton::clicked, this, &QDialog::accept);
 	connect(noButton, &QAbstractButton::clicked, this, &QDialog::reject);
 	connect(cancelButton, &QAbstractButton::clicked, this, &SaveDialog::cancel);
-}
-
-void SaveDialog::cancel()
-{
-	cancelled = true;
-	reject();
 }
