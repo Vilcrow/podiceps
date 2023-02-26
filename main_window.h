@@ -26,6 +26,7 @@
 #define MAIN_WINDOW_VIL_H
 
 #include "dictionary_widget.h"
+#include <QCloseEvent>
 #include <QMainWindow>
 #include <QItemSelection>
 #include <QStatusBar>
@@ -42,12 +43,14 @@ public:
 	virtual ~MainWindow();
 public slots:
 	void updateActions();
+protected:
+	void closeEvent(QCloseEvent *event) override;
 private slots:
 	void createFile();
 	void openFile();
-	void saveChanges();
+	bool saveChanges();
 	void saveFile();
-	void importFile(); //import the podicepses .txt to binary
+	void importFile(); // Import the podicepses .txt to binary.
 	void exportFile();
 	void showMessage(const QString &msg);
 	void showStatistics();
@@ -62,6 +65,7 @@ private:
 	void createToolsMenu();
 	void createHelpMenu();
 
+	bool closeImmediately;
 	QSettings mainWindowSettings;
 	DictionaryWidget *dictWidget;
 	QStatusBar *statusBar;

@@ -32,6 +32,22 @@ void SaveDialog::cancel()
 	reject();
 }
 
+int SaveDialog::trySave()
+{
+	cancelled = false;
+
+	int result = exec();
+	if(result == QDialog::Accepted) {
+		return SaveDialog::Accepted;
+	}
+	else if(cancelled) {
+		return SaveDialog::Cancelled;
+	}
+	else {
+		return SaveDialog::Rejected;
+	}
+}
+
 SaveDialog::SaveDialog(QWidget *parent) : QDialog(parent)
 {
 	setWindowTitle(tr("Save changes"));

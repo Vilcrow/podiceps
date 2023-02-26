@@ -34,7 +34,10 @@ class SaveDialog : public QDialog
 {
 	Q_OBJECT
 public:
+	enum SaveDialogCode { Rejected, Accepted, Cancelled };
+
 	bool isCancelled() const { return cancelled; }
+	int trySave();
 
 	SaveDialog(QWidget *parent = 0);
 private:

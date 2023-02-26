@@ -26,6 +26,7 @@
 #include "save_dialog.h"
 #include <QMenuBar>
 #include <QFileDialog>
+#include <stdio.h>
 
 void MainWindow::createMenus()
 {
@@ -112,15 +113,16 @@ void MainWindow::createHelpMenu()
 
 void MainWindow::openFile()
 {
+	bool ok = true;
 	if(!dictWidget->isSaved()) {
-		SaveDialog sDialog;
-		if(sDialog.exec()) {
-			saveChanges();
-		}
+		ok = saveChanges();
 	}
-	QString fileName = QFileDialog::getOpenFileName(this);
-	if(!fileName.isEmpty()) {
-		dictWidget->readFromFile(fileName);
+
+	if(ok) {
+		QString fileName = QFileDialog::getOpenFileName(this);
+		if(!fileName.isEmpty()) {
+			dictWidget->readFromFile(fileName);
+		}
 	}
 }
 
@@ -174,16 +176,17 @@ void MainWindow::openAbout()
 
 void MainWindow::importFile()
 {
+	bool ok = true;
 	if(!dictWidget->isSaved()) {
-		SaveDialog sDialog;
-		if(sDialog.exec()) {
-			saveChanges();
-		}
+		ok = saveChanges();
 	}
-	QString fileName = QFileDialog::getOpenFileName(this);
-	if(!fileName.isEmpty()) {
-		dictWidget->importFromFile(fileName);
-		dictWidget->setLastFileName("");
+
+	if(ok) {
+		QString fileName = QFileDialog::getOpenFileName(this);
+		if(!fileName.isEmpty()) {
+			dictWidget->importFromFile(fileName);
+			dictWidget->setLastFileName("");
+		}
 	}
 }
 
@@ -217,19 +220,37 @@ void MainWindow::openPreferences()
 
 }
 
-void MainWindow::saveChanges()
+bool MainWindow::saveChanges()
 {
+	bool success = false;
+
+	SaveDialog sDialog;
 	QString fileName = dictWidget->getLastFileName();
-	if(fileName.isEmpty()) {
-		fileName = QFileDialog::getSaveFileName(this);
+	int result = sDialog.trySave();
+	switch(result) {
+	case SaveDialog::Accepted:
+		if(fileName.isEmpty()) {
+			fileName = QFileDialog::getSaveFileName(this);
+		}
+		
+		if(!fileName.isEmpty()) {
+			dictWidget->writeToFile(fileName);
+			updateActions();
+			success = true;
+		}
+		else {
+			success = false;
+		}
+		break;
+	case SaveDialog::Rejected:
+		success = true;
+		break;
+	case SaveDialog::Cancelled:
+		success = false;
+		break;
 	}
 
-	if(fileName.isEmpty()) {
-		return;
-	}
-
-	dictWidget->writeToFile(fileName);
-	updateActions();
+	return success;
 }
 
 void MainWindow::updateActions()
@@ -260,47 +281,46 @@ void MainWindow::updateActions()
 
 void MainWindow::createFile()
 {
+	bool ok = true;
 	if(!dictWidget->isSaved()) {
-		SaveDialog sDialog;
-		if(sDialog.exec()) {
-			saveChanges();
-		}
+		ok = saveChanges();
 	}
-	dictWidget->createNewFile();
+
+	if(ok) {
+		dictWidget->createNewFile();
+	}
 }
 
 void MainWindow::quitApp()
 {
+	bool ok = true;
 	if(!dictWidget->isSaved()) {
-		SaveDialog sDialog;
-		int result = sDialog.exec();
-		if(result == QDialog::Accepted) {
-			saveChanges();
-		}
-		else if(sDialog.isCancelled() || !dictWidget->isSaved()) {
-			return;
-		}
+		ok = saveChanges();
 	}
-	close();
+	if(ok) {
+		closeImmediately = true;
+		close();
+	}
 }
-/*
-bool MainWindow::trySaveChanges()
+
+void MainWindow::closeEvent(QCloseEvent *event)
 {
-	bool ret = false;
-	SaveDialog sDialog;
-	int result = sDialog.exec();
-	if(result == QDialog::Accepted) {
-		saveChanges();
-		ret = true;
+	if(closeImmediately) {
+		return;
 	}
-	else if(sDialog.isCancelled()) {
-		ret = false;
+
+	bool ok = true;
+	if(!dictWidget->isSaved()) {
+		ok = saveChanges();
 	}
-	return ret;
+	if(!ok) {
+		event->ignore();
+	}
 }
-*/
+
 MainWindow::MainWindow() : mainWindowSettings("Vilcrow", "podiceps2")
 {
+	closeImmediately = false;
 	readSettings();
 	setWindowTitle("podiceps2");
 	dictWidget = new DictionaryWidget;
