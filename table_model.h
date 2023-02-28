@@ -1,5 +1,8 @@
 /**************************************************************************/
 /*  table_model.h                                                         */
+/*                                                                        */
+/*  vim:ts=4:sw=4:expandtab                                               */
+/*                                                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                               podiceps2                                */
@@ -32,29 +35,29 @@
 #include <QString>
 
 class TableModel : public QAbstractTableModel {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	int rowCount(const QModelIndex &parent) const override;
-	int columnCount(const QModelIndex &parent) const override;
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
 
-	QVariant data(const QModelIndex &index, int role) const override;
-	QVariant headerData(int section, Qt::Orientation orientation,
-						int role) const override;
-	Qt::ItemFlags flags(const QModelIndex &index) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    QVariant headerData(int section, Qt::Orientation orientation,
+                        int role) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-	bool setData(const QModelIndex &index, const QVariant &value,
-				 int role = Qt::EditRole) override;
-	bool insertRows(int position, int rows,
-				    const QModelIndex &index = QModelIndex()) override;
-	bool removeRows(int position, int rows,
-					const QModelIndex &index = QModelIndex()) override;
+    bool setData(const QModelIndex &index, const QVariant &value,
+                 int role = Qt::EditRole) override;
+    bool insertRows(int position, int rows,
+                    const QModelIndex &index = QModelIndex()) override;
+    bool removeRows(int position, int rows,
+                    const QModelIndex &index = QModelIndex()) override;
 
-	QList<WordLine> getWords() const { return words; };
+    QList<WordLine> getWords() const;
 
-	TableModel(QObject *parent = nullptr);
-	TableModel(QList<WordLine> words, QObject *parent = nullptr);
+    TableModel(QObject *parent = nullptr);
+    TableModel(QList<WordLine> words, QObject *parent = nullptr);
 private:
-	QList<WordLine> words;
+    QList<WordLine> words;
 };
 
 #endif

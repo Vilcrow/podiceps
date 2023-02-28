@@ -1,5 +1,8 @@
 /**************************************************************************/
 /*  word_line.cpp                                                         */
+/*                                                                        */
+/*  vim:ts=4:sw=4:expandtab                                               */
+/*                                                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                               podiceps2                                */
@@ -24,39 +27,84 @@
 
 #include "word_line.h"
 
+QString WordLine::getOriginal() const
+{
+    return original;
+}
+
+QString WordLine::getTranslation() const
+{
+    return translation;
+}
+
+QString WordLine::getStatus() const
+{
+    return status;
+}
+
+QString WordLine::getDate() const
+{
+    return date;
+}
+
+void WordLine::setOriginal(const QString &pOriginal)
+{
+    original = pOriginal;
+}
+
+void WordLine::setTranslation(const QString &pTranslation)
+{
+    translation = pTranslation;
+}
+
+void WordLine::setStatus(const QString &pStatus)
+{
+    status = pStatus;
+}
+
+void WordLine::setDate(const QString &pDate)
+{
+    date = pDate;
+}
+
+bool WordLine::isEmpty() const
+{
+    return original.isEmpty() && translation.isEmpty() &&
+           status.isEmpty() && date.isEmpty();
+}
+
+const WordLine& WordLine::operator=(const WordLine &other)
+{
+    original = other.original;
+    translation = other.translation;
+    status = other.status;
+    date = other.date;
+    return *this;
+}
+
 bool WordLine::operator==(const WordLine &other) const
 {
-	return original == other.original;
+    return original == other.original;
 }
 
 bool WordLine::operator>(const WordLine &other) const
 {
-	return original > other.original;
+    return original > other.original;
 }
 
 bool WordLine::operator<(const WordLine &other) const
 {
-	return original < other.original;
+    return original < other.original;
 }
 
 bool WordLine::operator>=(const WordLine &other) const
 {
-	return original >= other.original;
+    return original >= other.original;
 }
 
 bool WordLine::operator<=(const WordLine &other) const
 {
-	return original <= other.original;
-}
-
-QDataStream& WordLine::operator<<(QDataStream &stream) const
-{
-	return stream << original << translation << status << date;
-}
-
-QDataStream& WordLine::operator>>(QDataStream &stream)
-{
-	return stream >> original >> translation >> status >> date;
+    return original <= other.original;
 }
 
 WordLine::WordLine()
@@ -65,10 +113,10 @@ WordLine::WordLine()
 }
 
 WordLine::WordLine(const QString pOriginal, const QString pTranslation,
-				   const QString pStatus, const QString pDate)
+                   const QString pStatus, const QString pDate)
 {
-	original = pOriginal;
-	translation = pTranslation;
-	status = pStatus;
-	date = pDate;
+    original = pOriginal;
+    translation = pTranslation;
+    status = pStatus;
+    date = pDate;
 }

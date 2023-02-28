@@ -1,5 +1,8 @@
 /**************************************************************************/
 /*  main.cpp                                                              */
+/*                                                                        */
+/*  vim:ts=4:sw=4:expandtab                                               */
+/*                                                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                               podiceps2                                */
@@ -27,8 +30,8 @@
 
 int main(int argc, char **argv)
 {
-	QApplication app(argc, argv);
-	MainWindow mainWindow;
-	mainWindow.show();
-	return app.exec();
+    QApplication app(argc, argv);
+    MainWindow mainWindow;
+    mainWindow.show();
+    return app.exec();
 }

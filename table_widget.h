@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  word_line.h                                                           */
+/*  table_widget.h                                                        */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,59 +25,41 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef WORD_LINE_VIL_H
-#define WORD_LINE_VIL_H
+#ifndef TABLE_WIDGET_VIL_H
+#define TABLE_WIDGET_VIL_H
 
-#include <QString>
-#include <QObject>
+#include "table_model.h"
+#include <QWidget>
+#include <QSortFilterProxyModel>
+#include <QTableView>
 
-class WordLine {
+class DictionaryWidget;
+
+class TableWidget : public QWidget {
+    Q_OBJECT
 public:
-    QString getOriginal() const;
-    QString getTranslation() const;
-    QString getStatus() const;
-    QString getDate() const;
+    bool addEntry(const WordLine &word);
+    bool editEntry(const WordLine &word);
+    void removeEntry();
+    void fillTable(const QList<WordLine> words); 
+    void clear();
 
-    void setOriginal(const QString &pOriginal);
-    void setTranslation(const QString &pTranslation);
-    void setStatus(const QString &pStatus);
-    void setDate(const QString &pDate);
+    void setFilter(int col = -1, const QRegExp &exp = QRegExp());
+    int getRowCount() const;
+    QString getColumnName(int col) const;
 
-    bool isEmpty() const;
+    QList<WordLine> getWords() const;
+    WordLine getSelectedWord() const;
 
-    const WordLine& operator=(const WordLine &other);
-    bool operator==(const WordLine &other) const;
-    bool operator>(const WordLine &other) const;
-    bool operator<(const WordLine &other) const;
-    bool operator>=(const WordLine &other) const;
-    bool operator<=(const WordLine &other) const;
+    void connectSignals(DictionaryWidget *dictWidget);
+    QTableView* getTableView() const;
 
-    WordLine();
-    WordLine(const QString pOriginal,
-             const QString pTranslation = QString(),
-             const QString pStatus = QString(QObject::tr("new")),
-             const QString pDate = QString()
-            );
+    TableWidget();
+    virtual ~TableWidget();
 private:
-    QString original;
-    QString translation;
-    QString status;
-    QString date;
+    TableModel *tableModel;
+    QTableView *tableView;
+    QSortFilterProxyModel *proxyModel;
 };
-
-inline QDataStream &operator<<(QDataStream &stream, const WordLine &word)
-{
-    return stream << word.getOriginal() << word.getTranslation()
-                  << word.getStatus() << word.getDate();
-}
-
-inline QDataStream &operator>>(QDataStream &stream, WordLine &word)
-{
-    QString original, translation, status, date;
-    stream >> original >> translation >> status >> date;
-    word = WordLine(original, translation, status, date);
-
-    return stream;
-}
 
 #endif

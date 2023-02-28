@@ -1,5 +1,8 @@
 /**************************************************************************/
 /*  save_dialog.h                                                         */
+/*                                                                        */
+/*  vim:ts=4:sw=4:expandtab                                               */
+/*                                                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                               podiceps2                                */
@@ -32,22 +35,22 @@
 
 class SaveDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	enum SaveDialogCode { Rejected, Accepted, Cancelled };
+    enum SaveDialogCode { Rejected, Accepted, Cancelled };
 
-	bool isCancelled() const { return cancelled; }
-	int trySave();
+    bool isCancelled() const;
+    int trySave();
 
-	SaveDialog(QWidget *parent = 0);
+    SaveDialog(QWidget *parent = 0);
 private:
-	QLabel *infoLabel;
-	QPushButton *saveButton;
-	QPushButton *noButton;
-	QPushButton *cancelButton;
+    QLabel *infoLabel;
+    QPushButton *saveButton;
+    QPushButton *noButton;
+    QPushButton *cancelButton;
 
-	bool cancelled;
-	void cancel();
+    bool cancelled;
+    void cancel();
 };
 
 #endif

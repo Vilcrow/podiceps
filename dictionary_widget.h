@@ -1,5 +1,8 @@
 /**************************************************************************/
 /*  dictionary_widget.h                                                   */
+/*                                                                        */
+/*  vim:ts=4:sw=4:expandtab                                               */
+/*                                                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                               podiceps2                                */
@@ -25,85 +28,53 @@
 #ifndef DICTIONARY_WIDGET_VIL_H
 #define DICTIONARY_WIDGET_VIL_H
 
-#include "table_model.h"
+#include "input_widget.h"
+#include "table_widget.h"
 #include <QWidget>
-#include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QPushButton>
-#include <QLineEdit>
-#include <QSortFilterProxyModel>
-#include <QTableView>
-#include <QHeaderView>
-#include <QTextStream>
 #include <QSettings>
 
 class DictionaryWidget : public QWidget {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	QString addEntry(const WordLine &word);
+    QString addEntry(const WordLine &word);
 
-	void readFromFile(const QString &fileName);
-	void writeToFile (const QString &fileName);
-	void setLastFileName(const QString &newLast) { lastFileName = newLast; }
-	void importFromFile(const QString &fileName);
-	void exportToFile(const QString &fileName);
+    void readFromFile(const QString &fileName);
+    void writeToFile (const QString &fileName);
+    void setLastFileName(const QString &newLast);
+    void importFromFile(const QString &fileName);
+    void exportToFile(const QString &fileName);
 
-	bool isSaved() const { return changesSaved; }
-	void setSaved(const bool flag) { changesSaved = flag; }
+    bool isSaved() const;
+    void setSaved(const bool value);
 
-	QString getLastFileName() const { return lastFileName; }
-	int getRowCount() const { return tableModel->rowCount(QModelIndex()); }
+    QString getLastFileName() const;
+    int getRowCount() const;
 
-	void readSettings();
-	void writeSettings();
+    void readSettings();
+    void writeSettings();
 
-	DictionaryWidget();
-	virtual ~DictionaryWidget();
+    DictionaryWidget();
+    virtual ~DictionaryWidget();
 signals:
-	void sendMessage(const QString &msg);
-	void updateMenus();
+    void sendMessage(const QString &msg);
+    void updateMenus();
 public slots:
-	void clearInput();
-	void createNewFile();
-private slots:
-	void updateActions();
-	void addEntrySlot();
-	void editEntry();
-	void findEntry();
-	void removeEntry();
+    void clearInput();
+    void createNewFile();
+    void addEntrySlot();
+    void editEntry();
+    void findEntry();
+    void removeEntry();
+    void updateActions();
 private:
-	QSettings dictionarySettings;
-	QString lastFileName;
-	bool changesSaved;
+    QSettings dictionarySettings;
+    QString lastFileName;
+    bool changesSaved;
 
-	TableModel *tableModel;
-	QTableView *tableView;
-	QSortFilterProxyModel *proxyModel;
-
-	QLabel *originalLabel;
-	QLabel *translationLabel;
-	QLabel *statusLabel;
-	QLabel *dateLabel;
-
-	QLineEdit *originalLineEdit;
-	QLineEdit *translationLineEdit;
-	QLineEdit *statusLineEdit;
-	QLineEdit *dateLineEdit;
-
-	QPushButton *addButton;
-	QPushButton *editButton;
-	QPushButton *findButton;
-	QPushButton *deleteButton;
-
-	QVBoxLayout *mainLayout;
-	QGridLayout *inputLayout;
-	QHBoxLayout *buttonsLayout;
-
-	void createLineEditWidgets();
-	void createButtons();
-	void setupTable();
-	bool isEditLinesEmpty();
+    TableWidget *tableWidget;
+    InputWidget *inputWidget;
 };
 
 #endif

@@ -1,5 +1,8 @@
 /**************************************************************************/
 /*  save_dialog.cpp                                                       */
+/*                                                                        */
+/*  vim:ts=4:sw=4:expandtab                                               */
+/*                                                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                               podiceps2                                */
@@ -28,45 +31,50 @@
 
 void SaveDialog::cancel()
 {
-	cancelled = true;
-	reject();
+    cancelled = true;
+    reject();
+}
+
+bool SaveDialog::isCancelled() const
+{
+    return cancelled;
 }
 
 int SaveDialog::trySave()
 {
-	cancelled = false;
+    cancelled = false;
 
-	int result = exec();
-	if(result == QDialog::Accepted) {
-		return SaveDialog::Accepted;
-	}
-	else if(cancelled) {
-		return SaveDialog::Cancelled;
-	}
-	else {
-		return SaveDialog::Rejected;
-	}
+    int result = exec();
+    if(result == QDialog::Accepted) {
+        return SaveDialog::Accepted;
+    }
+    else if(cancelled) {
+        return SaveDialog::Cancelled;
+    }
+    else {
+        return SaveDialog::Rejected;
+    }
 }
 
 SaveDialog::SaveDialog(QWidget *parent) : QDialog(parent)
 {
-	setWindowTitle(tr("Save changes"));
-	infoLabel = new QLabel(tr("Save changes to the current file?"));
-	saveButton = new QPushButton(tr("Save"));
-	noButton = new QPushButton(tr("No"));
-	cancelButton = new QPushButton(tr("Cancel"));
-	cancelled = false;
-	
-	QVBoxLayout *vLayout = new QVBoxLayout;
-	vLayout->addWidget(infoLabel);
-	QHBoxLayout *hLayout = new QHBoxLayout;
-	hLayout->addWidget(saveButton);
-	hLayout->addWidget(noButton);
-	hLayout->addWidget(cancelButton);
-	vLayout->addLayout(hLayout);
-	setLayout(vLayout);
+    setWindowTitle(tr("Save changes"));
+    infoLabel = new QLabel(tr("Save changes to the current file?"));
+    saveButton = new QPushButton(tr("Save"));
+    noButton = new QPushButton(tr("No"));
+    cancelButton = new QPushButton(tr("Cancel"));
+    cancelled = false;
+    
+    QVBoxLayout *vLayout = new QVBoxLayout;
+    vLayout->addWidget(infoLabel);
+    QHBoxLayout *hLayout = new QHBoxLayout;
+    hLayout->addWidget(saveButton);
+    hLayout->addWidget(noButton);
+    hLayout->addWidget(cancelButton);
+    vLayout->addLayout(hLayout);
+    setLayout(vLayout);
 
-	connect(saveButton, &QAbstractButton::clicked, this, &QDialog::accept);
-	connect(noButton, &QAbstractButton::clicked, this, &QDialog::reject);
-	connect(cancelButton, &QAbstractButton::clicked, this, &SaveDialog::cancel);
+    connect(saveButton, &QAbstractButton::clicked, this, &QDialog::accept);
+    connect(noButton, &QAbstractButton::clicked, this, &QDialog::reject);
+    connect(cancelButton, &QAbstractButton::clicked, this, &SaveDialog::cancel);
 }

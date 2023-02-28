@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  word_line.h                                                           */
+/*  input_widget.h                                                        */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,59 +25,61 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef WORD_LINE_VIL_H
-#define WORD_LINE_VIL_H
+#ifndef INPUT_WIDGET_VIL_H
+#define INPUT_WIDGET_VIL_H
 
-#include <QString>
-#include <QObject>
+#include "word_line.h"
+#include <QWidget>
+#include <QLabel>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QLineEdit>
 
-class WordLine {
+class DictionaryWidget;
+
+class InputWidget : public QWidget {
+    Q_OBJECT
 public:
-    QString getOriginal() const;
-    QString getTranslation() const;
-    QString getStatus() const;
-    QString getDate() const;
+    enum Lines { OriginalLine, TranslationLine,
+                 StatusLine, DateLine, AllLines };
+    
+    enum Buttons { AddButton = AllLines + 1, EditButton,
+                   FindButton, DeleteButton, AllButtons };
 
-    void setOriginal(const QString &pOriginal);
-    void setTranslation(const QString &pTranslation);
-    void setStatus(const QString &pStatus);
-    void setDate(const QString &pDate);
+    WordLine getInput() const;
+    QString getInput(int index) const;
 
-    bool isEmpty() const;
+    void setInput(const WordLine &word);
+    void setInput(int index, const QString &value);
+    void setEnabled(int index, bool value = true);
 
-    const WordLine& operator=(const WordLine &other);
-    bool operator==(const WordLine &other) const;
-    bool operator>(const WordLine &other) const;
-    bool operator<(const WordLine &other) const;
-    bool operator>=(const WordLine &other) const;
-    bool operator<=(const WordLine &other) const;
+    void clearInput(int index = AllLines);
+    bool isEmpty(int index = AllLines) const;
 
-    WordLine();
-    WordLine(const QString pOriginal,
-             const QString pTranslation = QString(),
-             const QString pStatus = QString(QObject::tr("new")),
-             const QString pDate = QString()
-            );
+    void connectSignals(DictionaryWidget *dictWidget);
+
+    InputWidget();
+    virtual ~InputWidget();
 private:
-    QString original;
-    QString translation;
-    QString status;
-    QString date;
+    QLabel *originalLabel;
+    QLabel *translationLabel;
+    QLabel *statusLabel;
+    QLabel *dateLabel;
+
+    QLineEdit *originalLineEdit;
+    QLineEdit *translationLineEdit;
+    QLineEdit *statusLineEdit;
+    QLineEdit *dateLineEdit;
+
+    QPushButton *addButton;
+    QPushButton *editButton;
+    QPushButton *findButton;
+    QPushButton *deleteButton;
+
+    QVBoxLayout *mainLayout;
+    QGridLayout *inputLayout;
+    QHBoxLayout *buttonsLayout;
 };
-
-inline QDataStream &operator<<(QDataStream &stream, const WordLine &word)
-{
-    return stream << word.getOriginal() << word.getTranslation()
-                  << word.getStatus() << word.getDate();
-}
-
-inline QDataStream &operator>>(QDataStream &stream, WordLine &word)
-{
-    QString original, translation, status, date;
-    stream >> original >> translation >> status >> date;
-    word = WordLine(original, translation, status, date);
-
-    return stream;
-}
 
 #endif

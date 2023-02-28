@@ -18,10 +18,12 @@ find_package(Qt5Widgets REQUIRED)
 
 add_executable(podiceps2
     dictionary_widget.cpp
+    input_widget.cpp
     main.cpp
     main_window.cpp
     save_dialog.cpp
     table_model.cpp
+    table_widget.cpp
     word_line.cpp
 )
 

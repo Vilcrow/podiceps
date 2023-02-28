@@ -1,5 +1,8 @@
 /**************************************************************************/
 /*  main_window.h                                                         */
+/*                                                                        */
+/*  vim:ts=4:sw=4:expandtab                                               */
+/*                                                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
 /*                               podiceps2                                */
@@ -34,61 +37,62 @@
 
 class MainWindow: public QMainWindow
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	void readSettings();
-	void writeSettings();
+    void readSettings();
+    void writeSettings();
 
-	MainWindow();
-	virtual ~MainWindow();
+    MainWindow();
+    virtual ~MainWindow();
 public slots:
-	void updateActions();
+    void updateActions();
 protected:
-	void closeEvent(QCloseEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
 private slots:
-	void createFile();
-	void openFile();
-	bool saveChanges();
-	void saveFile();
-	void importFile(); // Import the podicepses .txt to binary.
-	void exportFile();
-	void showMessage(const QString &msg);
-	void showStatistics();
-	void openTutorial();
-	void openAbout();
-	void openPreferences();
-	void quitApp();
+    void createFile();
+    void openFile();
+    bool saveChanges();
+    bool trySaveChanges();
+    void saveFile();
+    void importFile(); // Import the podicepses .txt to binary.
+    void exportFile();
+    void showMessage(const QString &msg);
+    void showStatistics();
+    void openTutorial();
+    void openAbout();
+    void openPreferences();
+    void quitApp();
 private:
-	void createMenus();
-	void createFileMenu();
-	void createEditMenu();
-	void createToolsMenu();
-	void createHelpMenu();
+    void createMenus();
+    void createFileMenu();
+    void createEditMenu();
+    void createToolsMenu();
+    void createHelpMenu();
 
-	bool closeImmediately;
-	QSettings mainWindowSettings;
-	DictionaryWidget *dictWidget;
-	QStatusBar *statusBar;
+    bool closeImmediately;
+    QSettings mainWindowSettings;
+    DictionaryWidget *dictWidget;
+    QStatusBar *statusBar;
 
-	QMenu *fileMenu;
-	QAction *newAct;
-	QAction *openAct;
-	QAction *saveAct;
-	QAction *saveAsAct;
-	QAction *importAct;
-	QAction *exportAct;
-	QAction *exitAct;
+    QMenu *fileMenu;
+    QAction *newAct;
+    QAction *openAct;
+    QAction *saveAct;
+    QAction *saveAsAct;
+    QAction *importAct;
+    QAction *exportAct;
+    QAction *exitAct;
 
-	QMenu *editMenu;
-	QAction *preferencesAct;
+    QMenu *editMenu;
+    QAction *preferencesAct;
 
-	QMenu *toolsMenu;
-	QAction *showStatisticsAct;
-	QAction *clearInputAct;
+    QMenu *toolsMenu;
+    QAction *showStatisticsAct;
+    QAction *clearInputAct;
 
-	QMenu *helpMenu;
-	QAction *openTutorialAct;
-	QAction *openAboutAct;
+    QMenu *helpMenu;
+    QAction *openTutorialAct;
+    QAction *openAboutAct;
 };
 
 #endif
