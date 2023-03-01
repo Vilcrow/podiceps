@@ -54,6 +54,7 @@ void DictionaryWidget::readFromFile(const QString &fileName)
     catch(...) {
         QMessageBox::information(this, tr("Unable to open file"),
                                        tr("Invalid format"));
+        file.close();
         return;
     }
 
@@ -65,6 +66,8 @@ void DictionaryWidget::readFromFile(const QString &fileName)
         lastFileName = fileName;
     }
 
+    changesSaved = true;
+    file.close();
     sendMessage(tr("The file \"%1\" is open").arg(lastFileName));
 }
 
@@ -87,6 +90,7 @@ void DictionaryWidget::writeToFile(const QString &fileName)
     lastFileName = fileName;
     changesSaved = true;
 
+    file.close();
     sendMessage(tr("The file \"%1\" saved").arg(lastFileName));
 }
 
@@ -111,6 +115,8 @@ void DictionaryWidget::importFromFile(const QString &fileName)
 
     QList<WordLine> words;
     QTextStream in(&file);
+    QString oldDateFormat = "dd-MM-yyyy";
+    QString newDateFormat = "yyyy-MM-dd";
     while(!in.atEnd()) {
         QString line = in.readLine();
         QStringList list = line.split('|');
@@ -119,11 +125,8 @@ void DictionaryWidget::importFromFile(const QString &fileName)
                                      list.join('|'));
             return;
         }
-        WordLine word(list[1], list[2], list[3]);
-        // Change format "dd-MM-yyyy" to "yyyy-MM-dd".
-        QDateTime oldDate = QDateTime::fromString(list[4], "dd-MM-yyyy");
-        QString newDate = oldDate.toString("yyyy-MM-dd");
-        word.setDate(newDate);
+        WordLine word(list[1], list[2], list[3], list[4], oldDateFormat);
+        word.setDateFormat(newDateFormat);
         words << word;
     }
 
@@ -155,14 +158,13 @@ void DictionaryWidget::exportToFile(const QString &fileName)
 
     QTextStream out(&file);
     QList<WordLine> words = tableWidget->getWords();
-    for(auto w : words) {
-        // Change format "yyyy-MM-dd" to "dd-MM-yyyy".
-        QDateTime newDate = QDateTime::fromString(w.getDate(), "yyyy-MM-dd");
-        QString oldDate = newDate.toString("dd-MM-yyyy");
-        out << QString("|%1|%2|%3|%4\n").arg(w.getOriginal())
-                                        .arg(w.getTranslation())
-                                        .arg(w.getStatus())
-                                        .arg(oldDate);
+    QString oldDateFormat = "dd-MM-yyyy";
+    for(auto word : words) {
+        word.setDateFormat(oldDateFormat);
+        out << QString("|%1|%2|%3|%4\n").arg(word.getOriginal())
+                                        .arg(word.getTranslation())
+                                        .arg(word.getStatus())
+                                        .arg(word.getDate());
     }
 
     file.close();
@@ -228,9 +230,8 @@ void DictionaryWidget::addEntrySlot()
     if(word.getStatus().isEmpty()) {
         word.setStatus(tr("new"));
     }
-    // Get current date.
-    QString date = QDateTime::currentDateTime().toString("yyyy-MM-dd");
-    word.setDate(date);
+
+    word.setCurrentDate();
 
     QString result;
     if(tableWidget->addEntry(word)) {

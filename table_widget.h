@@ -41,7 +41,7 @@ public:
     bool addEntry(const WordLine &word);
     bool editEntry(const WordLine &word);
     void removeEntry();
-    void fillTable(const QList<WordLine> words); 
+    void fillTable(const QList<WordLine> words);
     void clear();
 
     void setFilter(int col = -1, const QRegExp &exp = QRegExp());

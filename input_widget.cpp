@@ -40,7 +40,7 @@ QString InputWidget::getInput(int index) const
     QString ret = QString();
 
     if(index < OriginalLine || index > AllLines) {
-        QString msg = tr("Index is out of bounds: at %1, %2\n").arg(__FILE__).arg(__LINE__);
+        QString msg = tr("Index is out of bounds: at %1, %2").arg(__FILE__).arg(__LINE__);
         qDebug() << msg;
         return ret;
     }
@@ -87,10 +87,10 @@ void InputWidget::setInput(int index, const QString &value)
 
 void InputWidget::setInput(const WordLine &word)
 {
-    originalLineEdit->setText(word.getOriginal());    
-    translationLineEdit->setText(word.getTranslation());    
-    statusLineEdit->setText(word.getStatus());    
-    dateLineEdit->setText(word.getDate());    
+    originalLineEdit->setText(word.getOriginal());
+    translationLineEdit->setText(word.getTranslation());
+    statusLineEdit->setText(word.getStatus());
+    dateLineEdit->setText(word.getDate());
 }
 
 void InputWidget::setEnabled(int index, bool value)
@@ -139,26 +139,26 @@ void InputWidget::clearInput(int index)
 {
     switch(index) {
     case OriginalLine:
-        originalLineEdit->setText("");    
+        originalLineEdit->setText("");
         originalLineEdit->setFocus(Qt::OtherFocusReason);
         break;
     case TranslationLine:
-        translationLineEdit->setText("");    
+        translationLineEdit->setText("");
         translationLineEdit->setFocus(Qt::OtherFocusReason);
         break;
     case StatusLine:
-        statusLineEdit->setText("");    
+        statusLineEdit->setText("");
         statusLineEdit->setFocus(Qt::OtherFocusReason);
         break;
     case DateLine:
-        dateLineEdit->setText("");    
+        dateLineEdit->setText("");
         dateLineEdit->setFocus(Qt::OtherFocusReason);
         break;
     case AllLines:
-        originalLineEdit->setText("");    
-        translationLineEdit->setText("");    
-        statusLineEdit->setText("");    
-        dateLineEdit->setText("");    
+        originalLineEdit->setText("");
+        translationLineEdit->setText("");
+        statusLineEdit->setText("");
+        dateLineEdit->setText("");
         originalLineEdit->setFocus(Qt::OtherFocusReason);
         break;
     }

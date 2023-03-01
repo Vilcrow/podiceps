@@ -64,7 +64,7 @@ SaveDialog::SaveDialog(QWidget *parent) : QDialog(parent)
     noButton = new QPushButton(tr("No"));
     cancelButton = new QPushButton(tr("Cancel"));
     cancelled = false;
-    
+
     QVBoxLayout *vLayout = new QVBoxLayout;
     vLayout->addWidget(infoLabel);
     QHBoxLayout *hLayout = new QHBoxLayout;

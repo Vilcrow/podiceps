@@ -230,7 +230,7 @@ bool MainWindow::saveChanges()
     if(fileName.isEmpty()) {
         fileName = QFileDialog::getSaveFileName(this);
     }
-    
+
     if(!fileName.isEmpty()) {
         dictWidget->writeToFile(fileName);
         dictWidget->setSaved(true);

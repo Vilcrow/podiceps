@@ -30,18 +30,24 @@
 
 #include <QString>
 #include <QObject>
+#include <QDate>
+
 
 class WordLine {
 public:
     QString getOriginal() const;
     QString getTranslation() const;
     QString getStatus() const;
-    QString getDate() const;
+    QString getDate(const QString &format = QString()) const;
+    QString getDateFormat() const;
 
     void setOriginal(const QString &pOriginal);
     void setTranslation(const QString &pTranslation);
     void setStatus(const QString &pStatus);
-    void setDate(const QString &pDate);
+    void setDate(const QString &pDate,
+                 const QString &format = QString());
+    void setCurrentDate();
+    void setDateFormat(const QString &format = QString());
 
     bool isEmpty() const;
 
@@ -53,16 +59,21 @@ public:
     bool operator<=(const WordLine &other) const;
 
     WordLine();
-    WordLine(const QString pOriginal,
-             const QString pTranslation = QString(),
-             const QString pStatus = QString(QObject::tr("new")),
-             const QString pDate = QString()
+    WordLine(const QString &pOriginal,
+             const QString &pTranslation = QString(),
+             const QString &pStatus = QString(QObject::tr("new")),
+             const QString &pDate = QString(),
+             const QString &format = QString()
             );
+    ~WordLine();
 private:
+    static QString DefaultDateFormat;
+
     QString original;
     QString translation;
     QString status;
-    QString date;
+    QDate date;
+    QString dateFormat;
 };
 
 inline QDataStream &operator<<(QDataStream &stream, const WordLine &word)

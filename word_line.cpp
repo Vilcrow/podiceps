@@ -26,6 +26,9 @@
 /**************************************************************************/
 
 #include "word_line.h"
+#include <QDate>
+
+QString WordLine::DefaultDateFormat = "yyyy-MM-dd";
 
 QString WordLine::getOriginal() const
 {
@@ -42,9 +45,19 @@ QString WordLine::getStatus() const
     return status;
 }
 
-QString WordLine::getDate() const
+QString WordLine::getDate(const QString &format) const
 {
-    return date;
+    if(!format.isEmpty()) {
+        return date.toString(format);
+    }
+    else {
+        return date.toString(dateFormat);
+    }
+}
+
+QString WordLine::getDateFormat() const
+{
+    return dateFormat;
 }
 
 void WordLine::setOriginal(const QString &pOriginal)
@@ -62,15 +75,39 @@ void WordLine::setStatus(const QString &pStatus)
     status = pStatus;
 }
 
-void WordLine::setDate(const QString &pDate)
+void WordLine::setDate(const QString &pDate, const QString &format)
 {
-    date = pDate;
+    QDate d;
+
+    if(format.isEmpty()) {
+        d = QDate::fromString(pDate, dateFormat);
+    }
+    else {
+        d = QDate::fromString(pDate, format);
+    }
+
+    if(d.isValid()) {
+        date = d;
+    }
+    else {
+        // Set the warning message.
+    }
+}
+
+void WordLine::setCurrentDate()
+{
+    date = QDate::currentDate();
+}
+
+void WordLine::setDateFormat(const QString &format)
+{
+    dateFormat = format;
 }
 
 bool WordLine::isEmpty() const
 {
     return original.isEmpty() && translation.isEmpty() &&
-           status.isEmpty() && date.isEmpty();
+           status.isEmpty() && date.isNull();
 }
 
 const WordLine& WordLine::operator=(const WordLine &other)
@@ -109,14 +146,21 @@ bool WordLine::operator<=(const WordLine &other) const
 
 WordLine::WordLine()
 {
-
+    dateFormat = DefaultDateFormat;
 }
 
-WordLine::WordLine(const QString pOriginal, const QString pTranslation,
-                   const QString pStatus, const QString pDate)
+WordLine::WordLine(const QString &pOriginal, const QString &pTranslation,
+                   const QString &pStatus, const QString &pDate,
+                   const QString &format)
 {
     original = pOriginal;
     translation = pTranslation;
     status = pStatus;
-    date = pDate;
+    dateFormat = format.isEmpty() ? DefaultDateFormat : format;
+    date = QDate::fromString(pDate, dateFormat);
+}
+
+WordLine::~WordLine()
+{
+
 }

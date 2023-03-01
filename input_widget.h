@@ -43,7 +43,7 @@ class InputWidget : public QWidget {
 public:
     enum Lines { OriginalLine, TranslationLine,
                  StatusLine, DateLine, AllLines };
-    
+
     enum Buttons { AddButton = AllLines + 1, EditButton,
                    FindButton, DeleteButton, AllButtons };
 
