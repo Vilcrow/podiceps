@@ -5,7 +5,7 @@
 /*                                                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                               podiceps2                                */
+/*                               podiceps                                 */
 /*                                   -                                    */
 /*                          pocket dictionary                             */
 /**************************************************************************/
@@ -99,7 +99,7 @@ void DictionaryWidget::setLastFileName(const QString &newLast)
     lastFileName = newLast;
 }
 
-// To import a text file of the 'podiceps'.
+// To import a text file of the 'podiceps-fltk'.
 void DictionaryWidget::importFromFile(const QString &fileName)
 {
     if(fileName.isEmpty()) {
@@ -140,6 +140,7 @@ void DictionaryWidget::importFromFile(const QString &fileName)
 
     changesSaved = false;
     file.close();
+    sendMessage(tr("The file \"%1\" imported").arg(fileName));
 }
 
 // To export to a text file in a "|original|translation|status|date\n" format.
@@ -168,6 +169,7 @@ void DictionaryWidget::exportToFile(const QString &fileName)
     }
 
     file.close();
+    sendMessage(tr("The file \"%1\" exported").arg(fileName));
 }
 
 bool DictionaryWidget::isSaved() const
@@ -325,7 +327,7 @@ void DictionaryWidget::updateActions()
     }
 }
 
-DictionaryWidget::DictionaryWidget() : dictionarySettings("Vilcrow", "podiceps2")
+DictionaryWidget::DictionaryWidget() : dictionarySettings("Vilcrow", "podiceps")
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     readSettings();

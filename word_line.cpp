@@ -5,7 +5,7 @@
 /*                                                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                               podiceps2                                */
+/*                               podiceps                                 */
 /*                                   -                                    */
 /*                          pocket dictionary                             */
 /**************************************************************************/
@@ -116,6 +116,7 @@ const WordLine& WordLine::operator=(const WordLine &other)
     translation = other.translation;
     status = other.status;
     date = other.date;
+    dateFormat = other.dateFormat;
     return *this;
 }
 

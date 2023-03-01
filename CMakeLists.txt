@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(podiceps2 LANGUAGES CXX)
+project(podiceps LANGUAGES CXX)
 
 #Enable debugging flags
 option(DEBUGGING "Debugging options" ON)
@@ -16,7 +16,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(Qt5Widgets REQUIRED)
 
-add_executable(podiceps2
+add_executable(podiceps
     dictionary_widget.cpp
     input_widget.cpp
     main.cpp
@@ -27,4 +27,4 @@ add_executable(podiceps2
     word_line.cpp
 )
 
-qt5_use_modules(podiceps2 Widgets)
+qt5_use_modules(podiceps Widgets)

@@ -5,7 +5,7 @@
 /*                                                                        */
 /**************************************************************************/
 /*                         This file is part of:                          */
-/*                               podiceps2                                */
+/*                               podiceps                                 */
 /*                                   -                                    */
 /*                          pocket dictionary                             */
 /**************************************************************************/
@@ -159,7 +159,7 @@ void MainWindow::openAbout()
     aboutWindow->setWindowTitle(tr("About"));
     QString copyrightChar = QChar(0x00A9);
     QLabel *aboutLabel = new QLabel(
-                            "podiceps2\n"
+                            "podiceps\n"
                             + tr("Copyright") + copyrightChar
                             + " 2022-2023 Vilcrow\n"
                             + tr("A simple program for maintaining"
@@ -331,11 +331,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-MainWindow::MainWindow() : mainWindowSettings("Vilcrow", "podiceps2")
+MainWindow::MainWindow() : mainWindowSettings("Vilcrow", "podiceps")
 {
     closeImmediately = false;
     readSettings();
-    setWindowTitle("podiceps2");
+    setWindowTitle("podiceps");
     dictWidget = new DictionaryWidget;
     setCentralWidget(dictWidget);
     createMenus();
