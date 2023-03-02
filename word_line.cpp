@@ -26,7 +26,6 @@
 /**************************************************************************/
 
 #include "word_line.h"
-#include <QDate>
 
 QString WordLine::DefaultDateFormat = "yyyy-MM-dd";
 

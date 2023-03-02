@@ -27,7 +27,13 @@
 
 #include "input_widget.h"
 #include "dictionary_widget.h"
+#include "word_line.h"
 #include <QDebug>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 WordLine InputWidget::getInput() const
 {

@@ -28,12 +28,12 @@
 #ifndef DICTIONARY_WIDGET_VIL_H
 #define DICTIONARY_WIDGET_VIL_H
 
-#include "input_widget.h"
-#include "table_widget.h"
-#include <QWidget>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QSettings>
+#include <QWidget>
+
+class InputWidget;
+class TableWidget;
+class WordLine;
 
 class DictionaryWidget : public QWidget {
     Q_OBJECT

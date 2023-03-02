@@ -28,10 +28,9 @@
 #ifndef WORD_LINE_VIL_H
 #define WORD_LINE_VIL_H
 
-#include <QString>
-#include <QObject>
 #include <QDate>
-
+#include <QObject>
+#include <QString>
 
 class WordLine {
 public:

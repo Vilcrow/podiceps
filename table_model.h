@@ -30,9 +30,8 @@
 
 #include "word_line.h"
 #include <QAbstractTableModel>
-#include <QModelIndex>
-#include <QList>
-#include <QString>
+
+class QModelIndex;
 
 class TableModel : public QAbstractTableModel {
     Q_OBJECT

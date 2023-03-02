@@ -26,9 +26,13 @@
 /**************************************************************************/
 
 #include "main_window.h"
+#include "dictionary_widget.h"
 #include "save_dialog.h"
 #include <QMenuBar>
 #include <QFileDialog>
+#include <QCloseEvent>
+#include <QStatusBar>
+#include <QVBoxLayout>
 
 void MainWindow::createMenus()
 {

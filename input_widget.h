@@ -28,15 +28,16 @@
 #ifndef INPUT_WIDGET_VIL_H
 #define INPUT_WIDGET_VIL_H
 
-#include "word_line.h"
-#include <QWidget>
-#include <QLabel>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QPushButton>
-#include <QLineEdit>
+#include <QWidget>
 
+class WordLine;
 class DictionaryWidget;
+class QLabel;
+class QGridLayout;
+class QPushButton;
+class QLineEdit;
 
 class InputWidget : public QWidget {
     Q_OBJECT

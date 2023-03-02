@@ -28,6 +28,7 @@
 #include "table_widget.h"
 #include "dictionary_widget.h"
 #include <QHeaderView>
+#include <QSortFilterProxyModel>
 
 void TableWidget::clear()
 {

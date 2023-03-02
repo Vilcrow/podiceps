@@ -26,11 +26,11 @@
 /**************************************************************************/
 
 #include "dictionary_widget.h"
-#include "save_dialog.h"
+#include "input_widget.h"
+#include "table_widget.h"
 #include "word_line.h"
-#include <QMessageBox>
-#include <QDateTime>
 #include <QFile>
+#include <QMessageBox>
 #include <QTextStream>
 
 void DictionaryWidget::readFromFile(const QString &fileName)

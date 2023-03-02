@@ -29,7 +29,6 @@
 #define SAVE_DIALOG_VIL_H
 
 #include <QDialog>
-#include <QWidget>
 #include <QLabel>
 #include <QPushButton>
 

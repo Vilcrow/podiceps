@@ -28,12 +28,12 @@
 #ifndef MAIN_WINDOW_VIL_H
 #define MAIN_WINDOW_VIL_H
 
-#include "dictionary_widget.h"
-#include <QCloseEvent>
 #include <QMainWindow>
-#include <QItemSelection>
-#include <QStatusBar>
 #include <QSettings>
+
+class DictionaryWidget;
+class QCloseEvent;
+class QStatusBar;
 
 class MainWindow: public QMainWindow
 {

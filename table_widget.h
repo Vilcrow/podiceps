@@ -29,11 +29,11 @@
 #define TABLE_WIDGET_VIL_H
 
 #include "table_model.h"
-#include <QWidget>
-#include <QSortFilterProxyModel>
 #include <QTableView>
+#include <QWidget>
 
 class DictionaryWidget;
+class QSortFilterProxyModel;
 
 class TableWidget : public QWidget {
     Q_OBJECT

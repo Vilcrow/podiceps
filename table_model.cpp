@@ -26,6 +26,7 @@
 /**************************************************************************/
 
 #include "table_model.h"
+#include <QModelIndex>
 
 int TableModel::rowCount(const QModelIndex &parent) const
 {

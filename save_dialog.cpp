@@ -26,8 +26,8 @@
 /**************************************************************************/
 
 #include "save_dialog.h"
-#include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 
 void SaveDialog::cancel()
 {
