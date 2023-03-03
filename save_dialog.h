@@ -29,8 +29,6 @@
 #define SAVE_DIALOG_VIL_H
 
 #include <QDialog>
-#include <QLabel>
-#include <QPushButton>
 
 class SaveDialog : public QDialog
 {
@@ -41,13 +39,9 @@ public:
     bool isCancelled() const;
     int trySave();
 
-    SaveDialog(QWidget *parent = 0);
+    SaveDialog(QWidget *parent = nullptr);
+    ~SaveDialog();
 private:
-    QLabel *infoLabel;
-    QPushButton *saveButton;
-    QPushButton *noButton;
-    QPushButton *cancelButton;
-
     bool cancelled;
     void cancel();
 };

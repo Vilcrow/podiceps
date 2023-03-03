@@ -214,7 +214,8 @@ void InputWidget::connectSignals(DictionaryWidget *dictWidget)
     }
 }
 
-InputWidget::InputWidget()
+InputWidget::InputWidget(QWidget *parent)
+    : QWidget(parent)
 {
     mainLayout = new QVBoxLayout(this);
 
@@ -244,17 +245,17 @@ InputWidget::InputWidget()
     // Buttons.
     buttonsLayout = new QHBoxLayout();
 
-    addButton = new QPushButton(tr("Add"));
+    addButton = new QPushButton(tr("&Add"));
     buttonsLayout->addWidget(addButton);
 
-    editButton = new QPushButton(tr("Edit"));
+    editButton = new QPushButton(tr("Ed&it"));
     editButton->setEnabled(false);
     buttonsLayout->addWidget(editButton);
 
-    findButton = new QPushButton(tr("Find"));
+    findButton = new QPushButton(tr("Fi&nd"));
     buttonsLayout->addWidget(findButton);
 
-    deleteButton = new QPushButton(tr("Delete"));
+    deleteButton = new QPushButton(tr("&Delete"));
     deleteButton->setEnabled(false);
     buttonsLayout->addWidget(deleteButton);
 

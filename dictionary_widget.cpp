@@ -84,16 +84,26 @@ void DictionaryWidget::writeToFile(const QString &fileName)
         return;
     }
 
-    QFile xmlFile(fileName);
+    if(writeToXmlFile(fileName)) {
+        lastFileName = fileName;
+        changesSaved = true;
+        sendMessage(tr("The file \"%1\" saved").arg(lastFileName));
+    }
+}
 
+bool DictionaryWidget::writeToXmlFile(const QString &fileName)
+{
+    bool success = false;
+
+    QFile xmlFile(fileName);
     if(!xmlFile.open(QFile::WriteOnly | QFile::Text)) {
         QMessageBox::information(this, tr("Unable to open file"),
                                  xmlFile.errorString());
-        return;
+        success = false;
+        return success;
     };
 
     QTextStream xmlContent(&xmlFile);
-
     QDomDocument document;
     QDomElement root = document.createElement("Words");
     document.appendChild(root);
@@ -107,11 +117,9 @@ void DictionaryWidget::writeToFile(const QString &fileName)
 
     xmlContent << document.toString();
     xmlFile.close();
+    success = true;
 
-    lastFileName = fileName;
-    changesSaved = true;
-
-    sendMessage(tr("The file \"%1\" saved").arg(lastFileName));
+    return success;
 }
 
 void DictionaryWidget::setLastFileName(const QString &newLast)
@@ -348,16 +356,17 @@ void DictionaryWidget::updateActions()
     }
 }
 
-DictionaryWidget::DictionaryWidget() : dictionarySettings("Vilcrow", "podiceps")
+DictionaryWidget::DictionaryWidget(QWidget *parent)
+    : QWidget(parent), dictionarySettings("Vilcrow", "podiceps")
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     readSettings();
 
-    tableWidget = new TableWidget();
+    tableWidget = new TableWidget(this);
     tableWidget->connectSignals(this);
     mainLayout->addWidget(tableWidget->getTableView());
 
-    inputWidget = new InputWidget();
+    inputWidget = new InputWidget(this);
     inputWidget->connectSignals(this);
     mainLayout->addWidget(inputWidget);
 

@@ -42,8 +42,10 @@ public:
     void readSettings();
     void writeSettings();
 
-    MainWindow();
+    MainWindow(QWidget *parent = nullptr);
     virtual ~MainWindow();
+signals:
+    void preferencesChanged();
 public slots:
     void updateActions();
 protected:

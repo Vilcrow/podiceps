@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  dictionary_widget.h                                                   */
+/*  preferences_widget.h                                                  */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,57 +25,49 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef DICTIONARY_WIDGET_VIL_H
-#define DICTIONARY_WIDGET_VIL_H
+#ifndef PREFERENCES_WIDGET_VIL_H
+#define PREFERENCES_WIDGET_VIL_H
 
+#include <QDialog>
 #include <QSettings>
-#include <QWidget>
+#include <QTabWidget>
 
-class InputWidget;
-class TableWidget;
-class WordLine;
+class QCheckBox;
+class QLineEdit;
+class QRadioButton;
 
-class DictionaryWidget : public QWidget {
+class PreferencesWidget : public QDialog {
     Q_OBJECT
 public:
-    QString addEntry(const WordLine &word);
+    enum Theme { LightTheme, DarkTheme, CustomTheme };
 
-    void readFromFile(const QString &fileName);
-    void writeToFile (const QString &fileName);
-    bool writeToXmlFile(const QString &fileName);
-    void setLastFileName(const QString &newLast);
-    void importFromFile(const QString &fileName);
-    void exportToFile(const QString &fileName);
-
-    bool isSaved() const;
-    void setSaved(const bool value);
-
-    QString getLastFileName() const;
-    int getRowCount() const;
-
+    PreferencesWidget(QWidget *parent = nullptr);
+    virtual ~PreferencesWidget();
+private slots:
+    void setCustomThemePath();
+    void onToggled(bool checked);
+    void stateChanged(int state);
+private:
     void readSettings();
     void writeSettings();
+    void setupIntefaceTab();
 
-    DictionaryWidget(QWidget *parent = nullptr);
-    virtual ~DictionaryWidget();
-signals:
-    void sendMessage(const QString &msg);
-    void updateMenus();
-public slots:
-    void clearInput();
-    void createNewFile();
-    void addEntrySlot();
-    void editEntry();
-    void findEntry();
-    void removeEntry();
-    void updateActions();
-private:
-    QSettings dictionarySettings;
-    QString lastFileName;
-    bool changesSaved;
+    QSettings settings;
+    int appTheme;
+    bool showStatus;
+    bool showDate;
 
-    TableWidget *tableWidget;
-    InputWidget *inputWidget;
+    QTabWidget *tabWidget;
+
+    QCheckBox *showStatusCheckBox;
+    QCheckBox *showDateCheckBox;
+
+    QRadioButton *lightThemeButton;
+    QRadioButton *darkThemeButton;
+    QRadioButton *customThemeButton;
+
+    QString customThemePath;
+    QLineEdit *customLineEdit;
 };
 
 #endif

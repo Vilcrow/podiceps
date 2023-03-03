@@ -60,7 +60,7 @@ public:
 
     void connectSignals(DictionaryWidget *dictWidget);
 
-    InputWidget();
+    InputWidget(QWidget *parent = nullptr);
     virtual ~InputWidget();
 private:
     QLabel *originalLabel;

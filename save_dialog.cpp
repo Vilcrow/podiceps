@@ -27,6 +27,8 @@
 
 #include "save_dialog.h"
 #include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
 #include <QVBoxLayout>
 
 void SaveDialog::cancel()
@@ -56,13 +58,14 @@ int SaveDialog::trySave()
     }
 }
 
-SaveDialog::SaveDialog(QWidget *parent) : QDialog(parent)
+SaveDialog::SaveDialog(QWidget *parent)
+    : QDialog(parent)
 {
     setWindowTitle(tr("Save changes"));
-    infoLabel = new QLabel(tr("Save changes to the current file?"));
-    saveButton = new QPushButton(tr("Save"));
-    noButton = new QPushButton(tr("No"));
-    cancelButton = new QPushButton(tr("Cancel"));
+    QLabel *infoLabel = new QLabel(tr("Save changes to the current file?"));
+    QPushButton *saveButton = new QPushButton(tr("Save"));
+    QPushButton *noButton = new QPushButton(tr("No"));
+    QPushButton *cancelButton = new QPushButton(tr("Cancel"));
     cancelled = false;
 
     QVBoxLayout *vLayout = new QVBoxLayout;
@@ -77,4 +80,9 @@ SaveDialog::SaveDialog(QWidget *parent) : QDialog(parent)
     connect(saveButton, &QAbstractButton::clicked, this, &QDialog::accept);
     connect(noButton, &QAbstractButton::clicked, this, &QDialog::reject);
     connect(cancelButton, &QAbstractButton::clicked, this, &SaveDialog::cancel);
+}
+
+SaveDialog::~SaveDialog()
+{
+
 }

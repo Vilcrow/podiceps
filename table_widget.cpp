@@ -170,7 +170,8 @@ void TableWidget::clearSelection()
     tableView->clearSelection();
 }
 
-TableWidget::TableWidget()
+TableWidget::TableWidget(QWidget *parent)
+    : QWidget(parent)
 {
     tableModel = new TableModel(this);
 

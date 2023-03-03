@@ -56,7 +56,7 @@ public:
 
     void clearSelection();
 
-    TableWidget();
+    TableWidget(QWidget *parent = nullptr);
     virtual ~TableWidget();
 private:
     TableModel *tableModel;

@@ -27,10 +27,13 @@
 
 #include "main_window.h"
 #include "dictionary_widget.h"
+#include "preferences_widget.h"
 #include "save_dialog.h"
-#include <QMenuBar>
-#include <QFileDialog>
 #include <QCloseEvent>
+#include <QFileDialog>
+#include <QLabel>
+#include <QMenuBar>
+#include <QPushButton>
 #include <QStatusBar>
 #include <QVBoxLayout>
 
@@ -83,7 +86,6 @@ void MainWindow::createEditMenu()
     editMenu = menuBar()->addMenu(tr("&Edit"));
     preferencesAct = new QAction(tr("&Preferences"), this);
     preferencesAct->setShortcut(Qt::CTRL + Qt::Key_P);
-    preferencesAct->setEnabled(false);
     editMenu->addAction(preferencesAct);
     connect(preferencesAct, &QAction::triggered,
             this, &MainWindow::openPreferences);
@@ -158,26 +160,25 @@ void MainWindow::openTutorial()
 
 void MainWindow::openAbout()
 {
-    QDialog *aboutWindow = new QDialog(this);
-    aboutWindow->setFixedSize(500, 150);
-    aboutWindow->setWindowTitle(tr("About"));
+    QDialog *aboutWidget = new QDialog(this);
+    aboutWidget->setFixedSize(500, 150);
+    aboutWidget->setWindowTitle(tr("About"));
     QString copyrightChar = QChar(0x00A9);
-    QLabel *aboutLabel = new QLabel(
-                            "podiceps\n"
-                            + tr("Copyright") + copyrightChar
-                            + " 2022-2023 Vilcrow\n"
-                            + tr("A simple program for maintaining"
-                            " a dictionary of foreign words.\n")
-                            + tr("License: GPL-3.0-or-later"));
+    QLabel aboutLabel("podiceps\n"
+                      + tr("Copyright") + copyrightChar
+                      + " 2022-2023 Vilcrow\n"
+                      + tr("A simple program for maintaining"
+                      " a dictionary of foreign words.\n")
+                      + tr("License: GPL-3.0-or-later"));
     QPushButton *closeButton = new QPushButton(tr("Close"));
     closeButton->setFixedWidth(100);
     connect(closeButton, &QAbstractButton::clicked,
-            aboutWindow, &QDialog::accept);
+            aboutWidget, &QDialog::accept);
     QVBoxLayout *vLayout = new QVBoxLayout;
-    vLayout->addWidget(aboutLabel);
+    vLayout->addWidget(&aboutLabel);
     vLayout->addWidget(closeButton, Qt::AlignCenter);
-    aboutWindow->setLayout(vLayout);
-    aboutWindow->exec();
+    aboutWidget->setLayout(vLayout);
+    aboutWidget->exec();
 }
 
 void MainWindow::importFile()
@@ -223,7 +224,10 @@ void MainWindow::writeSettings()
 
 void MainWindow::openPreferences()
 {
-
+    PreferencesWidget preferences(this);
+    if(preferences.exec() == QDialog::Accepted) {
+        emit preferencesChanged();
+    }
 }
 
 bool MainWindow::saveChanges()
@@ -252,7 +256,7 @@ bool MainWindow::trySaveChanges()
 {
     bool success = false;
 
-    SaveDialog sDialog;
+    SaveDialog sDialog(this);
     QString fileName = dictWidget->getLastFileName();
     int result = sDialog.trySave();
     switch(result) {
@@ -335,7 +339,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-MainWindow::MainWindow() : mainWindowSettings("Vilcrow", "podiceps")
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent), mainWindowSettings("Vilcrow", "podiceps")
 {
     closeImmediately = false;
     readSettings();
