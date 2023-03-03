@@ -14,7 +14,7 @@ set(CMAKE_AUTOMOC ON)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt5Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Xml REQUIRED)
 
 add_executable(podiceps
     dictionary_widget.cpp
@@ -27,4 +27,4 @@ add_executable(podiceps
     word_line.cpp
 )
 
-qt5_use_modules(podiceps Widgets)
+target_link_libraries(podiceps Qt5::Widgets Qt5::Xml)

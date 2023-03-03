@@ -109,6 +109,15 @@ bool WordLine::isEmpty() const
            status.isEmpty() && date.isNull();
 }
 
+void WordLine::setDomElement(QDomElement &element) const
+{
+    element.setAttribute("original", original);
+    element.setAttribute("translation", translation);
+    element.setAttribute("status", status);
+    element.setAttribute("date", getDate());
+    element.setAttribute("dateFormat", dateFormat);
+}
+
 const WordLine& WordLine::operator=(const WordLine &other)
 {
     original = other.original;
@@ -156,8 +165,18 @@ WordLine::WordLine(const QString &pOriginal, const QString &pTranslation,
     original = pOriginal;
     translation = pTranslation;
     status = pStatus;
-    dateFormat = format.isEmpty() ? DefaultDateFormat : format;
+    dateFormat = format;
     date = QDate::fromString(pDate, dateFormat);
+}
+
+WordLine::WordLine(const QDomElement &element)
+{
+    original = element.attribute("original", "");
+    translation = element.attribute("translation", "");
+    status = element.attribute("status", "");
+    dateFormat = element.attribute("dateFormat", DefaultDateFormat);
+    QString dateString = element.attribute("date", "");
+    date = QDate::fromString(dateString, dateFormat);
 }
 
 WordLine::~WordLine()

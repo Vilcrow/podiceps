@@ -39,36 +39,43 @@ void DictionaryWidget::readFromFile(const QString &fileName)
         return;
     }
 
-    QFile file(fileName);
-    if(!file.open(QIODevice::ReadOnly)) {
-        sendMessage(tr("Unable to open file: %1").arg(lastFileName));
-        lastFileName = "";
+    QFile xmlFile(fileName);
+    if(!xmlFile.open(QIODevice::ReadOnly)) {
+        if(fileName == lastFileName) {
+            lastFileName = "";
+        }
+        sendMessage(tr("Unable to open file: %1").arg(fileName));
         return;
     }
 
+    QDomDocument document;
+    document.setContent(&xmlFile);
+    xmlFile.close();
+
+    QDomElement root = document.documentElement();
+    QDomElement node = root.firstChild().toElement();
+
     QList<WordLine> words;
-    try {
-        QDataStream in(&file);
-        in >> words;
-    }
-    catch(...) {
-        QMessageBox::information(this, tr("Unable to open file"),
-                                       tr("Invalid format"));
-        file.close();
-        return;
+    while(!node.isNull()) {
+        if(node.tagName() == "word") {
+            while(!node.isNull()) {
+                WordLine word(node);
+                words.append(word);
+                node = node.nextSibling().toElement();
+            }
+        }
+        node = node.nextSibling().toElement();
     }
 
     if(words.isEmpty()) {
-        sendMessage(tr("The file is empty"));
+        sendMessage(tr("The file contains no words or has an invalid format."));
     }
     else {
         tableWidget->fillTable(words);
         lastFileName = fileName;
+        changesSaved = true;
+        sendMessage(tr("The file \"%1\" is open").arg(lastFileName));
     }
-
-    changesSaved = true;
-    file.close();
-    sendMessage(tr("The file \"%1\" is open").arg(lastFileName));
 }
 
 void DictionaryWidget::writeToFile(const QString &fileName)
@@ -77,20 +84,33 @@ void DictionaryWidget::writeToFile(const QString &fileName)
         return;
     }
 
-    QFile file(fileName);
-    if(!file.open(QIODevice::WriteOnly)) {
+    QFile xmlFile(fileName);
+
+    if(!xmlFile.open(QFile::WriteOnly | QFile::Text)) {
         QMessageBox::information(this, tr("Unable to open file"),
-                                 file.errorString());
+                                 xmlFile.errorString());
         return;
+    };
+
+    QTextStream xmlContent(&xmlFile);
+
+    QDomDocument document;
+    QDomElement root = document.createElement("Words");
+    document.appendChild(root);
+
+    QList<WordLine> words = tableWidget->getWords();
+    for(WordLine word : words) {
+        QDomElement domElement = document.createElement("word");
+        word.setDomElement(domElement);
+        root.appendChild(domElement);
     }
 
-    QDataStream out(&file);
-    out << tableWidget->getWords();
+    xmlContent << document.toString();
+    xmlFile.close();
 
     lastFileName = fileName;
     changesSaved = true;
 
-    file.close();
     sendMessage(tr("The file \"%1\" saved").arg(lastFileName));
 }
 
@@ -132,7 +152,7 @@ void DictionaryWidget::importFromFile(const QString &fileName)
 
     if(words.isEmpty()) {
         QMessageBox::information(this, tr("No words in file"),
-            tr("The file you are attempting to open contains no words."));
+            tr("The file contains no words."));
     }
     else {
         tableWidget->fillTable(words);
@@ -209,6 +229,7 @@ void DictionaryWidget::writeSettings()
 void DictionaryWidget::clearInput()
 {
     inputWidget->clearInput();
+    tableWidget->clearSelection();
 }
 
 void DictionaryWidget::createNewFile()

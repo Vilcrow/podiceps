@@ -165,6 +165,11 @@ QTableView* TableWidget::getTableView() const
     return tableView;
 }
 
+void TableWidget::clearSelection()
+{
+    tableView->clearSelection();
+}
+
 TableWidget::TableWidget()
 {
     tableModel = new TableModel(this);

@@ -54,6 +54,8 @@ public:
     void connectSignals(DictionaryWidget *dictWidget);
     QTableView* getTableView() const;
 
+    void clearSelection();
+
     TableWidget();
     virtual ~TableWidget();
 private:

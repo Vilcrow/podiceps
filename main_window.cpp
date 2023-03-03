@@ -350,10 +350,6 @@ MainWindow::MainWindow() : mainWindowSettings("Vilcrow", "podiceps")
             this, &MainWindow::showMessage);
     connect(dictWidget, &DictionaryWidget::updateMenus,
             this, &MainWindow::updateActions);
-    if(!dictWidget->getLastFileName().isEmpty()) {
-        QString last = dictWidget->getLastFileName();
-        showMessage(tr("The file \"%1\" is open").arg(last));
-    }
 }
 
 MainWindow::~MainWindow()
