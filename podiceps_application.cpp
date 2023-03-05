@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  save_dialog.h                                                         */
+/*  podiceps_application.hpp                                              */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,24 +25,40 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef SAVE_DIALOG_VIL_H
-#define SAVE_DIALOG_VIL_H
+#include "podiceps_application.h"
+#include "preferences_widget.h"
 
-#include <QDialog>
+void PodicepsApplication::updateSettings()
+{
+    setTheme();
+}
 
-class SaveDialog : public QDialog {
-    Q_OBJECT
-public:
-    enum SaveDialogCode { Rejected, Accepted, Cancelled };
+int PodicepsApplication::exec()
+{
+    setTheme();
+    mainWindow->show();
+    return QApplication::exec();
+}
 
-    bool isCancelled() const;
-    int trySave();
+void PodicepsApplication::setTheme()
+{
+    settings.beginGroup("/Settings/Inteface");
+    int appTheme = settings.value("/app_theme", 0).toInt();
+    settings.endGroup();
 
-    SaveDialog(QWidget *parent = nullptr);
-    virtual ~SaveDialog();
-private:
-    bool cancelled;
-    void cancel();
-};
+    QString theme = PreferencesWidget::getTheme(appTheme);
+    setStyleSheet(theme);
+}
 
-#endif
+PodicepsApplication::PodicepsApplication(int &argc, char **argv)
+    : QApplication(argc, argv), settings("Vilcrow", "podiceps")
+{
+    mainWindow = new MainWindow();
+    connect(mainWindow, &MainWindow::preferencesChanged,
+            this, &PodicepsApplication::updateSettings);
+}
+
+PodicepsApplication::~PodicepsApplication()
+{
+
+}

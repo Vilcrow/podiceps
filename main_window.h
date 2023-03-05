@@ -35,8 +35,7 @@ class DictionaryWidget;
 class QCloseEvent;
 class QStatusBar;
 
-class MainWindow: public QMainWindow
-{
+class MainWindow: public QMainWindow {
     Q_OBJECT
 public:
     void readSettings();

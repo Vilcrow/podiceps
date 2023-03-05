@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  save_dialog.h                                                         */
+/*  podices_application.h                                                 */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,24 +25,26 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef SAVE_DIALOG_VIL_H
-#define SAVE_DIALOG_VIL_H
+#ifndef PODICEPS_APPLICATION_VIL_H
+#define PODICEPS_APPLICATION_VIL_H
 
-#include <QDialog>
+#include "main_window.h"
+#include <QApplication>
+#include <QSettings>
 
-class SaveDialog : public QDialog {
+class PodicepsApplication : public QApplication {
     Q_OBJECT
 public:
-    enum SaveDialogCode { Rejected, Accepted, Cancelled };
+    int exec();
+    void setTheme();
 
-    bool isCancelled() const;
-    int trySave();
-
-    SaveDialog(QWidget *parent = nullptr);
-    virtual ~SaveDialog();
+    PodicepsApplication(int &argc, char **argv);
+    virtual ~PodicepsApplication();
+public slots:
+    void updateSettings();
 private:
-    bool cancelled;
-    void cancel();
+    QSettings settings;
+    MainWindow *mainWindow;
 };
 
 #endif

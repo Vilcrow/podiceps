@@ -25,13 +25,10 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#include "main_window.h"
-#include <QApplication>
+#include <podiceps_application.h>
 
 int main(int argc, char **argv)
 {
-    QApplication app(argc, argv);
-    MainWindow mainWindow;
-    mainWindow.show();
+    PodicepsApplication app(argc, argv);
     return app.exec();
 }

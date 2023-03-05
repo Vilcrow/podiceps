@@ -175,3 +175,8 @@ TableModel::TableModel(QList<WordLine> words, QObject *parent)
 {
 
 }
+
+TableModel::~TableModel()
+{
+
+}

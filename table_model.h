@@ -55,6 +55,7 @@ public:
 
     TableModel(QObject *parent = nullptr);
     TableModel(QList<WordLine> words, QObject *parent = nullptr);
+    virtual ~TableModel();
 private:
     QList<WordLine> words;
 };

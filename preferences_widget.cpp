@@ -34,13 +34,64 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QTextStream>
 #include <QVBoxLayout>
+
+QMap<int, QString> PreferencesWidget::themePaths = { {LightTheme, ""},
+                                                     {DarkTheme, ""},
+                                                     {CustomTheme, ""} };
+
+void PreferencesWidget::setThemePaths()
+{
+    QSettings settings("Vilcrow", "podiceps");
+    settings.beginGroup("/Settings/Inteface");
+    themePaths[LightTheme] = settings.value("/light_theme_path", "").toString();
+    themePaths[DarkTheme] = settings.value("/dark_theme_path", "").toString();
+    themePaths[CustomTheme] = settings.value("/custom_theme_path", "").toString();
+    settings.endGroup();
+}
+
+QString PreferencesWidget::getTheme(int theme)
+{
+    setThemePaths();
+
+    QString ret = "";
+    QString path = "";
+
+    switch(theme) {
+    case LightTheme:
+        path = themePaths[LightTheme];
+        break;
+    case DarkTheme:
+        path = themePaths[DarkTheme];
+        break;
+    case CustomTheme:
+        path = themePaths[CustomTheme];
+        break;
+    }
+
+    if(!path.isEmpty()) {
+        QFile themeFile(path);
+        if(themeFile.open(QIODevice::ReadOnly)) {
+            QTextStream content(&themeFile);
+            ret = content.readAll();
+        }
+    }
+
+    return ret;
+}
+
+void PreferencesWidget::accept()
+{
+    writeSettings();
+    QDialog::accept();
+}
 
 void PreferencesWidget::setCustomThemePath()
 {
     QString path = QFileDialog::getOpenFileName(this);
     if(!path.isEmpty()) {
-        customThemePath = path;
+        themePaths[CustomTheme] = path;
         customLineEdit->setText(path);
     }
 }
@@ -86,7 +137,7 @@ void PreferencesWidget::readSettings()
 {
     settings.beginGroup("/Settings/Inteface");
     appTheme = settings.value("/app_theme", 0).toInt();
-    customThemePath = settings.value("/custom_theme_path", "").toString();
+    themePaths[CustomTheme] = settings.value("/custom_theme_path", "").toString();
     showStatus = settings.value("/table/show_status", true).toBool();
     showDate = settings.value("/table/show_date", true).toBool();
     settings.endGroup();
@@ -133,11 +184,11 @@ void PreferencesWidget::setupIntefaceTab()
     customLayout->addWidget(customThemeButton);
     connect(customThemeButton, &QRadioButton::toggled,
             this, &PreferencesWidget::onToggled);
-    customLineEdit = new QLineEdit(customThemePath);
+    customLineEdit = new QLineEdit(themePaths[CustomTheme]);
     customLayout->addWidget(customLineEdit);
-    QPushButton *customOpenButton = new QPushButton(tr("&Open"));
-    customLayout->addWidget(customOpenButton);
-    connect(customOpenButton, &QAbstractButton::clicked,
+    QPushButton *customChooseButton = new QPushButton(tr("Ch&oose..."));
+    customLayout->addWidget(customChooseButton);
+    connect(customChooseButton, &QAbstractButton::clicked,
             this, &PreferencesWidget::setCustomThemePath);
 
     switch(appTheme) {
@@ -202,7 +253,5 @@ PreferencesWidget::PreferencesWidget(QWidget *parent)
 
 PreferencesWidget::~PreferencesWidget()
 {
-    if(result() == QDialog::Accepted) {
-        writeSettings();
-    }
+
 }

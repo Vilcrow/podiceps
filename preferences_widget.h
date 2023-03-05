@@ -40,14 +40,20 @@ class PreferencesWidget : public QDialog {
     Q_OBJECT
 public:
     enum Theme { LightTheme, DarkTheme, CustomTheme };
+    static QString getTheme(int theme);
 
     PreferencesWidget(QWidget *parent = nullptr);
     virtual ~PreferencesWidget();
+public slots:
+    void accept() override;
 private slots:
     void setCustomThemePath();
     void onToggled(bool checked);
     void stateChanged(int state);
 private:
+    static QMap<int, QString> themePaths;
+    static void setThemePaths();
+
     void readSettings();
     void writeSettings();
     void setupIntefaceTab();
@@ -65,9 +71,8 @@ private:
     QRadioButton *lightThemeButton;
     QRadioButton *darkThemeButton;
     QRadioButton *customThemeButton;
-
-    QString customThemePath;
     QLineEdit *customLineEdit;
+
 };
 
 #endif

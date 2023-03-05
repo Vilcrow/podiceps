@@ -21,6 +21,7 @@ add_executable(podiceps
     input_widget.cpp
     main.cpp
     main_window.cpp
+    podiceps_application.cpp
     preferences_widget.cpp
     save_dialog.cpp
     table_model.cpp

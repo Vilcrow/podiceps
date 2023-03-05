@@ -79,19 +79,4 @@ private:
     QString dateFormat;
 };
 
-inline QDataStream &operator<<(QDataStream &stream, const WordLine &word)
-{
-    return stream << word.getOriginal() << word.getTranslation()
-                  << word.getStatus() << word.getDate();
-}
-
-inline QDataStream &operator>>(QDataStream &stream, WordLine &word)
-{
-    QString original, translation, status, date;
-    stream >> original >> translation >> status >> date;
-    word = WordLine(original, translation, status, date);
-
-    return stream;
-}
-
 #endif
