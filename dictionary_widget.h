@@ -69,8 +69,9 @@ public slots:
     void findEntry();
     void removeEntry();
     void updateActions();
+    void updateSettings();
 private:
-    QSettings dictionarySettings;
+    QSettings settings;
     QString lastFileName;
     bool changesSaved;
 

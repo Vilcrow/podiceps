@@ -222,16 +222,16 @@ int DictionaryWidget::getRowCount() const
 
 void DictionaryWidget::readSettings()
 {
-    dictionarySettings.beginGroup("/Settings");
-    lastFileName = dictionarySettings.value("/last_file_name", "").toString();
-    dictionarySettings.endGroup();
+    settings.beginGroup("/Settings");
+    lastFileName = settings.value("/last_file_name", "").toString();
+    settings.endGroup();
 }
 
 void DictionaryWidget::writeSettings()
 {
-    dictionarySettings.beginGroup("/Settings");
-    dictionarySettings.setValue("last_file_name", lastFileName);
-    dictionarySettings.endGroup();
+    settings.beginGroup("/Settings");
+    settings.setValue("last_file_name", lastFileName);
+    settings.endGroup();
 }
 
 void DictionaryWidget::clearInput()
@@ -269,7 +269,7 @@ void DictionaryWidget::addEntrySlot()
         changesSaved = false;
         emit updateMenus();
         //originalLineEdit->setStyleSheet("");
-        result = QString(tr("Done"));
+        result = QString(tr("Added"));
     }
     else {
         result = QString(tr("Duplicate word. The word \"%1\" already exists.")
@@ -291,6 +291,7 @@ void DictionaryWidget::editEntry()
     if(tableWidget->editEntry(word)) {
         changesSaved = false;
         emit updateMenus();
+        emit sendMessage(tr("Edited"));
     }
     else {
         emit sendMessage(tr("The word \"%1\" already exists.")
@@ -339,6 +340,7 @@ void DictionaryWidget::removeEntry()
     tableWidget->removeEntry();
     changesSaved = false;
     emit updateMenus();
+    sendMessage(tr("Deleted"));
 }
 
 void DictionaryWidget::updateActions()
@@ -356,8 +358,13 @@ void DictionaryWidget::updateActions()
     }
 }
 
+void DictionaryWidget::updateSettings()
+{
+    tableWidget->updateSettings();
+}
+
 DictionaryWidget::DictionaryWidget(QWidget *parent)
-    : QWidget(parent), dictionarySettings("Vilcrow", "podiceps")
+    : QWidget(parent), settings("Vilcrow", "podiceps")
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     readSettings();

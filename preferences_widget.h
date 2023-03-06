@@ -42,14 +42,17 @@ public:
     enum Theme { LightTheme, DarkTheme, CustomTheme };
     static QString getTheme(int theme);
 
+    enum Language { EnglishLang };
+
     PreferencesWidget(QWidget *parent = nullptr);
     virtual ~PreferencesWidget();
 public slots:
     void accept() override;
 private slots:
     void setCustomThemePath();
-    void onToggled(bool checked);
-    void stateChanged(int state);
+    void languageChanged(bool checked);
+    void themeChanged(bool checked);
+    void tableSettingsChanged(int state);
 private:
     static QMap<int, QString> themePaths;
     static void setThemePaths();
@@ -59,11 +62,14 @@ private:
     void setupIntefaceTab();
 
     QSettings settings;
+    int appLanguage;
     int appTheme;
     bool showStatus;
     bool showDate;
 
     QTabWidget *tabWidget;
+
+    QRadioButton *engLangButton;
 
     QCheckBox *showStatusCheckBox;
     QCheckBox *showDateCheckBox;

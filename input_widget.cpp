@@ -220,16 +220,17 @@ InputWidget::InputWidget(QWidget *parent)
     mainLayout = new QVBoxLayout(this);
 
     // Labels.
-    originalLabel = new QLabel(tr("Original"));
-    translationLabel = new QLabel(tr("Translation"));
-    statusLabel = new QLabel(tr("Status"));
-    dateLabel = new QLabel(tr("Date"));
+    QLabel *originalLabel = new QLabel(tr("Original"));
+    QLabel *translationLabel = new QLabel(tr("Translation"));
+    QLabel *statusLabel = new QLabel(tr("Status"));
+    QLabel *dateLabel = new QLabel(tr("Date"));
 
     // Edit lines.
     originalLineEdit = new QLineEdit();
     translationLineEdit = new QLineEdit();
     statusLineEdit = new QLineEdit();
     dateLineEdit = new QLineEdit();
+    dateLineEdit->setEnabled(false);
 
     inputLayout = new QGridLayout();
     inputLayout->addWidget(originalLabel, 0, 0, Qt::AlignCenter);

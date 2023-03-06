@@ -29,6 +29,7 @@
 #define TABLE_WIDGET_VIL_H
 
 #include "table_model.h"
+#include <QSettings>
 #include <QTableView>
 #include <QWidget>
 
@@ -38,6 +39,9 @@ class QSortFilterProxyModel;
 class TableWidget : public QWidget {
     Q_OBJECT
 public:
+    enum Columns { OriginalColumn, TranslationColumn,
+                   StatusColumn, DateColumn };
+
     bool addEntry(const WordLine &word);
     bool editEntry(const WordLine &word);
     void removeEntry();
@@ -58,7 +62,10 @@ public:
 
     TableWidget(QWidget *parent = nullptr);
     virtual ~TableWidget();
+public slots:
+    void updateSettings();
 private:
+    QSettings settings;
     TableModel *tableModel;
     QTableView *tableView;
     QSortFilterProxyModel *proxyModel;

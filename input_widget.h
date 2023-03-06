@@ -63,11 +63,6 @@ public:
     InputWidget(QWidget *parent = nullptr);
     virtual ~InputWidget();
 private:
-    QLabel *originalLabel;
-    QLabel *translationLabel;
-    QLabel *statusLabel;
-    QLabel *dateLabel;
-
     QLineEdit *originalLineEdit;
     QLineEdit *translationLineEdit;
     QLineEdit *statusLineEdit;

@@ -53,13 +53,13 @@ bool TableWidget::addEntry(const WordLine &word)
 {
     if(!tableModel->getWords().contains(word)) {
         tableModel->insertRows(0, 1, QModelIndex());
-        QModelIndex index = tableModel->index(0, 0, QModelIndex());
+        QModelIndex index = tableModel->index(0, OriginalColumn, QModelIndex());
         tableModel->setData(index, word.getOriginal(), Qt::EditRole);
-        index = tableModel->index(0, 1, QModelIndex());
+        index = tableModel->index(0, TranslationColumn, QModelIndex());
         tableModel->setData(index, word.getTranslation(), Qt::EditRole);
-        index = tableModel->index(0, 2, QModelIndex());
+        index = tableModel->index(0, StatusColumn, QModelIndex());
         tableModel->setData(index, word.getStatus(), Qt::EditRole);
-        index = tableModel->index(0, 3, QModelIndex());
+        index = tableModel->index(0, DateColumn, QModelIndex());
         tableModel->setData(index, word.getDate(), Qt::EditRole);
         return true;
     }
@@ -72,17 +72,21 @@ bool TableWidget::editEntry(const WordLine &word) {
     int row = -1;
     for(QModelIndex index : indexes) {
         row = proxyModel->mapToSource(index).row();
-        QModelIndex orgIndex = tableModel->index(row, 0, QModelIndex());
+        QModelIndex originalIndex = tableModel->index(row, OriginalColumn,
+                                                      QModelIndex());
 
-        if(word.getOriginal() != tableModel->data(orgIndex, Qt::DisplayRole) &&
-                tableModel->getWords().contains(word)) {
+        if(word.getOriginal() != tableModel->data(originalIndex,
+                                                  Qt::DisplayRole) &&
+           tableModel->getWords().contains(word)) {
             return false;
         }
 
-        tableModel->setData(orgIndex, word.getOriginal(), Qt::EditRole);
-        QModelIndex translationIndex = tableModel->index(row, 1, QModelIndex());
+        tableModel->setData(originalIndex, word.getOriginal(), Qt::EditRole);
+        QModelIndex translationIndex = tableModel->index(row, TranslationColumn,
+                                                         QModelIndex());
         tableModel->setData(translationIndex, word.getTranslation(), Qt::EditRole);
-        QModelIndex statusIndex = tableModel->index(row, 2, QModelIndex());
+        QModelIndex statusIndex = tableModel->index(row, StatusColumn,
+                                                    QModelIndex());
         tableModel->setData(statusIndex, word.getStatus(), Qt::EditRole);
     }
 
@@ -124,20 +128,23 @@ WordLine TableWidget::getSelectedWord() const
         int row = -1;
         for(QModelIndex index : indexes) {
             row = proxyModel->mapToSource(index).row();
-            QModelIndex originalIndex = tableModel->index(row, 0,
-                                                    QModelIndex());
+            QModelIndex originalIndex = tableModel->index(row, OriginalColumn,
+                                                          QModelIndex());
             QVariant varOriginal = tableModel->data(originalIndex,
                                                     Qt::DisplayRole);
             original = varOriginal.toString();
-            QModelIndex translationIndex = tableModel->index(row, 1,
-                                                    QModelIndex());
+            QModelIndex translationIndex = tableModel->index(row,
+                                                             TranslationColumn,
+                                                             QModelIndex());
             QVariant varTranslation = tableModel->data(translationIndex,
                                                     Qt::DisplayRole);
             translation = varTranslation.toString();
-            QModelIndex statusIndex = tableModel->index(row, 2, QModelIndex());
+            QModelIndex statusIndex = tableModel->index(row, StatusColumn,
+                                                        QModelIndex());
             QVariant varStatus = tableModel->data(statusIndex, Qt::DisplayRole);
             status = varStatus.toString();
-            QModelIndex dateIndex = tableModel->index(row, 3, QModelIndex());
+            QModelIndex dateIndex = tableModel->index(row, DateColumn,
+                                                      QModelIndex());
             QVariant varDate = tableModel->data(dateIndex, Qt::DisplayRole);
             date = varDate.toString();
         }
@@ -170,27 +177,53 @@ void TableWidget::clearSelection()
     tableView->clearSelection();
 }
 
+void TableWidget::updateSettings()
+{
+    settings.beginGroup("/Settings/Inteface");
+    bool hideStatus = !settings.value("/table/show_status", true).toBool();
+    bool hideDate = !settings.value("/table/show_date", true).toBool();
+    settings.endGroup();
+
+    int visibleCount = 4;
+    if(hideStatus) {
+        --visibleCount;
+    }
+    if(hideDate) {
+        --visibleCount;
+    }
+
+    int widthTotal = tableView->horizontalHeader()->length();
+    int widthColumn = widthTotal / visibleCount;
+    tableView->setColumnWidth(OriginalColumn, widthColumn);
+    tableView->setColumnWidth(TranslationColumn, widthColumn);
+    tableView->setColumnWidth(StatusColumn, widthColumn);
+
+    tableView->setColumnHidden(StatusColumn, hideStatus);
+    tableView->setColumnHidden(DateColumn, hideDate);
+}
+
 TableWidget::TableWidget(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent), settings("Vilcrow", "podiceps")
 {
     tableModel = new TableModel(this);
 
     proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(tableModel);
-    proxyModel->setFilterKeyColumn(0);
+    proxyModel->setFilterKeyColumn(OriginalColumn);
 
     tableView = new QTableView;
     tableView->setModel(proxyModel);
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     tableView->horizontalHeader()->setStretchLastSection(true);
     tableView->horizontalHeader()->setMinimumSectionSize(100);
-    tableView->setColumnWidth(0, 150);
-    tableView->setColumnWidth(1, 150);
-    tableView->setColumnWidth(2, 100);
+    tableView->setColumnWidth(OriginalColumn, 150);
+    tableView->setColumnWidth(TranslationColumn, 150);
+    tableView->setColumnWidth(StatusColumn, 100);
     tableView->verticalHeader()->hide();
     tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     tableView->setSortingEnabled(true);
+    updateSettings();
 }
 
 TableWidget::~TableWidget()

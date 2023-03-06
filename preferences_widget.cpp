@@ -43,10 +43,13 @@ QMap<int, QString> PreferencesWidget::themePaths = { {LightTheme, ""},
 
 void PreferencesWidget::setThemePaths()
 {
+    // Default theme(Qt).
+    themePaths[LightTheme] = "";
+
+    themePaths[DarkTheme] = "../themes/theme_dark.qss";
+
     QSettings settings("Vilcrow", "podiceps");
     settings.beginGroup("/Settings/Inteface");
-    themePaths[LightTheme] = settings.value("/light_theme_path", "").toString();
-    themePaths[DarkTheme] = settings.value("/dark_theme_path", "").toString();
     themePaths[CustomTheme] = settings.value("/custom_theme_path", "").toString();
     settings.endGroup();
 }
@@ -96,14 +99,24 @@ void PreferencesWidget::setCustomThemePath()
     }
 }
 
-void PreferencesWidget::onToggled(bool checked)
+void PreferencesWidget::languageChanged(bool checked)
 {
     if(checked) {
-        QRadioButton *b = static_cast<QRadioButton*>(sender());
-        if(b == lightThemeButton) {
+        QRadioButton *button = static_cast<QRadioButton*>(sender());
+        if(button == engLangButton) {
+            appLanguage = EnglishLang;
+        }
+    }
+}
+
+void PreferencesWidget::themeChanged(bool checked)
+{
+    if(checked) {
+        QRadioButton *button = static_cast<QRadioButton*>(sender());
+        if(button == lightThemeButton) {
             appTheme = LightTheme;
         }
-        else if(b == darkThemeButton) {
+        else if(button == darkThemeButton) {
             appTheme = DarkTheme;
         }
         else {
@@ -112,10 +125,10 @@ void PreferencesWidget::onToggled(bool checked)
     }
 }
 
-void PreferencesWidget::stateChanged(int state)
+void PreferencesWidget::tableSettingsChanged(int state)
 {
-    QCheckBox *b = static_cast<QCheckBox*>(sender());
-    if(b == showStatusCheckBox) {
+    QCheckBox *checkBox = static_cast<QCheckBox*>(sender());
+    if(checkBox == showStatusCheckBox) {
         if(state == Qt::Unchecked) {
             showStatus = false;
         }
@@ -123,7 +136,7 @@ void PreferencesWidget::stateChanged(int state)
             showStatus = true;
         }
     }
-    else if(b == showDateCheckBox) {
+    else if(checkBox == showDateCheckBox) {
         if(state == Qt::Unchecked) {
             showDate = false;
         }
@@ -136,6 +149,7 @@ void PreferencesWidget::stateChanged(int state)
 void PreferencesWidget::readSettings()
 {
     settings.beginGroup("/Settings/Inteface");
+    appLanguage = settings.value("/app_language", 0).toInt();
     appTheme = settings.value("/app_theme", 0).toInt();
     themePaths[CustomTheme] = settings.value("/custom_theme_path", "").toString();
     showStatus = settings.value("/table/show_status", true).toBool();
@@ -146,6 +160,7 @@ void PreferencesWidget::readSettings()
 void PreferencesWidget::writeSettings()
 {
     settings.beginGroup("/Settings/Inteface");
+    settings.setValue("/app_language", appLanguage);
     settings.setValue("/app_theme", appTheme);
     settings.setValue("/custom_theme_path", customLineEdit->text());
     settings.setValue("/table/show_status", showStatus);
@@ -165,6 +180,23 @@ void PreferencesWidget::setupIntefaceTab()
     interfaceTab->setLayout(mainLayout);
     tabWidget->addTab(interfaceTab, tr("&Interface"));
 
+    // Language settings.
+    QGroupBox *langGroupBox = new QGroupBox(tr("Language"));
+    QVBoxLayout *langLayout = new QVBoxLayout;
+    engLangButton = new QRadioButton("English");
+    langLayout->addWidget(engLangButton);
+    connect(engLangButton, &QRadioButton::toggled,
+            this, &PreferencesWidget::languageChanged);
+
+    switch(appLanguage) {
+    case EnglishLang:
+        engLangButton->setChecked(true);
+        break;
+    }
+
+    langGroupBox->setLayout(langLayout);
+    mainLayout->addWidget(langGroupBox);
+
     // Theme settings.
     QGroupBox *themeGroupBox = new QGroupBox(tr("Theme"));
     QVBoxLayout *themeLayout = new QVBoxLayout;
@@ -172,18 +204,18 @@ void PreferencesWidget::setupIntefaceTab()
     lightThemeButton = new QRadioButton(tr("&Light"));
     themeLayout->addWidget(lightThemeButton);
     connect(lightThemeButton, &QRadioButton::toggled,
-            this, &PreferencesWidget::onToggled);
+            this, &PreferencesWidget::themeChanged);
 
     darkThemeButton = new QRadioButton(tr("&Dark"));
     themeLayout->addWidget(darkThemeButton);
     connect(darkThemeButton, &QRadioButton::toggled,
-            this, &PreferencesWidget::onToggled);
+            this, &PreferencesWidget::themeChanged);
 
     QHBoxLayout *customLayout = new QHBoxLayout;
     customThemeButton = new QRadioButton(tr("C&ustom"));
     customLayout->addWidget(customThemeButton);
     connect(customThemeButton, &QRadioButton::toggled,
-            this, &PreferencesWidget::onToggled);
+            this, &PreferencesWidget::themeChanged);
     customLineEdit = new QLineEdit(themePaths[CustomTheme]);
     customLayout->addWidget(customLineEdit);
     QPushButton *customChooseButton = new QPushButton(tr("Ch&oose..."));
@@ -215,13 +247,13 @@ void PreferencesWidget::setupIntefaceTab()
     showStatusCheckBox->setChecked(showStatus);
     tableLayout->addWidget(showStatusCheckBox);
     connect(showStatusCheckBox, &QCheckBox::stateChanged,
-            this, &PreferencesWidget::stateChanged);
+            this, &PreferencesWidget::tableSettingsChanged);
 
     showDateCheckBox = new QCheckBox(tr("D&ate column"), interfaceTab);
     showDateCheckBox->setChecked(showDate);
     tableLayout->addWidget(showDateCheckBox);
     connect(showDateCheckBox, &QCheckBox::stateChanged,
-            this, &PreferencesWidget::stateChanged);
+            this, &PreferencesWidget::tableSettingsChanged);
 
     tableGroupBox->setLayout(tableLayout);
     mainLayout->addWidget(tableGroupBox);

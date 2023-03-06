@@ -1,0 +1,366 @@
+/**************************************************************************/
+/*  theme_dark.qss                                                        */
+/*                                                                        */
+/*  vim:ts=4:sw=4:expandtab                                               */
+/*                                                                        */
+/**************************************************************************/
+/*                         This file is part of:                          */
+/*                               podiceps                                 */
+/*                                   -                                    */
+/*                          pocket dictionary                             */
+/**************************************************************************/
+/* Copyright (C) 2022-present S.V.I. 'Vilcrow', <vilcrow.net>             */
+/*                                                                        */
+/* LICENCE:                                                               */
+/* This program is free software: you can redistribute it and/or modify   */
+/* it under the terms of the GNU General Public License as published by   */
+/* the Free Software Foundation, either version 3 of the License, or      */
+/* (at your option) any later version.                                    */
+/*                                                                        */
+/* This program is distributed in the hope that it will be useful,        */
+/* but WITHOUT ANY WARRANTY; without even the implied warranty of         */
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           */
+/* GNU General Public License for more details.                           */
+/* You should have received a copy of the GNU General Public License      */
+/* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
+/**************************************************************************/
+
+/*    QWidget    */
+
+QWidget
+{
+    background-color: #000000;
+    color: #ffffff;
+    border-color: #051a39;
+}
+
+/*    QLabel    */
+
+QLabel
+{
+    background-color: transparent;
+    color: #dcdcdc;
+}
+
+QLabel::disabled
+{
+    background-color: transparent;
+    color: #656565;
+}
+
+/*    QToolTip    */
+
+QToolTip
+{
+    border : 1px solid #000000;
+    background-color: #424242;
+    color: #ffffff;
+    border-color: #031734;
+}
+
+/*    QMenuBar    */
+
+QMenuBar
+{
+    background-color: #424242;
+    color: #ffffff;
+    border-color: #051a39;
+}
+
+QMenuBar::item
+{
+    background-color: transparent;
+}
+
+QMenuBar::item:selected
+{
+    background-color: #4969ff;
+    border: 1px solid #000;
+    margin-bottom: -1px;
+    padding-bottom: 1px;
+}
+
+QMenuBar::item:pressed
+{
+    background-color: #4969ff;
+    border: 1px solid #000;
+    margin-bottom: -1px;
+    padding-bottom: 1px;
+}
+
+/*    QMenu    */
+
+QMenu
+{
+    background-color: #202020;
+    border: 1px solid;
+    color: #ffffff;
+}
+
+QMenu::separator
+{
+    height: 1px;
+    background-color: #6d8eff;
+    color: #ffffff;
+    padding-left: 4px;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+QMenu::item
+{
+    min-width : 120px;
+}
+
+QMenu::item:selected
+{
+    background-color: #4969ff;
+    color: #ffffff;
+}
+
+QMenu::item:disabled
+{
+    color: #6e6e6e;
+}
+
+/*    QPushButton    */
+
+QPushButton
+{
+    background-color: #274a7d;
+    color: #ffffff;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+QPushButton::disabled
+{
+    background-color: #424242;
+    color: #656565;
+}
+
+QPushButton::hover
+{
+    background-color: #3665aa;
+    color: #ffffff;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    border-color: #051a39;
+    padding: 5px;
+}
+
+QPushButton::pressed
+{
+    background-color: #4969ff;
+    color: #ffffff;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: #051a39;
+    padding: 5px;
+}
+
+/*    QLineEdit    */
+
+QLineEdit
+{
+    background-color: #525251;
+    color: #ffffff;
+    border-width: 1px;
+    border-radius: 3px;
+    border-color: #051a39;
+    padding: 2px;
+}
+
+QLineEdit::disabled
+{
+    background-color: #404040;
+    color: #656565;
+    border-width: 1px;
+    border-radius: 3px;
+    border-color: #051a39;
+    padding: 2px;
+}
+
+/*    QGroupBox    */
+
+QGroupBox
+{
+    border: 1px solid;
+    border-color: #607cff;
+    margin-top: 22px;
+}
+
+QGroupBox::title
+{
+    background-color: #607cff;
+    color: #ffffff;
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 5px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+QGroupBox::title::disabled
+{
+    background-color: #404040;
+    color: #656565;
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    padding: 5px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+/*    QCheckBox    */
+
+QCheckBox::indicator
+{
+    color: #b1b1b1;
+    background-color: #b1b1b1;
+    border: 1px solid #b1b1b1;
+    width: 12px;
+    height: 12px;
+}
+
+QCheckBox::indicator:checked
+{
+    background-color: #607cff;
+}
+
+QCheckBox::indicator:unchecked:hover
+{
+    border: 1px solid #607cff;
+}
+
+QCheckBox::disabled
+{
+    color: #656565;
+}
+
+QCheckBox::indicator:disabled
+{
+    background-color: #656565;
+    color: #656565;
+    border: 1px solid #656565;
+}
+
+/*    QRadioButton    */
+
+QRadioButton::indicator::unchecked
+{
+    border: 3px inset gray;
+    border-radius: 6px;
+    background-color:  #ffffff;
+    width: 8px;
+    height: 8px;
+}
+
+QRadioButton::indicator::unchecked:hover
+{
+    border: 2px solid #607cff;
+    border-radius: 5px;
+    background-color:  #ffffff;
+    width: 9px;
+    height: 9px;
+}
+
+QRadioButton::indicator::checked
+{
+    border: 2px inset darkgray;
+    border-radius: 5px;
+    background-color: #4969ff;
+    width: 9px;
+    height: 9px;
+}
+
+QRadioButton::disabled
+{
+    color: #656565;
+}
+
+QRadioButton::indicator:disabled
+{
+    background-color: #656565;
+    color: #656565;
+    border: 2px solid #656565;
+}
+
+/*    QTableView    */
+
+QTableView
+{
+    background-color: #191a1a;
+    border: 1px solid #32414B;
+    color: #dcdcdc;
+    gridline-color: #8faaff;
+    outline : 0;
+}
+
+QTableView::disabled
+{
+    background-color: #191a1a;
+    border: 1px solid #32414B;
+    color: #dcdcdc;
+    gridline-color: #8faaff;
+    outline : 0;
+}
+
+QTableView::item:hover
+{
+    background-color: #26264f;
+    color: #dcdcdc;
+}
+
+QTableView::item:selected
+{
+    background-color: #191a1a;
+    border: 2px solid #4969ff;
+    color: #ffffff;
+}
+
+QTableView::item:selected:disabled
+{
+    background-color: #1a1b1c;
+    border: 2px solid #525251;
+    color: #656565;
+}
+
+QTableCornerButton::section
+{
+    background-color: #505050;
+    color: #ffffff;
+}
+
+QHeaderView::section
+{
+    background-color: #676765;
+    color: #ffffff;
+    text-align: left;
+    padding: 2px;
+}
+
+QHeaderView::section:disabled
+{
+    background-color: #525251;
+    color: #656565;
+}
+
+QHeaderView::section:checked
+{
+    color: #ffffff;
+    background-color: #001c99;
+}
+
+/*    QStatusBar    */
+
+QStatusBar
+{
+    background-color: #424242;
+    color: #ffffff;
+    border-color: #051a39;
+}

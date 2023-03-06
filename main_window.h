@@ -70,8 +70,8 @@ private:
     void createToolsMenu();
     void createHelpMenu();
 
-    bool closeImmediately;
     QSettings mainWindowSettings;
+    bool closeImmediately;
     DictionaryWidget *dictWidget;
     QStatusBar *statusBar;
 

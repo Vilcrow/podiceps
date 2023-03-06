@@ -355,6 +355,8 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::showMessage);
     connect(dictWidget, &DictionaryWidget::updateMenus,
             this, &MainWindow::updateActions);
+    connect(this, &MainWindow::preferencesChanged,
+            dictWidget, &DictionaryWidget::updateSettings);
 }
 
 MainWindow::~MainWindow()

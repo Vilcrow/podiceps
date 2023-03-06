@@ -35,7 +35,7 @@ void PodicepsApplication::updateSettings()
 
 int PodicepsApplication::exec()
 {
-    setTheme();
+    updateSettings();
     mainWindow->show();
     return QApplication::exec();
 }
