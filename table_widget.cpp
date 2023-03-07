@@ -27,8 +27,19 @@
 
 #include "table_widget.h"
 #include "dictionary_widget.h"
+#include "word_card.h"
 #include <QHeaderView>
 #include <QSortFilterProxyModel>
+
+bool TableWidget::isSaved() const
+{
+    return changesSaved;
+}
+
+void TableWidget::setSaved(bool value)
+{
+    changesSaved = value;
+}
 
 void TableWidget::clear()
 {
@@ -61,6 +72,12 @@ bool TableWidget::addEntry(const WordLine &word)
         tableModel->setData(index, word.getStatus(), Qt::EditRole);
         index = tableModel->index(0, DateColumn, QModelIndex());
         tableModel->setData(index, word.getDate(), Qt::EditRole);
+
+        index = tableModel->index(0, CommentColumn, QModelIndex());
+        tableModel->setData(index, word.getComment(), Qt::EditRole);
+
+        changesSaved = false;
+        emit dataChanged();
         return true;
     }
 
@@ -88,7 +105,13 @@ bool TableWidget::editEntry(const WordLine &word) {
         QModelIndex statusIndex = tableModel->index(row, StatusColumn,
                                                     QModelIndex());
         tableModel->setData(statusIndex, word.getStatus(), Qt::EditRole);
+
+        QModelIndex commentIndex = tableModel->index(row, CommentColumn,
+                                                    QModelIndex());
+        tableModel->setData(commentIndex, word.getComment(), Qt::EditRole);
     }
+    changesSaved = false;
+    emit dataChanged();
 
     return true;
 }
@@ -100,6 +123,8 @@ void TableWidget::removeEntry()
         int row = proxyModel->mapToSource(index).row();
         tableModel->removeRows(row, 1, QModelIndex());
     }
+    changesSaved = false;
+    emit dataChanged();
 }
 
 void TableWidget::setFilter(int col, const QRegExp &exp)
@@ -124,7 +149,7 @@ WordLine TableWidget::getSelectedWord() const
 
     QModelIndexList indexes = tableView->selectionModel()->selectedRows();
     if(!indexes.isEmpty()) {
-        QString original, translation, status, date;
+        QString original, translation, status, date, comment;
         int row = -1;
         for(QModelIndex index : indexes) {
             row = proxyModel->mapToSource(index).row();
@@ -147,9 +172,15 @@ WordLine TableWidget::getSelectedWord() const
                                                       QModelIndex());
             QVariant varDate = tableModel->data(dateIndex, Qt::DisplayRole);
             date = varDate.toString();
+
+            QModelIndex commentIndex = tableModel->index(row, CommentColumn,
+                                                      QModelIndex());
+            QVariant varComment = tableModel->data(commentIndex, Qt::DisplayRole);
+            comment = varComment.toString();
         }
 
         ret = WordLine(original, translation, status, date);
+        ret.setComment(comment);
     }
 
     return ret;
@@ -163,6 +194,8 @@ QString TableWidget::getColumnName(int col) const
 
 void TableWidget::connectSignals(DictionaryWidget *dictWidget)
 {
+    connect(this, &TableWidget::dataChanged,
+            dictWidget, &DictionaryWidget::updateActions);
     connect(tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
             dictWidget, &DictionaryWidget::updateActions);
 }
@@ -202,8 +235,20 @@ void TableWidget::updateSettings()
     tableView->setColumnHidden(DateColumn, hideDate);
 }
 
+void TableWidget::openWordCard(const QModelIndex &index)
+{
+    WordLine word = getSelectedWord();
+    WordCard wordCard(word, this);
+    if(wordCard.exec() == QDialog::Accepted && word != wordCard.getWord()) {
+        editEntry(wordCard.getWord());
+        changesSaved = false;
+        emit dataChanged();
+    }
+}
+
 TableWidget::TableWidget(QWidget *parent)
-    : QWidget(parent), settings("Vilcrow", "podiceps")
+    : QWidget(parent), settings("Vilcrow", "podiceps"),
+      changesSaved(true)
 {
     tableModel = new TableModel(this);
 
@@ -219,11 +264,15 @@ TableWidget::TableWidget(QWidget *parent)
     tableView->setColumnWidth(OriginalColumn, 150);
     tableView->setColumnWidth(TranslationColumn, 150);
     tableView->setColumnWidth(StatusColumn, 100);
+    tableView->setColumnHidden(CommentColumn, true);
     tableView->verticalHeader()->hide();
     tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     tableView->setSortingEnabled(true);
     updateSettings();
+
+    connect(tableView, &QAbstractItemView::doubleClicked,
+            this, &TableWidget::openWordCard);
 }
 
 TableWidget::~TableWidget()

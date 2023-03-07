@@ -92,7 +92,8 @@ void PreferencesWidget::accept()
 
 void PreferencesWidget::setCustomThemePath()
 {
-    QString path = QFileDialog::getOpenFileName(this);
+    QString path = QFileDialog::getOpenFileName(this, tr("Open File"),
+                                         "", tr("QSS files (*.qss)"));
     if(!path.isEmpty()) {
         themePaths[CustomTheme] = path;
         customLineEdit->setText(path);
@@ -279,8 +280,10 @@ PreferencesWidget::PreferencesWidget(QWidget *parent)
     vLayout->addLayout(hLayout);
     setLayout(vLayout);
 
-    connect(saveButton, &QAbstractButton::clicked, this, &QDialog::accept);
-    connect(cancelButton, &QAbstractButton::clicked, this, &QDialog::reject);
+    connect(saveButton, &QAbstractButton::clicked,
+            this, &PreferencesWidget::accept);
+    connect(cancelButton, &QAbstractButton::clicked,
+            this, &QDialog::reject);
 }
 
 PreferencesWidget::~PreferencesWidget()

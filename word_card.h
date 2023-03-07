@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  input_widget.h                                                        */
+/*  word_card.h                                                           */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,58 +25,34 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef INPUT_WIDGET_VIL_H
-#define INPUT_WIDGET_VIL_H
+#ifndef WORD_CARD_VIL_H
+#define WORD_CARD_VIL_H
 
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QWidget>
+#include "word_line.h"
+#include <QDialog>
 
-class WordLine;
-class DictionaryWidget;
-class QLabel;
-class QGridLayout;
-class QPushButton;
 class QLineEdit;
+class QTextEdit;
 
-class InputWidget : public QWidget {
+class WordCard : public QDialog {
     Q_OBJECT
 public:
-    enum Lines { OriginalLine, TranslationLine,
-                 StatusLine, DateLine, AllLines };
+    WordLine getWord() const;
 
-    enum Buttons { AddButton = AllLines + 1, EditButton,
-                   FindButton, DeleteButton, AllButtons };
-
-    WordLine getInput() const;
-    QString getInput(int index) const;
-
-    void setInput(const WordLine &word);
-    void setInput(int index, const QString &value);
-    void setEnabled(int index, bool value = true);
-    void setStyleSheet(int index, const QString &style);
-
-    void clearInput(int index = AllLines);
-    bool isEmpty(int index = AllLines) const;
-
-    void connectSignals(DictionaryWidget *dictWidget);
-
-    InputWidget(QWidget *parent = nullptr);
-    virtual ~InputWidget();
+    WordCard(const WordLine &pWord, QWidget *parent = nullptr);
+    virtual ~WordCard();
+public slots:
+    void accept() override;
+private slots:
+    void truncateComment();
 private:
-    QLineEdit *originalLineEdit;
-    QLineEdit *translationLineEdit;
-    QLineEdit *statusLineEdit;
-    QLineEdit *dateLineEdit;
+    WordLine word;
 
-    QPushButton *addButton;
-    QPushButton *editButton;
-    QPushButton *findButton;
-    QPushButton *deleteButton;
-
-    QVBoxLayout *mainLayout;
-    QGridLayout *inputLayout;
-    QHBoxLayout *buttonsLayout;
+    QLineEdit *originalText;
+    QLineEdit *translationText;
+    QLineEdit *statusText;
+    QLineEdit *dateText;
+    QTextEdit *commentText;
 };
 
 #endif

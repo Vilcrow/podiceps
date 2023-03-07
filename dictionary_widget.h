@@ -48,7 +48,7 @@ public:
     void exportToFile(const QString &fileName);
 
     bool isSaved() const;
-    void setSaved(const bool value);
+    void setSaved(bool value);
 
     QString getLastFileName() const;
     int getRowCount() const;
@@ -73,7 +73,6 @@ public slots:
 private:
     QSettings settings;
     QString lastFileName;
-    bool changesSaved;
 
     TableWidget *tableWidget;
     InputWidget *inputWidget;

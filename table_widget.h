@@ -40,7 +40,10 @@ class TableWidget : public QWidget {
     Q_OBJECT
 public:
     enum Columns { OriginalColumn, TranslationColumn,
-                   StatusColumn, DateColumn };
+                   StatusColumn, DateColumn, CommentColumn };
+
+    bool isSaved() const;
+    void setSaved(bool value);
 
     bool addEntry(const WordLine &word);
     bool editEntry(const WordLine &word);
@@ -62,10 +65,15 @@ public:
 
     TableWidget(QWidget *parent = nullptr);
     virtual ~TableWidget();
+signals:
+    void dataChanged();
 public slots:
     void updateSettings();
+private slots:
+    void openWordCard(const QModelIndex &index);
 private:
     QSettings settings;
+    bool changesSaved;
     TableModel *tableModel;
     QTableView *tableView;
     QSortFilterProxyModel *proxyModel;

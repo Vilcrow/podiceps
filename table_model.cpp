@@ -26,6 +26,7 @@
 /**************************************************************************/
 
 #include "table_model.h"
+#include "table_widget.h"
 #include <QModelIndex>
 
 int TableModel::rowCount(const QModelIndex &parent) const
@@ -37,7 +38,7 @@ int TableModel::rowCount(const QModelIndex &parent) const
 int TableModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 4;
+    return 5;
 }
 
 QVariant TableModel::data(const QModelIndex &index, int role) const
@@ -52,17 +53,20 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
     if(role == Qt::DisplayRole) {
         const WordLine &word = words.at(index.row());
-        if(index.column() == 0) {
+        if(index.column() == TableWidget::OriginalColumn) {
             return word.getOriginal();
         }
-        else if(index.column() == 1) {
+        else if(index.column() == TableWidget::TranslationColumn) {
             return word.getTranslation();
         }
-        else if(index.column() == 2) {
+        else if(index.column() == TableWidget::StatusColumn) {
             return word.getStatus();
         }
-        else if(index.column() == 3) {
+        else if(index.column() == TableWidget::DateColumn) {
             return word.getDate();
+        }
+        else if(index.column() == TableWidget::CommentColumn) {
+            return word.getComment();
         }
     }
 
@@ -78,13 +82,13 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation,
 
     if(orientation == Qt::Horizontal) {
         switch(section) {
-        case 0:
+        case TableWidget::OriginalColumn:
             return tr("Original");
-        case 1:
+        case TableWidget::TranslationColumn:
             return tr("Translation");
-        case 2:
+        case TableWidget::StatusColumn:
             return tr("Status");
-        case 3:
+        case TableWidget::DateColumn:
             return tr("Date");
         default:
             return QVariant();
@@ -127,17 +131,20 @@ bool TableModel::setData(const QModelIndex &index, const QVariant &value,
     if(index.isValid() && role == Qt::EditRole) {
         int row = index.row();
         WordLine word = words.value(row);
-        if(index.column() == 0) {
+        if(index.column() == TableWidget::OriginalColumn) {
             word.setOriginal(value.toString());
         }
-        else if(index.column() == 1) {
+        else if(index.column() == TableWidget::TranslationColumn) {
             word.setTranslation(value.toString());
         }
-        else if(index.column() == 2) {
+        else if(index.column() == TableWidget::StatusColumn) {
             word.setStatus(value.toString());
         }
-        else if(index.column() == 3) {
+        else if(index.column() == TableWidget::DateColumn) {
             word.setDate(value.toString());
+        }
+        else if(index.column() == TableWidget::CommentColumn) {
+            word.setComment(value.toString());
         }
         else {
             return false;

@@ -59,14 +59,13 @@ int SaveDialog::trySave()
 }
 
 SaveDialog::SaveDialog(QWidget *parent)
-    : QDialog(parent)
+    : QDialog(parent), cancelled(false)
 {
     setWindowTitle(tr("Save changes"));
     QLabel *infoLabel = new QLabel(tr("Save changes to the current file?"));
     QPushButton *saveButton = new QPushButton(tr("Save"));
     QPushButton *noButton = new QPushButton(tr("No"));
     QPushButton *cancelButton = new QPushButton(tr("Cancel"));
-    cancelled = false;
 
     QVBoxLayout *vLayout = new QVBoxLayout;
     vLayout->addWidget(infoLabel);

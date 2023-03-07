@@ -37,6 +37,17 @@
 #include <QStatusBar>
 #include <QVBoxLayout>
 
+void MainWindow::appendFormat(QString &name, const QString &format)
+{
+    if(format.isEmpty()) {
+        return;
+    }
+
+    if(!name.endsWith(format, Qt::CaseInsensitive)) {
+        name.append("." + format);
+    }
+}
+
 void MainWindow::createMenus()
 {
     createFileMenu();
@@ -127,8 +138,10 @@ void MainWindow::openFile()
     }
 
     if(ok) {
-        QString fileName = QFileDialog::getOpenFileName(this);
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+                                                 "", tr("XML Files (*.xml)"));
         if(!fileName.isEmpty()) {
+            appendFormat(fileName, "xml");
             dictWidget->readFromFile(fileName);
         }
     }
@@ -136,8 +149,10 @@ void MainWindow::openFile()
 
 void MainWindow::saveFile()
 {
-    QString fileName = QFileDialog::getSaveFileName(this);
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
+                                             "", tr("XML Files (*.xml)"));
     if(!fileName.isEmpty()) {
+        appendFormat(fileName, "xml");
         dictWidget->writeToFile(fileName);
     }
 }
@@ -189,8 +204,10 @@ void MainWindow::importFile()
     }
 
     if(ok) {
-        QString fileName = QFileDialog::getOpenFileName(this);
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Import File"),
+                                                "", tr("Text files (*.txt)"));
         if(!fileName.isEmpty()) {
+            appendFormat(fileName, "txt");
             dictWidget->importFromFile(fileName);
             dictWidget->setLastFileName("");
         }
@@ -199,8 +216,10 @@ void MainWindow::importFile()
 
 void MainWindow::exportFile()
 {
-    QString fileName = QFileDialog::getSaveFileName(this);
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Export File"),
+                                              "", tr("Text Files (*.txt)"));
     if(!fileName.isEmpty()) {
+        appendFormat(fileName, "txt");
         dictWidget->exportToFile(fileName);
         dictWidget->setLastFileName(fileName);
     }
@@ -236,10 +255,12 @@ bool MainWindow::saveChanges()
 
     QString fileName = dictWidget->getLastFileName();
     if(fileName.isEmpty()) {
-        fileName = QFileDialog::getSaveFileName(this);
+        fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
+                                         "", tr("XML Files (*.xml)"));
     }
 
     if(!fileName.isEmpty()) {
+        appendFormat(fileName, "xml");
         dictWidget->writeToFile(fileName);
         dictWidget->setSaved(true);
         updateActions();
@@ -261,7 +282,7 @@ bool MainWindow::trySaveChanges()
     int result = sDialog.trySave();
     switch(result) {
     case SaveDialog::Accepted:
-        result = saveChanges();
+        success = saveChanges();
         break;
     case SaveDialog::Rejected:
         success = true;

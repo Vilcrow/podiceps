@@ -73,7 +73,7 @@ void DictionaryWidget::readFromFile(const QString &fileName)
     else {
         tableWidget->fillTable(words);
         lastFileName = fileName;
-        changesSaved = true;
+        setSaved(true);
         sendMessage(tr("The file \"%1\" is open").arg(lastFileName));
     }
 }
@@ -86,7 +86,7 @@ void DictionaryWidget::writeToFile(const QString &fileName)
 
     if(writeToXmlFile(fileName)) {
         lastFileName = fileName;
-        changesSaved = true;
+        setSaved(true);
         sendMessage(tr("The file \"%1\" saved").arg(lastFileName));
     }
 }
@@ -164,9 +164,9 @@ void DictionaryWidget::importFromFile(const QString &fileName)
     }
     else {
         tableWidget->fillTable(words);
+        setSaved(false);
     }
 
-    changesSaved = false;
     file.close();
     sendMessage(tr("The file \"%1\" imported").arg(fileName));
 }
@@ -202,12 +202,12 @@ void DictionaryWidget::exportToFile(const QString &fileName)
 
 bool DictionaryWidget::isSaved() const
 {
-    return changesSaved;
+    return tableWidget->isSaved();
 }
 
-void DictionaryWidget::setSaved(const bool value)
+void DictionaryWidget::setSaved(bool value)
 {
-    changesSaved = value;
+    tableWidget->setSaved(value);
 }
 
 QString DictionaryWidget::getLastFileName() const
@@ -252,7 +252,8 @@ void DictionaryWidget::addEntrySlot()
     WordLine word = inputWidget->getInput();
 
     if(word.getOriginal().isEmpty()) {
-        //originalLineEdit->setStyleSheet("border: 1px solid red");
+        inputWidget->setStyleSheet(InputWidget::OriginalLine,
+                                   "border: 1px solid red");
         emit sendMessage(tr("Enter the original word"));
         return;
     }
@@ -266,9 +267,8 @@ void DictionaryWidget::addEntrySlot()
 
     QString result;
     if(tableWidget->addEntry(word)) {
-        changesSaved = false;
         emit updateMenus();
-        //originalLineEdit->setStyleSheet("");
+        inputWidget->setStyleSheet(InputWidget::OriginalLine, "");
         result = QString(tr("Added"));
     }
     else {
@@ -283,13 +283,13 @@ void DictionaryWidget::editEntry()
 {
     WordLine word = inputWidget->getInput();
     if(word.getOriginal().isEmpty()) {
-        //originalLineEdit->setStyleSheet("border: 1px solid red");
+        inputWidget->setStyleSheet(InputWidget::OriginalLine,
+                                   "border: 1px solid red");
         emit sendMessage(tr("Enter the original word"));
         return;
     }
 
     if(tableWidget->editEntry(word)) {
-        changesSaved = false;
         emit updateMenus();
         emit sendMessage(tr("Edited"));
     }
@@ -338,7 +338,6 @@ void DictionaryWidget::findEntry()
 void DictionaryWidget::removeEntry()
 {
     tableWidget->removeEntry();
-    changesSaved = false;
     emit updateMenus();
     sendMessage(tr("Deleted"));
 }
@@ -356,6 +355,7 @@ void DictionaryWidget::updateActions()
         inputWidget->setEnabled(InputWidget::DeleteButton, false);
         inputWidget->setEnabled(InputWidget::EditButton, false);
     }
+    updateMenus();
 }
 
 void DictionaryWidget::updateSettings()
@@ -381,7 +381,6 @@ DictionaryWidget::DictionaryWidget(QWidget *parent)
         readFromFile(lastFileName);
     }
 
-    changesSaved = true;
 }
 
 DictionaryWidget::~DictionaryWidget()

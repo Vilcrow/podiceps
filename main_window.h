@@ -38,6 +38,8 @@ class QStatusBar;
 class MainWindow: public QMainWindow {
     Q_OBJECT
 public:
+    static void appendFormat(QString &name, const QString &format);
+
     void readSettings();
     void writeSettings();
 

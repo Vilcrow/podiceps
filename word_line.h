@@ -35,11 +35,16 @@
 
 class WordLine {
 public:
+    enum { MaxOriginalLength = 50, MaxTranslationLength = 100,
+           MaxStatusLength = 20, MaxDateLength = 20,
+           MaxCommentLength = 500 };
+
     QString getOriginal() const;
     QString getTranslation() const;
     QString getStatus() const;
     QString getDate(const QString &format = QString()) const;
     QString getDateFormat() const;
+    QString getComment() const;
 
     void setOriginal(const QString &pOriginal);
     void setTranslation(const QString &pTranslation);
@@ -48,6 +53,7 @@ public:
                  const QString &format = QString());
     void setCurrentDate();
     void setDateFormat(const QString &format);
+    void setComment(const QString &pComment);
 
     bool isEmpty() const;
 
@@ -55,6 +61,7 @@ public:
 
     const WordLine& operator=(const WordLine &other);
     bool operator==(const WordLine &other) const;
+    bool operator!=(const WordLine &other) const;
     bool operator>(const WordLine &other) const;
     bool operator<(const WordLine &other) const;
     bool operator>=(const WordLine &other) const;
@@ -72,11 +79,14 @@ public:
 private:
     static QString DefaultDateFormat;
 
+    void truncate();
+
     QString original;
     QString translation;
     QString status;
     QDate date;
     QString dateFormat;
+    QString comment;
 };
 
 #endif

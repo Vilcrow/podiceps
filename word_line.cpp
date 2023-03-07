@@ -59,19 +59,27 @@ QString WordLine::getDateFormat() const
     return dateFormat;
 }
 
+QString WordLine::getComment() const
+{
+    return comment;
+}
+
 void WordLine::setOriginal(const QString &pOriginal)
 {
     original = pOriginal;
+    truncate();
 }
 
 void WordLine::setTranslation(const QString &pTranslation)
 {
     translation = pTranslation;
+    truncate();
 }
 
 void WordLine::setStatus(const QString &pStatus)
 {
     status = pStatus;
+    truncate();
 }
 
 void WordLine::setDate(const QString &pDate, const QString &format)
@@ -96,17 +104,25 @@ void WordLine::setDate(const QString &pDate, const QString &format)
 void WordLine::setCurrentDate()
 {
     date = QDate::currentDate();
+    truncate();
 }
 
 void WordLine::setDateFormat(const QString &format)
 {
     dateFormat = format;
+    truncate();
+}
+
+void WordLine::setComment(const QString &pComment)
+{
+    comment = pComment;
+    truncate();
 }
 
 bool WordLine::isEmpty() const
 {
     return original.isEmpty() && translation.isEmpty() &&
-           status.isEmpty() && date.isNull();
+           status.isEmpty() && date.isNull() && comment.isEmpty();
 }
 
 void WordLine::setDomElement(QDomElement &element) const
@@ -116,6 +132,7 @@ void WordLine::setDomElement(QDomElement &element) const
     element.setAttribute("status", status);
     element.setAttribute("date", getDate());
     element.setAttribute("dateFormat", dateFormat);
+    element.setAttribute("comment", comment);
 }
 
 const WordLine& WordLine::operator=(const WordLine &other)
@@ -125,12 +142,20 @@ const WordLine& WordLine::operator=(const WordLine &other)
     status = other.status;
     date = other.date;
     dateFormat = other.dateFormat;
+    comment = other.comment;
     return *this;
 }
 
 bool WordLine::operator==(const WordLine &other) const
 {
     return original == other.original;
+}
+
+bool WordLine::operator!=(const WordLine &other) const
+{
+    return original != other.original || translation != other.translation ||
+           status != other.status || date != other.date ||
+           comment != other.comment;
 }
 
 bool WordLine::operator>(const WordLine &other) const
@@ -153,9 +178,23 @@ bool WordLine::operator<=(const WordLine &other) const
     return original <= other.original;
 }
 
+void WordLine::truncate()
+{
+    original.truncate(MaxOriginalLength);
+    translation.truncate(MaxTranslationLength);
+    status.truncate(MaxStatusLength);
+    dateFormat.truncate(MaxDateLength);
+    comment.truncate(MaxCommentLength);
+}
+
 WordLine::WordLine()
 {
+    original = QString();
+    translation = QString();
+    status = QString();
     dateFormat = DefaultDateFormat;
+    date = QDate();  // The null and invalid date.
+    comment = QString();
 }
 
 WordLine::WordLine(const QString &pOriginal, const QString &pTranslation,
@@ -167,6 +206,8 @@ WordLine::WordLine(const QString &pOriginal, const QString &pTranslation,
     status = pStatus;
     dateFormat = format;
     date = QDate::fromString(pDate, dateFormat);
+    comment = QString();
+    truncate();
 }
 
 WordLine::WordLine(const QDomElement &element)
@@ -177,6 +218,8 @@ WordLine::WordLine(const QDomElement &element)
     dateFormat = element.attribute("dateFormat", DefaultDateFormat);
     QString dateString = element.attribute("date", "");
     date = QDate::fromString(dateString, dateFormat);
+    comment = element.attribute("comment", "");
+    truncate();
 }
 
 WordLine::~WordLine()

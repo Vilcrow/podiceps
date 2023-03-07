@@ -26,6 +26,7 @@ add_executable(podiceps
     save_dialog.cpp
     table_model.cpp
     table_widget.cpp
+    word_card.cpp
     word_line.cpp
 )
 

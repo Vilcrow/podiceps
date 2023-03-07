@@ -141,30 +141,80 @@ void InputWidget::setEnabled(int index, bool value)
     }
 }
 
+void InputWidget::setStyleSheet(int index, const QString &style)
+{
+    switch(index) {
+    case OriginalLine:
+        originalLineEdit->setStyleSheet(style);
+        break;
+    case TranslationLine:
+        translationLineEdit->setStyleSheet(style);
+        break;
+    case StatusLine:
+        statusLineEdit->setStyleSheet(style);
+        break;
+    case DateLine:
+        dateLineEdit->setStyleSheet(style);
+        break;
+    case AllLines:
+        originalLineEdit->setStyleSheet(style);
+        translationLineEdit->setStyleSheet(style);
+        statusLineEdit->setStyleSheet(style);
+        dateLineEdit->setStyleSheet(style);
+        break;
+    case AddButton:
+        addButton->setStyleSheet(style);
+        break;
+    case EditButton:
+        editButton->setStyleSheet(style);
+        break;
+    case FindButton:
+        findButton->setStyleSheet(style);
+        break;
+    case DeleteButton:
+        deleteButton->setStyleSheet(style);
+        break;
+    case AllButtons:
+        addButton->setStyleSheet(style);
+        editButton->setStyleSheet(style);
+        findButton->setStyleSheet(style);
+        deleteButton->setStyleSheet(style);
+        break;
+    }
+}
+
 void InputWidget::clearInput(int index)
 {
     switch(index) {
     case OriginalLine:
         originalLineEdit->setText("");
+        originalLineEdit->setStyleSheet("");
         originalLineEdit->setFocus(Qt::OtherFocusReason);
         break;
     case TranslationLine:
         translationLineEdit->setText("");
+        translationLineEdit->setStyleSheet("");
         translationLineEdit->setFocus(Qt::OtherFocusReason);
         break;
     case StatusLine:
         statusLineEdit->setText("");
+        statusLineEdit->setStyleSheet("");
         statusLineEdit->setFocus(Qt::OtherFocusReason);
         break;
     case DateLine:
         dateLineEdit->setText("");
+        dateLineEdit->setStyleSheet("");
         dateLineEdit->setFocus(Qt::OtherFocusReason);
         break;
     case AllLines:
         originalLineEdit->setText("");
+        originalLineEdit->setStyleSheet("");
         translationLineEdit->setText("");
+        translationLineEdit->setStyleSheet("");
         statusLineEdit->setText("");
+        statusLineEdit->setStyleSheet("");
         dateLineEdit->setText("");
+        dateLineEdit->setStyleSheet("");
         originalLineEdit->setFocus(Qt::OtherFocusReason);
         break;
     }
@@ -227,9 +277,13 @@ InputWidget::InputWidget(QWidget *parent)
 
     // Edit lines.
     originalLineEdit = new QLineEdit();
+    originalLineEdit->setMaxLength(WordLine::MaxOriginalLength);
     translationLineEdit = new QLineEdit();
+    translationLineEdit->setMaxLength(WordLine::MaxTranslationLength);
     statusLineEdit = new QLineEdit();
+    statusLineEdit->setMaxLength(WordLine::MaxStatusLength);
     dateLineEdit = new QLineEdit();
+    dateLineEdit->setMaxLength(WordLine::MaxDateLength);
     dateLineEdit->setEnabled(false);
 
     inputLayout = new QGridLayout();
