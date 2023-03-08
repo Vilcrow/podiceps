@@ -185,6 +185,29 @@ QLineEdit::disabled
     padding: 2px;
 }
 
+/*    QTextEdit    */
+
+QTextEdit
+{
+    background-color: #525251;
+    color: #ffffff;
+    border-color: #051a39;
+    border-width: 1px;
+    border-radius: 3px;
+    border-color: #051a39;
+    padding: 2px;
+}
+
+QTextEdit::disabled
+{
+    background-color: #404040;
+    color: #656565;
+    border-width: 1px;
+    border-radius: 3px;
+    border-color: #051a39;
+    padding: 2px;
+}
+
 /*    QGroupBox    */
 
 QGroupBox

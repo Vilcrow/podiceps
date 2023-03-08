@@ -59,10 +59,13 @@ public:
     void clearInput(int index = AllLines);
     bool isEmpty(int index = AllLines) const;
 
-    void connectSignals(DictionaryWidget *dictWidget);
-
     InputWidget(QWidget *parent = nullptr);
     virtual ~InputWidget();
+signals:
+    void addClicked();
+    void editClicked();
+    void findClicked();
+    void deleteClicked();
 private:
     QLineEdit *originalLineEdit;
     QLineEdit *translationLineEdit;

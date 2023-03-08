@@ -250,20 +250,6 @@ bool InputWidget::isEmpty(int index) const
     return ret;
 }
 
-void InputWidget::connectSignals(DictionaryWidget *dictWidget)
-{
-    if(dictWidget) {
-        connect(addButton, &QAbstractButton::clicked,
-                dictWidget, &DictionaryWidget::addEntrySlot);
-        connect(editButton, &QAbstractButton::clicked,
-                dictWidget, &DictionaryWidget::editEntry);
-        connect(findButton, &QAbstractButton::clicked,
-                dictWidget, &DictionaryWidget::findEntry);
-        connect(deleteButton, &QAbstractButton::clicked,
-                dictWidget, &DictionaryWidget::removeEntry);
-    }
-}
-
 InputWidget::InputWidget(QWidget *parent)
     : QWidget(parent)
 {
@@ -284,7 +270,6 @@ InputWidget::InputWidget(QWidget *parent)
     statusLineEdit->setMaxLength(WordLine::MaxStatusLength);
     dateLineEdit = new QLineEdit();
     dateLineEdit->setMaxLength(WordLine::MaxDateLength);
-    dateLineEdit->setEnabled(false);
 
     inputLayout = new QGridLayout();
     inputLayout->addWidget(originalLabel, 0, 0, Qt::AlignCenter);
@@ -315,6 +300,15 @@ InputWidget::InputWidget(QWidget *parent)
     buttonsLayout->addWidget(deleteButton);
 
     mainLayout->addLayout(buttonsLayout);
+
+    connect(addButton, &QAbstractButton::clicked,
+            this, &InputWidget::addClicked);
+    connect(editButton, &QAbstractButton::clicked,
+            this, &InputWidget::editClicked);
+    connect(findButton, &QAbstractButton::clicked,
+            this, &InputWidget::findClicked);
+    connect(deleteButton, &QAbstractButton::clicked,
+            this, &InputWidget::deleteClicked);
 }
 
 InputWidget::~InputWidget()

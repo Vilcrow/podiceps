@@ -239,6 +239,7 @@ void MainWindow::writeSettings()
     mainSettings.beginGroup("/Settings");
     mainSettings.endGroup();
 */
+    dictWidget->writeSettings();
 }
 
 void MainWindow::openPreferences()
@@ -341,6 +342,7 @@ void MainWindow::quitApp()
     }
     if(ok) {
         closeImmediately = true;
+        writeSettings();
         close();
     }
 }
@@ -354,6 +356,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     bool ok = true;
     if(!dictWidget->isSaved()) {
         ok = trySaveChanges();
+        writeSettings();
     }
     if(!ok) {
         event->ignore();
@@ -366,15 +369,15 @@ MainWindow::MainWindow(QWidget *parent)
     closeImmediately = false;
     readSettings();
     setWindowTitle("podiceps");
-    dictWidget = new DictionaryWidget;
+    dictWidget = new DictionaryWidget(this);
     setCentralWidget(dictWidget);
     createMenus();
     statusBar = new QStatusBar;
     setStatusBar(statusBar);
     updateActions();
-    connect(dictWidget, &DictionaryWidget::sendMessage,
+    connect(dictWidget, &DictionaryWidget::actionCompleted,
             this, &MainWindow::showMessage);
-    connect(dictWidget, &DictionaryWidget::updateMenus,
+    connect(dictWidget, &DictionaryWidget::stateChanged,
             this, &MainWindow::updateActions);
     connect(this, &MainWindow::preferencesChanged,
             dictWidget, &DictionaryWidget::updateSettings);

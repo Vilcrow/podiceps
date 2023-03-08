@@ -44,7 +44,7 @@ void DictionaryWidget::readFromFile(const QString &fileName)
         if(fileName == lastFileName) {
             lastFileName = "";
         }
-        sendMessage(tr("Unable to open file: %1").arg(fileName));
+        actionCompleted(tr("Unable to open file: %1").arg(fileName));
         return;
     }
 
@@ -68,13 +68,14 @@ void DictionaryWidget::readFromFile(const QString &fileName)
     }
 
     if(words.isEmpty()) {
-        sendMessage(tr("The file contains no words or has an invalid format."));
+        actionCompleted(tr("The file contains no words or "
+                           "has an invalid format."));
     }
     else {
         tableWidget->fillTable(words);
         lastFileName = fileName;
         setSaved(true);
-        sendMessage(tr("The file \"%1\" is open").arg(lastFileName));
+        actionCompleted(tr("The file \"%1\" is open").arg(lastFileName));
     }
 }
 
@@ -87,7 +88,7 @@ void DictionaryWidget::writeToFile(const QString &fileName)
     if(writeToXmlFile(fileName)) {
         lastFileName = fileName;
         setSaved(true);
-        sendMessage(tr("The file \"%1\" saved").arg(lastFileName));
+        actionCompleted(tr("The file \"%1\" saved").arg(lastFileName));
     }
 }
 
@@ -168,7 +169,7 @@ void DictionaryWidget::importFromFile(const QString &fileName)
     }
 
     file.close();
-    sendMessage(tr("The file \"%1\" imported").arg(fileName));
+    actionCompleted(tr("The file \"%1\" imported").arg(fileName));
 }
 
 // To export to a text file in a "|original|translation|status|date\n" format.
@@ -197,7 +198,7 @@ void DictionaryWidget::exportToFile(const QString &fileName)
     }
 
     file.close();
-    sendMessage(tr("The file \"%1\" exported").arg(fileName));
+    actionCompleted(tr("The file \"%1\" exported").arg(fileName));
 }
 
 bool DictionaryWidget::isSaved() const
@@ -254,7 +255,7 @@ void DictionaryWidget::addEntrySlot()
     if(word.getOriginal().isEmpty()) {
         inputWidget->setStyleSheet(InputWidget::OriginalLine,
                                    "border: 1px solid red");
-        emit sendMessage(tr("Enter the original word"));
+        emit actionCompleted(tr("Enter the original word"));
         return;
     }
 
@@ -267,7 +268,7 @@ void DictionaryWidget::addEntrySlot()
 
     QString result;
     if(tableWidget->addEntry(word)) {
-        emit updateMenus();
+        emit stateChanged();
         inputWidget->setStyleSheet(InputWidget::OriginalLine, "");
         result = QString(tr("Added"));
     }
@@ -276,7 +277,7 @@ void DictionaryWidget::addEntrySlot()
                                                        .arg(word.getOriginal()));
     }
 
-    emit sendMessage(result);
+    emit actionCompleted(result);
 }
 
 void DictionaryWidget::editEntry()
@@ -285,16 +286,16 @@ void DictionaryWidget::editEntry()
     if(word.getOriginal().isEmpty()) {
         inputWidget->setStyleSheet(InputWidget::OriginalLine,
                                    "border: 1px solid red");
-        emit sendMessage(tr("Enter the original word"));
+        emit actionCompleted(tr("Enter the original word"));
         return;
     }
 
     if(tableWidget->editEntry(word)) {
-        emit updateMenus();
-        emit sendMessage(tr("Edited"));
+        emit stateChanged();
+        emit actionCompleted(tr("Edited"));
     }
     else {
-        emit sendMessage(tr("The word \"%1\" already exists.")
+        emit actionCompleted(tr("The word \"%1\" already exists.")
                          .arg(word.getOriginal()));
     }
 }
@@ -303,7 +304,7 @@ void DictionaryWidget::findEntry()
 {
     if(inputWidget->isEmpty()) {
         tableWidget->setFilter(0);
-        sendMessage(tr("The filter is cleared"));
+        actionCompleted(tr("The filter is cleared"));
         return;
     }
 
@@ -331,18 +332,18 @@ void DictionaryWidget::findEntry()
     tableWidget->setFilter(columnFind, regExp);
 
     QString column = tableWidget->getColumnName(columnFind);
-    sendMessage(tr("The filter \"%1\" (%2) is set").arg(regExp.pattern())
+    actionCompleted(tr("The filter \"%1\" (%2) is set").arg(regExp.pattern())
                                                    .arg(column));
 }
 
 void DictionaryWidget::removeEntry()
 {
     tableWidget->removeEntry();
-    emit updateMenus();
-    sendMessage(tr("Deleted"));
+    emit stateChanged();
+    actionCompleted(tr("Deleted"));
 }
 
-void DictionaryWidget::updateActions()
+void DictionaryWidget::updateInput()
 {
     WordLine word = tableWidget->getSelectedWord();
     if(!word.isEmpty()) {
@@ -355,7 +356,6 @@ void DictionaryWidget::updateActions()
         inputWidget->setEnabled(InputWidget::DeleteButton, false);
         inputWidget->setEnabled(InputWidget::EditButton, false);
     }
-    updateMenus();
 }
 
 void DictionaryWidget::updateSettings()
@@ -370,11 +370,24 @@ DictionaryWidget::DictionaryWidget(QWidget *parent)
     readSettings();
 
     tableWidget = new TableWidget(this);
-    tableWidget->connectSignals(this);
+    connect(tableWidget, &TableWidget::dataChanged,
+            this, &DictionaryWidget::updateInput);
+    connect(tableWidget, &TableWidget::dataChanged,
+            this, &DictionaryWidget::stateChanged);
+    connect(tableWidget, &TableWidget::selectionChanged,
+            this, &DictionaryWidget::updateInput);
+
     mainLayout->addWidget(tableWidget->getTableView());
 
     inputWidget = new InputWidget(this);
-    inputWidget->connectSignals(this);
+    connect(inputWidget, &InputWidget::addClicked,
+            this, &DictionaryWidget::addEntrySlot);
+    connect(inputWidget, &InputWidget::editClicked,
+            this, &DictionaryWidget::editEntry);
+    connect(inputWidget, &InputWidget::findClicked,
+            this, &DictionaryWidget::findEntry);
+    connect(inputWidget, &InputWidget::deleteClicked,
+            this, &DictionaryWidget::removeEntry);
     mainLayout->addWidget(inputWidget);
 
     if(!lastFileName.isEmpty()) {
@@ -385,5 +398,5 @@ DictionaryWidget::DictionaryWidget(QWidget *parent)
 
 DictionaryWidget::~DictionaryWidget()
 {
-    writeSettings();
+
 }

@@ -60,6 +60,11 @@ void TableWidget::fillTable(const QList<WordLine> words)
     }
 }
 
+void TableWidget::sortByColumn(int column, Qt::SortOrder order)
+{
+    tableView->sortByColumn(OriginalColumn, order);
+}
+
 bool TableWidget::addEntry(const WordLine &word)
 {
     if(!tableModel->getWords().contains(word)) {
@@ -81,6 +86,7 @@ bool TableWidget::addEntry(const WordLine &word)
         return true;
     }
 
+    // If the word already exists in the table.
     return false;
 }
 
@@ -192,14 +198,6 @@ QString TableWidget::getColumnName(int col) const
                                        Qt::DisplayRole).toString();
 }
 
-void TableWidget::connectSignals(DictionaryWidget *dictWidget)
-{
-    connect(this, &TableWidget::dataChanged,
-            dictWidget, &DictionaryWidget::updateActions);
-    connect(tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
-            dictWidget, &DictionaryWidget::updateActions);
-}
-
 QTableView* TableWidget::getTableView() const
 {
     return tableView;
@@ -255,6 +253,7 @@ TableWidget::TableWidget(QWidget *parent)
     proxyModel = new QSortFilterProxyModel(this);
     proxyModel->setSourceModel(tableModel);
     proxyModel->setFilterKeyColumn(OriginalColumn);
+    proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
 
     tableView = new QTableView;
     tableView->setModel(proxyModel);
@@ -269,10 +268,13 @@ TableWidget::TableWidget(QWidget *parent)
     tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     tableView->setSortingEnabled(true);
+    tableView->sortByColumn(OriginalColumn, Qt::AscendingOrder);
     updateSettings();
 
     connect(tableView, &QAbstractItemView::doubleClicked,
             this, &TableWidget::openWordCard);
+    connect(tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &TableWidget::selectionChanged);
 }
 
 TableWidget::~TableWidget()

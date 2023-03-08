@@ -45,6 +45,8 @@ public:
     bool isSaved() const;
     void setSaved(bool value);
 
+    void sortByColumn(int column, Qt::SortOrder order = Qt::AscendingOrder);
+
     bool addEntry(const WordLine &word);
     bool editEntry(const WordLine &word);
     void removeEntry();
@@ -58,7 +60,6 @@ public:
     QList<WordLine> getWords() const;
     WordLine getSelectedWord() const;
 
-    void connectSignals(DictionaryWidget *dictWidget);
     QTableView* getTableView() const;
 
     void clearSelection();
@@ -67,6 +68,7 @@ public:
     virtual ~TableWidget();
 signals:
     void dataChanged();
+    void selectionChanged();
 public slots:
     void updateSettings();
 private slots:

@@ -41,6 +41,7 @@ void WordCard::accept()
     word.setTranslation(translationText->text());
     word.setStatus(statusText->text());
     word.setComment(commentText->toPlainText());
+
     QDialog::accept();
 }
 

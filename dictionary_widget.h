@@ -59,8 +59,8 @@ public:
     DictionaryWidget(QWidget *parent = nullptr);
     virtual ~DictionaryWidget();
 signals:
-    void sendMessage(const QString &msg);
-    void updateMenus();
+    void actionCompleted(const QString &msg);
+    void stateChanged();
 public slots:
     void clearInput();
     void createNewFile();
@@ -68,8 +68,9 @@ public slots:
     void editEntry();
     void findEntry();
     void removeEntry();
-    void updateActions();
     void updateSettings();
+private slots:
+    void updateInput();
 private:
     QSettings settings;
     QString lastFileName;
