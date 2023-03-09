@@ -46,12 +46,18 @@ QString WordLine::getStatus() const
 
 QString WordLine::getDate(const QString &format) const
 {
-    if(!format.isEmpty()) {
-        return date.toString(format);
+    QString ret = QString();
+
+    if(date.isValid()) {
+        if(!format.isEmpty()) {
+            ret = date.toString(format);
+        }
+        else {
+            ret = date.toString(dateFormat);
+        }
     }
-    else {
-        return date.toString(dateFormat);
-    }
+
+    return ret;
 }
 
 QString WordLine::getDateFormat() const
@@ -95,6 +101,7 @@ void WordLine::setDate(const QString &pDate, const QString &format)
 
     if(d.isValid()) {
         date = d;
+        setDateFormat(format);
     }
     else {
         // Set the warning message.
@@ -117,6 +124,16 @@ void WordLine::setComment(const QString &pComment)
 {
     comment = pComment;
     truncate();
+}
+
+void WordLine::clear()
+{
+    original = QString();
+    translation = QString();
+    status = QString();
+    date = QDate();
+    dateFormat = DefaultDateFormat;
+    comment = QString();
 }
 
 bool WordLine::isEmpty() const
@@ -187,24 +204,12 @@ void WordLine::truncate()
     comment.truncate(MaxCommentLength);
 }
 
-WordLine::WordLine()
-{
-    original = QString();
-    translation = QString();
-    status = QString();
-    dateFormat = DefaultDateFormat;
-    date = QDate();  // The null and invalid date.
-    comment = QString();
-}
-
 WordLine::WordLine(const QString &pOriginal, const QString &pTranslation,
                    const QString &pStatus, const QString &pDate,
                    const QString &format)
+    : original(pOriginal), translation(pTranslation), status(pStatus)
 {
-    original = pOriginal;
-    translation = pTranslation;
-    status = pStatus;
-    dateFormat = format;
+    dateFormat = format.isEmpty() ? DefaultDateFormat : format;
     date = QDate::fromString(pDate, dateFormat);
     comment = QString();
     truncate();

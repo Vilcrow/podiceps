@@ -10,24 +10,14 @@ else()
     add_compile_options(-std=c++11 -O2)
 endif(DEBUGGING)
 
-set(CMAKE_AUTOMOC ON)
+set(APP_NAME podiceps)
+set(APP_LIB_NAME podiceps_lib)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+#Directory with source code
+add_subdirectory(src)
 
-find_package(Qt5 COMPONENTS Widgets Xml REQUIRED)
-
-add_executable(podiceps
-    dictionary_widget.cpp
-    input_widget.cpp
-    main.cpp
-    main_window.cpp
-    podiceps_application.cpp
-    preferences_widget.cpp
-    save_dialog.cpp
-    table_model.cpp
-    table_widget.cpp
-    word_card.cpp
-    word_line.cpp
-)
-
-target_link_libraries(podiceps Qt5::Widgets Qt5::Xml)
+#Compilaton of the tests
+option(COMPILE_UTESTS "Compile the unit tests" ON)
+if(COMPILE_UTESTS)
+    add_subdirectory(tests)
+endif(COMPILE_UTESTS)

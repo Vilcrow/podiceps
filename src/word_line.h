@@ -28,7 +28,7 @@
 #ifndef WORD_LINE_VIL_H
 #define WORD_LINE_VIL_H
 
-#include <QDate>
+#include <QDateTime>
 #include <QDomElement>
 #include <QObject>
 #include <QString>
@@ -54,6 +54,7 @@ public:
     void setCurrentDate();
     void setDateFormat(const QString &format);
     void setComment(const QString &pComment);
+    void clear();
 
     bool isEmpty() const;
 
@@ -67,10 +68,9 @@ public:
     bool operator>=(const WordLine &other) const;
     bool operator<=(const WordLine &other) const;
 
-    WordLine();
-    WordLine(const QString &pOriginal,
+    WordLine(const QString &pOriginal = QString(),
              const QString &pTranslation = QString(),
-             const QString &pStatus = QString(QObject::tr("new")),
+             const QString &pStatus = QString(),
              const QString &pDate = QString(),
              const QString &format = DefaultDateFormat
             );
