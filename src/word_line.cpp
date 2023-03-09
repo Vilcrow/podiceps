@@ -111,7 +111,6 @@ void WordLine::setDate(const QString &pDate, const QString &format)
 void WordLine::setCurrentDate()
 {
     date = QDate::currentDate();
-    truncate();
 }
 
 void WordLine::setDateFormat(const QString &format)
@@ -142,6 +141,11 @@ bool WordLine::isEmpty() const
            status.isEmpty() && date.isNull() && comment.isEmpty();
 }
 
+bool WordLine::isDateValid() const
+{
+    return date.isValid();
+}
+
 void WordLine::setDomElement(QDomElement &element) const
 {
     element.setAttribute("original", original);
@@ -163,6 +167,7 @@ const WordLine& WordLine::operator=(const WordLine &other)
     return *this;
 }
 
+// The operator is designed to prevent duplication of words in the table.
 bool WordLine::operator==(const WordLine &other) const
 {
     return original == other.original;

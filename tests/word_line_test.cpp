@@ -46,7 +46,7 @@ TEST_GROUP(EmptyWordLineGroup)
     }
 };
 
-TEST(EmptyWordLineGroup, Constructors)
+TEST(EmptyWordLineGroup, Constructor)
 {
     CHECK(word->isEmpty());
 }
@@ -57,6 +57,7 @@ TEST(EmptyWordLineGroup, GetMethods)
     CHECK(word->getTranslation() == "");
     CHECK(word->getStatus() == "");
     CHECK(word->getDate() == "");
+    CHECK(word->getDate("dd-MM-yyyy") == "");
     // Default format.
     CHECK(word->getDateFormat() == "yyyy-MM-dd");
     CHECK(word->getComment() == "");
@@ -77,8 +78,45 @@ TEST(EmptyWordLineGroup, SetMethods)
     CHECK(word->getDate() == "12-10-2012");
     CHECK(word->getDateFormat() == "dd-MM-yyyy");
 
+    word->setDateFormat("MM.dd.yyyy");
+    CHECK(word->getDate() == "10.12.2012");
+    CHECK(word->getDate("yyyy") == "2012");
+
     word->setComment("Hello, world!");
     CHECK(word->getComment() == "Hello, world!");
+}
+
+TEST(EmptyWordLineGroup, MaxLength)
+{
+    word->setOriginal(QString(2 * WordLine::MaxOriginalLength, 'o'));
+    CHECK_EQUAL(word->getOriginal().length(), WordLine::MaxOriginalLength);
+
+    word->setTranslation(QString(2 * WordLine::MaxTranslationLength, 't'));
+    CHECK_EQUAL(word->getTranslation().length(), WordLine::MaxTranslationLength);
+
+    word->setStatus(QString(2 * WordLine::MaxStatusLength, 's'));
+    CHECK_EQUAL(word->getStatus().length(), WordLine::MaxStatusLength);
+
+    word->setDateFormat(QString(2 * WordLine::MaxDateLength, 'f'));
+    CHECK_EQUAL(word->getDateFormat().length(), WordLine::MaxDateLength);
+
+    word->setComment(QString(2 * WordLine::MaxCommentLength, 'c'));
+    CHECK_EQUAL(word->getComment().length(), WordLine::MaxCommentLength);
+}
+
+TEST(EmptyWordLineGroup, InvalidDate)
+{
+    CHECK_FALSE(word->isDateValid());
+
+    word->setDate("10-10-2010", "dd-MM-yyyy");
+    CHECK(word->isDateValid());
+
+    word->setDate("-10-2010", "dd-MM-yyyy");
+    CHECK(word->isDateValid());
+    CHECK(word->getDate() == "10-10-2010");
+
+    word->clear();
+    CHECK_FALSE(word->isDateValid());
 }
 
 TEST_GROUP(FullWordLineGroup)
@@ -100,9 +138,10 @@ TEST_GROUP(FullWordLineGroup)
     }
 };
 
-TEST(FullWordLineGroup, Constructors)
+TEST(FullWordLineGroup, Constructor)
 {
     CHECK_FALSE(word->isEmpty());
+    CHECK(word->isDateValid());
 }
 
 TEST(FullWordLineGroup, GetMethods)
@@ -115,8 +154,83 @@ TEST(FullWordLineGroup, GetMethods)
     CHECK(word->getComment() == "Comment.");
 }
 
-TEST(FullWordLineGroup, ClearMethods)
+TEST(FullWordLineGroup, ClearMethod)
 {
     word->clear();
     CHECK(word->isEmpty());
+}
+
+TEST(FullWordLineGroup, Operators)
+{
+    WordLine other("word");
+    CHECK(*word == other);
+    CHECK(*word != other);
+    other.setOriginal("world");
+    CHECK_FALSE(*word == other);
+    CHECK(*word != other);
+    CHECK(*word < other);
+    CHECK_FALSE(*word > other);
+    CHECK(*word <= other);
+    CHECK_FALSE(*word >= other);
+}
+
+TEST_GROUP(WordLineFromQDomElementGroup)
+{
+    WordLine *word = nullptr;
+    QDomElement *element = nullptr;
+
+    void setup()
+    {
+        MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
+        QDomDocument doc;
+        element = new QDomElement();
+        *element = doc.createElement("word");
+        doc.appendChild(*element);
+        element->setAttribute("original", "world");
+        element->setAttribute("translation", "мир");
+        element->setAttribute("status", "new");
+        element->setAttribute("date", "03-11-2023");
+        element->setAttribute("dateFormat", "MM-dd-yyyy");
+        element->setAttribute("comment", "Any comment.");
+
+        word = new WordLine(*element);
+    }
+
+    void teardown()
+    {
+        delete word;
+        delete element;
+        MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
+    }
+};
+
+TEST(WordLineFromQDomElementGroup, Constructor)
+{
+    CHECK_FALSE(word->isEmpty());
+}
+
+TEST(WordLineFromQDomElementGroup, GetMethods)
+{
+    CHECK(word->getOriginal() == "world");
+    CHECK(word->getTranslation() == "мир");
+    CHECK(word->getStatus() == "new");
+    CHECK(word->getDate() == "03-11-2023");
+    CHECK(word->getDateFormat() == "MM-dd-yyyy");
+    CHECK(word->getComment() == "Any comment.");
+}
+
+TEST(WordLineFromQDomElementGroup, SetDomElement)
+{
+    QDomDocument doc;
+    QDomElement e = doc.createElement("word");
+    doc.appendChild(e);
+    word->setDomElement(e);
+
+    CHECK(e.attribute("original") =="world");
+    CHECK(e.attribute("translation") == "мир");
+    CHECK(e.attribute("status") == "new");
+    CHECK(e.attribute("date") == "03-11-2023");
+    CHECK(e.attribute("dateFormat") == "MM-dd-yyyy");
+    CHECK(e.attribute("comment") == "Any comment.");
+    CHECK(e.attribute("trash") == "");
 }

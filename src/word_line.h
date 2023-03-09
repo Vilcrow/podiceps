@@ -28,7 +28,7 @@
 #ifndef WORD_LINE_VIL_H
 #define WORD_LINE_VIL_H
 
-#include <QDateTime>
+#include <QDate>
 #include <QDomElement>
 #include <QObject>
 #include <QString>
@@ -57,6 +57,7 @@ public:
     void clear();
 
     bool isEmpty() const;
+    bool isDateValid() const;
 
     void setDomElement(QDomElement &element) const;
 
