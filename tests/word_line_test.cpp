@@ -61,6 +61,7 @@ TEST(EmptyWordLineGroup, GetMethods)
     // Default format.
     CHECK(word->getDateFormat() == "yyyy-MM-dd");
     CHECK(word->getComment() == "");
+    CHECK(word->getTranscription() == "");
 }
 
 TEST(EmptyWordLineGroup, SetMethods)
@@ -75,8 +76,10 @@ TEST(EmptyWordLineGroup, SetMethods)
     CHECK(word->getStatus() == "remembered");
 
     word->setDate("12-10-2012", "dd-MM-yyyy");
-    CHECK(word->getDate() == "12-10-2012");
-    CHECK(word->getDateFormat() == "dd-MM-yyyy");
+    CHECK(word->getDate() == "2012-10-12");
+    CHECK(word->getDateFormat() == "yyyy-MM-dd");
+    word->setDateFormat("MM-dd-yyyy");
+    CHECK(word->getDate() == "10-12-2012");
 
     word->setDateFormat("MM.dd.yyyy");
     CHECK(word->getDate() == "10.12.2012");
@@ -84,6 +87,9 @@ TEST(EmptyWordLineGroup, SetMethods)
 
     word->setComment("Hello, world!");
     CHECK(word->getComment() == "Hello, world!");
+
+    word->setTranscription("wɜːld");
+    CHECK(word->getTranscription() == "wɜːld");
 }
 
 TEST(EmptyWordLineGroup, MaxLength)
@@ -102,18 +108,21 @@ TEST(EmptyWordLineGroup, MaxLength)
 
     word->setComment(QString(2 * WordLine::MaxCommentLength, 'c'));
     CHECK_EQUAL(word->getComment().length(), WordLine::MaxCommentLength);
+
+    word->setTranscription(QString(2 * WordLine::MaxOriginalLength, 't'));
+    CHECK_EQUAL(word->getTranscription().length(), WordLine::MaxOriginalLength);
 }
 
 TEST(EmptyWordLineGroup, InvalidDate)
 {
     CHECK_FALSE(word->isDateValid());
 
-    word->setDate("10-10-2010", "dd-MM-yyyy");
+    word->setDate("12-10-2010", "dd-MM-yyyy");
     CHECK(word->isDateValid());
 
     word->setDate("-10-2010", "dd-MM-yyyy");
     CHECK(word->isDateValid());
-    CHECK(word->getDate() == "10-10-2010");
+    CHECK(word->getDate() == "2010-10-12");
 
     word->clear();
     CHECK_FALSE(word->isDateValid());
@@ -129,6 +138,7 @@ TEST_GROUP(FullWordLineGroup)
         word = new WordLine("word", "слово", "new",
                             "01-01-2023", "dd-MM-yyyy");
         word->setComment("Comment.");
+        word->setTranscription("wɜːd");
     }
 
     void teardown()
@@ -152,6 +162,7 @@ TEST(FullWordLineGroup, GetMethods)
     CHECK(word->getDate() == "01-01-2023");
     CHECK(word->getDateFormat() == "dd-MM-yyyy");
     CHECK(word->getComment() == "Comment.");
+    CHECK(word->getTranscription() == "wɜːd");
 }
 
 TEST(FullWordLineGroup, ClearMethod)
@@ -192,6 +203,7 @@ TEST_GROUP(WordLineFromQDomElementGroup)
         element->setAttribute("date", "03-11-2023");
         element->setAttribute("dateFormat", "MM-dd-yyyy");
         element->setAttribute("comment", "Any comment.");
+        element->setAttribute("transcription", "wɜːld");
 
         word = new WordLine(*element);
     }
@@ -217,6 +229,7 @@ TEST(WordLineFromQDomElementGroup, GetMethods)
     CHECK(word->getDate() == "03-11-2023");
     CHECK(word->getDateFormat() == "MM-dd-yyyy");
     CHECK(word->getComment() == "Any comment.");
+    CHECK(word->getTranscription() == "wɜːld");
 }
 
 TEST(WordLineFromQDomElementGroup, SetDomElement)
@@ -232,5 +245,6 @@ TEST(WordLineFromQDomElementGroup, SetDomElement)
     CHECK(e.attribute("date") == "03-11-2023");
     CHECK(e.attribute("dateFormat") == "MM-dd-yyyy");
     CHECK(e.attribute("comment") == "Any comment.");
+    CHECK(e.attribute("transcription") == "wɜːld");
     CHECK(e.attribute("trash") == "");
 }

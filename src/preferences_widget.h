@@ -64,6 +64,7 @@ private:
     QSettings settings;
     int appLanguage;
     int appTheme;
+    bool showTranscription;
     bool showStatus;
     bool showDate;
 
@@ -71,6 +72,7 @@ private:
 
     QRadioButton *engLangButton;
 
+    QCheckBox *showTranscriptionCheckBox;
     QCheckBox *showStatusCheckBox;
     QCheckBox *showDateCheckBox;
 

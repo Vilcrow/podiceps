@@ -45,6 +45,7 @@ public:
     QString getDate(const QString &format = QString()) const;
     QString getDateFormat() const;
     QString getComment() const;
+    QString getTranscription() const;
 
     void setOriginal(const QString &pOriginal);
     void setTranslation(const QString &pTranslation);
@@ -54,6 +55,7 @@ public:
     void setCurrentDate();
     void setDateFormat(const QString &format);
     void setComment(const QString &pComment);
+    void setTranscription(const QString &pTranscription);
     void clear();
 
     bool isEmpty() const;
@@ -88,6 +90,7 @@ private:
     QDate date;
     QString dateFormat;
     QString comment;
+    QString transcription;
 };
 
 #endif

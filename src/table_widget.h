@@ -39,7 +39,7 @@ class QSortFilterProxyModel;
 class TableWidget : public QWidget {
     Q_OBJECT
 public:
-    enum Columns { OriginalColumn, TranslationColumn,
+    enum Columns { OriginalColumn, TranscriptionColumn, TranslationColumn,
                    StatusColumn, DateColumn, CommentColumn };
 
     bool isSaved() const;

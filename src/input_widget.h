@@ -28,22 +28,17 @@
 #ifndef INPUT_WIDGET_VIL_H
 #define INPUT_WIDGET_VIL_H
 
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QWidget>
 
 class WordLine;
-class DictionaryWidget;
-class QLabel;
-class QGridLayout;
 class QPushButton;
 class QLineEdit;
 
 class InputWidget : public QWidget {
     Q_OBJECT
 public:
-    enum Lines { OriginalLine, TranslationLine,
-                 StatusLine, DateLine, AllLines };
+    enum Lines { OriginalLine, TranscriptionLine, TranslationLine,
+                 StatusLine, AllLines };
 
     enum Buttons { AddButton = AllLines + 1, EditButton,
                    FindButton, DeleteButton, AllButtons };
@@ -68,18 +63,14 @@ signals:
     void deleteClicked();
 private:
     QLineEdit *originalLineEdit;
+    QLineEdit *transcriptionLineEdit;
     QLineEdit *translationLineEdit;
     QLineEdit *statusLineEdit;
-    QLineEdit *dateLineEdit;
 
     QPushButton *addButton;
     QPushButton *editButton;
     QPushButton *findButton;
     QPushButton *deleteButton;
-
-    QVBoxLayout *mainLayout;
-    QGridLayout *inputLayout;
-    QHBoxLayout *buttonsLayout;
 };
 
 #endif

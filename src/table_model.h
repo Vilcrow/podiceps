@@ -36,6 +36,8 @@ class QModelIndex;
 class TableModel : public QAbstractTableModel {
     Q_OBJECT
 public:
+    enum { ColumnCount = 6 };
+
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;
 
@@ -54,7 +56,7 @@ public:
     QList<WordLine> getWords() const;
 
     TableModel(QObject *parent = nullptr);
-    TableModel(QList<WordLine> words, QObject *parent = nullptr);
+    TableModel(QList<WordLine> pWords, QObject *parent = nullptr);
     virtual ~TableModel();
 private:
     QList<WordLine> words;

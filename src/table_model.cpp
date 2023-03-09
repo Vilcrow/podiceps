@@ -38,7 +38,7 @@ int TableModel::rowCount(const QModelIndex &parent) const
 int TableModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 5;
+    return ColumnCount;
 }
 
 QVariant TableModel::data(const QModelIndex &index, int role) const
@@ -55,6 +55,9 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         const WordLine &word = words.at(index.row());
         if(index.column() == TableWidget::OriginalColumn) {
             return word.getOriginal();
+        }
+        else if(index.column() == TableWidget::TranscriptionColumn) {
+            return word.getTranscription();
         }
         else if(index.column() == TableWidget::TranslationColumn) {
             return word.getTranslation();
@@ -84,6 +87,8 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation,
         switch(section) {
         case TableWidget::OriginalColumn:
             return tr("Original");
+        case TableWidget::TranscriptionColumn:
+            return tr("Transcription");
         case TableWidget::TranslationColumn:
             return tr("Translation");
         case TableWidget::StatusColumn:
@@ -134,6 +139,9 @@ bool TableModel::setData(const QModelIndex &index, const QVariant &value,
         if(index.column() == TableWidget::OriginalColumn) {
             word.setOriginal(value.toString());
         }
+        else if(index.column() == TableWidget::TranscriptionColumn) {
+            word.setTranscription(value.toString());
+        }
         else if(index.column() == TableWidget::TranslationColumn) {
             word.setTranslation(value.toString());
         }
@@ -177,8 +185,8 @@ TableModel::TableModel(QObject *parent) : QAbstractTableModel(parent)
 
 }
 
-TableModel::TableModel(QList<WordLine> words, QObject *parent)
-            : QAbstractTableModel(parent), words(words)
+TableModel::TableModel(QList<WordLine> pWords, QObject *parent)
+            : QAbstractTableModel(parent), words(pWords)
 {
 
 }

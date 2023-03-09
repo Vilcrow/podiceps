@@ -46,7 +46,7 @@ void PreferencesWidget::setThemePaths()
     // Default theme(Qt).
     themePaths[LightTheme] = "";
 
-    themePaths[DarkTheme] = "../themes/theme_dark.qss";
+    themePaths[DarkTheme] = "../../themes/theme_dark.qss";
 
     QSettings settings("Vilcrow", "podiceps");
     settings.beginGroup("/Settings/Inteface");
@@ -129,7 +129,15 @@ void PreferencesWidget::themeChanged(bool checked)
 void PreferencesWidget::tableSettingsChanged(int state)
 {
     QCheckBox *checkBox = static_cast<QCheckBox*>(sender());
-    if(checkBox == showStatusCheckBox) {
+    if(checkBox == showTranscriptionCheckBox) {
+        if(state == Qt::Unchecked) {
+            showTranscription = false;
+        }
+        else if(state == Qt::Checked) {
+            showTranscription = true;
+        }
+    }
+    else if(checkBox == showStatusCheckBox) {
         if(state == Qt::Unchecked) {
             showStatus = false;
         }
@@ -153,6 +161,7 @@ void PreferencesWidget::readSettings()
     appLanguage = settings.value("/app_language", 0).toInt();
     appTheme = settings.value("/app_theme", 0).toInt();
     themePaths[CustomTheme] = settings.value("/custom_theme_path", "").toString();
+    showTranscription = settings.value("/table/show_transcription", true).toBool();
     showStatus = settings.value("/table/show_status", true).toBool();
     showDate = settings.value("/table/show_date", true).toBool();
     settings.endGroup();
@@ -164,6 +173,7 @@ void PreferencesWidget::writeSettings()
     settings.setValue("/app_language", appLanguage);
     settings.setValue("/app_theme", appTheme);
     settings.setValue("/custom_theme_path", customLineEdit->text());
+    settings.setValue("/table/show_transcription", showTranscription);
     settings.setValue("/table/show_status", showStatus);
     settings.setValue("/table/show_date", showDate);
     settings.endGroup();
@@ -243,6 +253,12 @@ void PreferencesWidget::setupIntefaceTab()
     // Table settings.
     QGroupBox *tableGroupBox = new QGroupBox(tr("Table"));
     QVBoxLayout *tableLayout = new QVBoxLayout;
+
+    showTranscriptionCheckBox = new QCheckBox(tr("&Transcription column"), interfaceTab);
+    showTranscriptionCheckBox->setChecked(showTranscription);
+    tableLayout->addWidget(showTranscriptionCheckBox);
+    connect(showTranscriptionCheckBox, &QCheckBox::stateChanged,
+            this, &PreferencesWidget::tableSettingsChanged);
 
     showStatusCheckBox = new QCheckBox(tr("S&tatus column"), interfaceTab);
     showStatusCheckBox->setChecked(showStatus);

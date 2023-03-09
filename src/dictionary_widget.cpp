@@ -32,6 +32,7 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QTextStream>
+#include <QVBoxLayout>
 
 void DictionaryWidget::readFromFile(const QString &fileName)
 {
@@ -264,13 +265,14 @@ void DictionaryWidget::addEntrySlot()
         word.setStatus(tr("new"));
     }
 
+    // Set the current date instead of the invalid date.
     word.setCurrentDate();
 
     QString result;
     if(tableWidget->addEntry(word)) {
-        emit stateChanged();
         inputWidget->setStyleSheet(InputWidget::OriginalLine, "");
         result = QString(tr("Added"));
+        emit stateChanged();
     }
     else {
         result = QString(tr("Duplicate word. The word \"%1\" already exists.")

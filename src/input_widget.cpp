@@ -29,16 +29,23 @@
 #include "dictionary_widget.h"
 #include "word_line.h"
 #include <QDebug>
-#include <QHBoxLayout>
+#include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QVBoxLayout>
 
 WordLine InputWidget::getInput() const
 {
-    return WordLine(originalLineEdit->text(), translationLineEdit->text(),
-                    statusLineEdit->text(), dateLineEdit->text());
+    QString original, transcription, translation, status;
+    original = originalLineEdit->text();
+    transcription = transcriptionLineEdit->text();
+    translation = translationLineEdit->text();
+    status = statusLineEdit->text();
+
+    WordLine word(original, translation, status);
+    word.setTranscription(transcription);
+
+    return word;
 }
 
 QString InputWidget::getInput(int index) const
@@ -55,14 +62,14 @@ QString InputWidget::getInput(int index) const
     case OriginalLine:
         ret = originalLineEdit->text();
         break;
+    case TranscriptionLine:
+        ret = transcriptionLineEdit->text();
+        break;
     case TranslationLine:
         ret = translationLineEdit->text();
         break;
     case StatusLine:
         ret = statusLineEdit->text();
-        break;
-    case DateLine:
-        ret = dateLineEdit->text();
         break;
     case AllLines:
         break;
@@ -77,14 +84,14 @@ void InputWidget::setInput(int index, const QString &value)
     case OriginalLine:
         originalLineEdit->setText(value);
         break;
+    case TranscriptionLine:
+        transcriptionLineEdit->setText(value);
+        break;
     case TranslationLine:
         translationLineEdit->setText(value);
         break;
     case StatusLine:
         statusLineEdit->setText(value);
-        break;
-    case DateLine:
-        dateLineEdit->setText(value);
         break;
     case AllLines:
         break;
@@ -94,9 +101,9 @@ void InputWidget::setInput(int index, const QString &value)
 void InputWidget::setInput(const WordLine &word)
 {
     originalLineEdit->setText(word.getOriginal());
+    transcriptionLineEdit->setText(word.getTranscription());
     translationLineEdit->setText(word.getTranslation());
     statusLineEdit->setText(word.getStatus());
-    dateLineEdit->setText(word.getDate());
 }
 
 void InputWidget::setEnabled(int index, bool value)
@@ -105,20 +112,20 @@ void InputWidget::setEnabled(int index, bool value)
     case OriginalLine:
         originalLineEdit->setEnabled(value);
         break;
+    case TranscriptionLine:
+        transcriptionLineEdit->setEnabled(value);
+        break;
     case TranslationLine:
         translationLineEdit->setEnabled(value);
         break;
     case StatusLine:
         statusLineEdit->setEnabled(value);
         break;
-    case DateLine:
-        dateLineEdit->setEnabled(value);
-        break;
     case AllLines:
         originalLineEdit->setEnabled(value);
+        transcriptionLineEdit->setEnabled(value);
         translationLineEdit->setEnabled(value);
         statusLineEdit->setEnabled(value);
-        dateLineEdit->setEnabled(value);
         break;
     case AddButton:
         addButton->setEnabled(value);
@@ -147,20 +154,20 @@ void InputWidget::setStyleSheet(int index, const QString &style)
     case OriginalLine:
         originalLineEdit->setStyleSheet(style);
         break;
+    case TranscriptionLine:
+        transcriptionLineEdit->setStyleSheet(style);
+        break;
     case TranslationLine:
         translationLineEdit->setStyleSheet(style);
         break;
     case StatusLine:
         statusLineEdit->setStyleSheet(style);
         break;
-    case DateLine:
-        dateLineEdit->setStyleSheet(style);
-        break;
     case AllLines:
         originalLineEdit->setStyleSheet(style);
+        transcriptionLineEdit->setStyleSheet(style);
         translationLineEdit->setStyleSheet(style);
         statusLineEdit->setStyleSheet(style);
-        dateLineEdit->setStyleSheet(style);
         break;
     case AddButton:
         addButton->setStyleSheet(style);
@@ -191,6 +198,11 @@ void InputWidget::clearInput(int index)
         originalLineEdit->setStyleSheet("");
         originalLineEdit->setFocus(Qt::OtherFocusReason);
         break;
+    case TranscriptionLine:
+        transcriptionLineEdit->setText("");
+        transcriptionLineEdit->setStyleSheet("");
+        transcriptionLineEdit->setFocus(Qt::OtherFocusReason);
+        break;
     case TranslationLine:
         translationLineEdit->setText("");
         translationLineEdit->setStyleSheet("");
@@ -201,20 +213,15 @@ void InputWidget::clearInput(int index)
         statusLineEdit->setStyleSheet("");
         statusLineEdit->setFocus(Qt::OtherFocusReason);
         break;
-    case DateLine:
-        dateLineEdit->setText("");
-        dateLineEdit->setStyleSheet("");
-        dateLineEdit->setFocus(Qt::OtherFocusReason);
-        break;
     case AllLines:
         originalLineEdit->setText("");
         originalLineEdit->setStyleSheet("");
+        transcriptionLineEdit->setText("");
+        transcriptionLineEdit->setStyleSheet("");
         translationLineEdit->setText("");
         translationLineEdit->setStyleSheet("");
         statusLineEdit->setText("");
         statusLineEdit->setStyleSheet("");
-        dateLineEdit->setText("");
-        dateLineEdit->setStyleSheet("");
         originalLineEdit->setFocus(Qt::OtherFocusReason);
         break;
     }
@@ -225,13 +232,16 @@ bool InputWidget::isEmpty(int index) const
     bool ret = true;
 
     bool original = originalLineEdit->text().isEmpty();
+    bool transcription = transcriptionLineEdit->text().isEmpty();
     bool translation = translationLineEdit->text().isEmpty();
     bool status = statusLineEdit->text().isEmpty();
-    bool date = dateLineEdit->text().isEmpty();
 
     switch(index) {
     case OriginalLine:
         ret = original;
+        break;
+    case TranscriptionLine:
+        ret = transcription;
         break;
     case TranslationLine:
         ret = translation;
@@ -239,11 +249,8 @@ bool InputWidget::isEmpty(int index) const
     case StatusLine:
         ret = status;
         break;
-    case DateLine:
-        ret = date;
-        break;
     case AllLines:
-        ret = original && translation && status && date;
+        ret = original && transcription && translation && status;
         break;
     }
 
@@ -251,55 +258,46 @@ bool InputWidget::isEmpty(int index) const
 }
 
 InputWidget::InputWidget(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent), originalLineEdit(new QLineEdit),
+      transcriptionLineEdit(new QLineEdit), translationLineEdit(new QLineEdit),
+      statusLineEdit(new QLineEdit)
 {
-    mainLayout = new QVBoxLayout(this);
+    originalLineEdit->setMaxLength(WordLine::MaxOriginalLength);
+    transcriptionLineEdit->setMaxLength(WordLine::MaxOriginalLength);
+    translationLineEdit->setMaxLength(WordLine::MaxTranslationLength);
+    statusLineEdit->setMaxLength(WordLine::MaxStatusLength);
 
-    // Labels.
     QLabel *originalLabel = new QLabel(tr("Original"));
+    QLabel *transcriptionLabel = new QLabel(tr("Transcription"));
     QLabel *translationLabel = new QLabel(tr("Translation"));
     QLabel *statusLabel = new QLabel(tr("Status"));
-    QLabel *dateLabel = new QLabel(tr("Date"));
-
-    // Edit lines.
-    originalLineEdit = new QLineEdit();
-    originalLineEdit->setMaxLength(WordLine::MaxOriginalLength);
-    translationLineEdit = new QLineEdit();
-    translationLineEdit->setMaxLength(WordLine::MaxTranslationLength);
-    statusLineEdit = new QLineEdit();
-    statusLineEdit->setMaxLength(WordLine::MaxStatusLength);
-    dateLineEdit = new QLineEdit();
-    dateLineEdit->setMaxLength(WordLine::MaxDateLength);
-
-    inputLayout = new QGridLayout();
-    inputLayout->addWidget(originalLabel, 0, 0, Qt::AlignCenter);
-    inputLayout->addWidget(translationLabel, 0, 1, Qt::AlignCenter);
-    inputLayout->addWidget(statusLabel, 0, 2, Qt::AlignCenter);
-    inputLayout->addWidget(dateLabel, 0, 3, Qt::AlignCenter);
-    inputLayout->addWidget(originalLineEdit, 1, 0);
-    inputLayout->addWidget(translationLineEdit, 1, 1);
-    inputLayout->addWidget(statusLineEdit, 1, 2);
-    inputLayout->addWidget(dateLineEdit, 1, 3);
-    mainLayout->addLayout(inputLayout);
-
-    // Buttons.
-    buttonsLayout = new QHBoxLayout();
 
     addButton = new QPushButton(tr("&Add"));
-    buttonsLayout->addWidget(addButton);
 
     editButton = new QPushButton(tr("Ed&it"));
     editButton->setEnabled(false);
-    buttonsLayout->addWidget(editButton);
 
     findButton = new QPushButton(tr("Fi&nd"));
-    buttonsLayout->addWidget(findButton);
 
     deleteButton = new QPushButton(tr("&Delete"));
     deleteButton->setEnabled(false);
-    buttonsLayout->addWidget(deleteButton);
 
-    mainLayout->addLayout(buttonsLayout);
+    QGridLayout *mainLayout = new QGridLayout(this);
+    mainLayout->addWidget(originalLabel, 0, 0, Qt::AlignCenter);
+    mainLayout->addWidget(transcriptionLabel, 0, 1, Qt::AlignCenter);
+    mainLayout->addWidget(translationLabel, 0, 2, Qt::AlignCenter);
+    mainLayout->addWidget(statusLabel, 0, 3, Qt::AlignCenter);
+
+    mainLayout->addWidget(originalLineEdit, 1, 0);
+    mainLayout->addWidget(transcriptionLineEdit, 1, 1);
+    mainLayout->addWidget(translationLineEdit, 1, 2);
+    mainLayout->addWidget(statusLineEdit, 1, 3);
+
+    mainLayout->addWidget(addButton, 2, 0);
+    mainLayout->addWidget(editButton, 2, 1);
+    mainLayout->addWidget(findButton, 2, 2);
+    mainLayout->addWidget(deleteButton, 2, 3);
+    setLayout(mainLayout);
 
     connect(addButton, &QAbstractButton::clicked,
             this, &InputWidget::addClicked);

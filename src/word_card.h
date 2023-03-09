@@ -49,6 +49,7 @@ private:
     WordLine word;
 
     QLineEdit *originalText;
+    QLineEdit *transcriptionText;
     QLineEdit *translationText;
     QLineEdit *statusText;
     QLineEdit *dateText;
