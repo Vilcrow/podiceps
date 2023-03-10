@@ -26,6 +26,7 @@
 /**************************************************************************/
 
 #include "dictionary_widget.h"
+#include "find_widget.h"
 #include "input_widget.h"
 #include "table_widget.h"
 #include "word_line.h"
@@ -302,40 +303,17 @@ void DictionaryWidget::editEntry()
     }
 }
 
-void DictionaryWidget::findEntry()
+void DictionaryWidget::setFilter()
 {
-    if(inputWidget->isEmpty()) {
-        tableWidget->setFilter(0);
-        actionCompleted(tr("The filter is cleared"));
-        return;
-    }
-
-    WordLine word = inputWidget->getInput();
-    int columnFind = -1; // Which column will we search for.
     QRegExp::PatternSyntax syntax = QRegExp::PatternSyntax(QRegExp::FixedString);
-    QRegExp regExp;
-    if(!word.getOriginal().isEmpty()) {
-        regExp = QRegExp(word.getOriginal(), Qt::CaseInsensitive, syntax);
-        columnFind = 0;
-    }
-    else if(!word.getTranslation().isEmpty()) {
-        regExp = QRegExp(word.getTranslation(), Qt::CaseInsensitive,
-                         syntax);
-        columnFind = 1;
-    }
-    else if(!word.getStatus().isEmpty()) {
-        regExp = QRegExp(word.getStatus(), Qt::CaseInsensitive, syntax);
-        columnFind = 2;
-    }
-    else if(!word.getDate().isEmpty()) {
-        regExp = QRegExp(word.getDate(), Qt::CaseInsensitive, syntax);
-        columnFind = 3;
-    }
-    tableWidget->setFilter(columnFind, regExp);
+    QRegExp regExp = QRegExp(findWidget->getFilter(), Qt::CaseInsensitive, syntax);
+    int column = findWidget->getChecked(); // Which column will we search for.
+    tableWidget->setFilter(column, regExp);
+}
 
-    QString column = tableWidget->getColumnName(columnFind);
-    actionCompleted(tr("The filter \"%1\" (%2) is set").arg(regExp.pattern())
-                                                   .arg(column));
+void DictionaryWidget::clearFilter()
+{
+    tableWidget->setFilter();
 }
 
 void DictionaryWidget::removeEntry()
@@ -365,13 +343,39 @@ void DictionaryWidget::updateSettings()
     tableWidget->updateSettings();
 }
 
+void DictionaryWidget::openFind()
+{
+    inputWidget->hide();
+    findWidget->show();
+    findWidget->setFocus();
+}
+
+void DictionaryWidget::closeFind()
+{
+    findWidget->hide();
+    inputWidget->show();
+    inputWidget->setFocus();
+}
+
 DictionaryWidget::DictionaryWidget(QWidget *parent)
     : QWidget(parent), settings("Vilcrow", "podiceps")
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
     readSettings();
 
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+
     tableWidget = new TableWidget(this);
+
+    mainLayout->addWidget(tableWidget->getTableView());
+
+    findWidget = new FindWidget(this);
+    findWidget->hide();
+
+    mainLayout->addWidget(findWidget);
+
+    inputWidget = new InputWidget(this);
+    mainLayout->addWidget(inputWidget);
+
     connect(tableWidget, &TableWidget::dataChanged,
             this, &DictionaryWidget::updateInput);
     connect(tableWidget, &TableWidget::dataChanged,
@@ -379,23 +383,25 @@ DictionaryWidget::DictionaryWidget(QWidget *parent)
     connect(tableWidget, &TableWidget::selectionChanged,
             this, &DictionaryWidget::updateInput);
 
-    mainLayout->addWidget(tableWidget->getTableView());
+    connect(findWidget, &FindWidget::setClicked,
+            this, &DictionaryWidget::setFilter);
+    connect(findWidget, &FindWidget::clearClicked,
+            this, &DictionaryWidget::clearFilter);
+    connect(findWidget, &FindWidget::closeClicked,
+            this, &DictionaryWidget::closeFind);
 
-    inputWidget = new InputWidget(this);
     connect(inputWidget, &InputWidget::addClicked,
             this, &DictionaryWidget::addEntrySlot);
     connect(inputWidget, &InputWidget::editClicked,
-            this, &DictionaryWidget::editEntry);
+            tableWidget, &TableWidget::openWordCard);
     connect(inputWidget, &InputWidget::findClicked,
-            this, &DictionaryWidget::findEntry);
+            this, &DictionaryWidget::openFind);
     connect(inputWidget, &InputWidget::deleteClicked,
             this, &DictionaryWidget::removeEntry);
-    mainLayout->addWidget(inputWidget);
 
     if(!lastFileName.isEmpty()) {
         readFromFile(lastFileName);
     }
-
 }
 
 DictionaryWidget::~DictionaryWidget()

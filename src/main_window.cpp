@@ -159,7 +159,7 @@ void MainWindow::saveFile()
 
 void MainWindow::showMessage(const QString &msg)
 {
-    statusBar->showMessage(msg);
+    statusBar->showMessage(msg, 5000);
 }
 
 void MainWindow::showStatistics()

@@ -2,6 +2,7 @@ set(CMAKE_AUTOMOC ON)
 
 set(APP_LIB_SOURCE
     dictionary_widget.cpp
+    find_widget.cpp
     input_widget.cpp
     main_window.cpp
     podiceps_application.cpp

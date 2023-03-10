@@ -255,14 +255,39 @@ void TableWidget::updateSettings()
     tableView->setColumnHidden(DateColumn, hideDate);
 }
 
-void TableWidget::openWordCard(const QModelIndex &index)
+void TableWidget::rowClicked(const QModelIndex &index)
+{
+    Q_UNUSED(index);
+    openWordCard();
+}
+
+void TableWidget::openWordCard()
 {
     WordLine word = getSelectedWord();
-    WordCard wordCard(word, this);
-    if(wordCard.exec() == QDialog::Accepted && word != wordCard.getWord()) {
-        editEntry(wordCard.getWord());
-        changesSaved = false;
-        emit dataChanged();
+    WordCard wordCard(this, word);
+    while(true) {
+        int result = wordCard.exec();
+        if(result == QDialog::Rejected) {
+            break;
+        }
+        // Changes have been made.
+        else if(word != wordCard.getWord()) {
+            if(editEntry(wordCard.getWord())) {
+                changesSaved = false;
+                emit dataChanged();
+                break;
+            }
+            else {
+                QString msg = tr("The word \"%1\" already exists.")
+                                 .arg(wordCard.getWord().getOriginal());
+                wordCard.showMessage(msg);
+                continue;
+            }
+        }
+        // Without changes.
+        else {
+            break;
+        }
     }
 }
 
@@ -297,7 +322,7 @@ TableWidget::TableWidget(QWidget *parent)
     updateSettings();
 
     connect(tableView, &QAbstractItemView::doubleClicked,
-            this, &TableWidget::openWordCard);
+            this, &TableWidget::rowClicked);
     connect(tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &TableWidget::selectionChanged);
 }

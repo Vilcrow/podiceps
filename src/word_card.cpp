@@ -32,6 +32,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QStatusBar>
 #include <QTextEdit>
 #include <QVBoxLayout>
 
@@ -51,6 +52,16 @@ WordLine WordCard::getWord() const
     return word;
 }
 
+void WordCard::setWord(const WordLine &pWord)
+{
+    word = pWord;
+}
+
+void WordCard::showMessage(const QString &msg)
+{
+    statusBar->showMessage(msg, 5000);
+}
+
 void WordCard::truncateComment()
 {
     if(commentText->toPlainText().length() > WordLine::MaxCommentLength) {
@@ -60,11 +71,11 @@ void WordCard::truncateComment()
     }
 }
 
-WordCard::WordCard(const WordLine &pWord, QWidget *parent)
+WordCard::WordCard(QWidget *parent, const WordLine &pWord)
     : QDialog(parent), word(pWord), originalText(new QLineEdit),
       transcriptionText(new QLineEdit), translationText(new QLineEdit),
       statusText(new QLineEdit), dateText(new QLineEdit),
-      commentText(new QTextEdit)
+      commentText(new QTextEdit), statusBar(new QStatusBar(this))
 {
     originalText->setMaxLength(WordLine::MaxOriginalLength);
     transcriptionText->setMaxLength(WordLine::MaxOriginalLength);
@@ -80,7 +91,7 @@ WordCard::WordCard(const WordLine &pWord, QWidget *parent)
     dateText->setEnabled(false);
     commentText->setText(word.getComment());
 
-    QGridLayout *mainLayout = new QGridLayout;
+    QGridLayout *gridLayout = new QGridLayout;
 
     QLabel *originalLabel = new QLabel(tr("Original"));
     QLabel *transcriptionLabel = new QLabel(tr("Transcription"));
@@ -89,34 +100,42 @@ WordCard::WordCard(const WordLine &pWord, QWidget *parent)
     QLabel *dateLabel = new QLabel(tr("Date"));
     QLabel *commentLabel = new QLabel(tr("Comment"));
 
-    mainLayout->addWidget(originalLabel, 0, 0);
-    mainLayout->addWidget(originalText, 0, 1);
-    mainLayout->addWidget(transcriptionLabel, 1, 0);
-    mainLayout->addWidget(transcriptionText, 1, 1);
-    mainLayout->addWidget(translationLabel, 2, 0);
-    mainLayout->addWidget(translationText, 2, 1);
-    mainLayout->addWidget(statusLabel, 3, 0);
-    mainLayout->addWidget(statusText, 3, 1);
-    mainLayout->addWidget(dateLabel, 4, 0);
-    mainLayout->addWidget(dateText, 4, 1);
-    mainLayout->addWidget(commentLabel, 5, 0, Qt::AlignTop);
-    mainLayout->addWidget(commentText, 5, 1);
-
-    connect(commentText, &QTextEdit::textChanged,
-            this, &WordCard::truncateComment);
+    gridLayout->addWidget(originalLabel, 0, 0);
+    gridLayout->addWidget(originalText, 0, 1);
+    gridLayout->addWidget(transcriptionLabel, 1, 0);
+    gridLayout->addWidget(transcriptionText, 1, 1);
+    gridLayout->addWidget(translationLabel, 2, 0);
+    gridLayout->addWidget(translationText, 2, 1);
+    gridLayout->addWidget(statusLabel, 3, 0);
+    gridLayout->addWidget(statusText, 3, 1);
+    gridLayout->addWidget(dateLabel, 4, 0);
+    gridLayout->addWidget(dateText, 4, 1);
+    gridLayout->addWidget(commentLabel, 5, 0, Qt::AlignTop);
+    gridLayout->addWidget(commentText, 5, 1);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
+
     QPushButton *saveButton = new QPushButton(tr("&Save"));
     QPushButton *cancelButton = new QPushButton(tr("&Cancel"));
+
     buttonLayout->addWidget(saveButton);
     buttonLayout->addWidget(cancelButton);
-    mainLayout->addLayout(buttonLayout, 6, 1, Qt::AlignRight);
+
+    gridLayout->addLayout(buttonLayout, 6, 1, Qt::AlignRight);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+
+    mainLayout->addLayout(gridLayout);
+    mainLayout->addWidget(statusBar);
 
     setLayout(mainLayout);
     setWindowTitle(tr("Edit a Word"));
 
     connect(saveButton, &QAbstractButton::clicked, this, &QDialog::accept);
     connect(cancelButton, &QAbstractButton::clicked, this, &QDialog::reject);
+
+    connect(commentText, &QTextEdit::textChanged,
+            this, &WordCard::truncateComment);
 }
 
 WordCard::~WordCard()

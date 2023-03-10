@@ -32,14 +32,18 @@
 #include <QDialog>
 
 class QLineEdit;
+class QStatusBar;
 class QTextEdit;
 
 class WordCard : public QDialog {
     Q_OBJECT
 public:
     WordLine getWord() const;
+    void setWord(const WordLine &pWord);
 
-    WordCard(const WordLine &pWord, QWidget *parent = nullptr);
+    void showMessage(const QString &msg);
+
+    WordCard(QWidget *parent = nullptr, const WordLine &pWord = WordLine());
     virtual ~WordCard();
 public slots:
     void accept() override;
@@ -54,6 +58,8 @@ private:
     QLineEdit *statusText;
     QLineEdit *dateText;
     QTextEdit *commentText;
+
+    QStatusBar *statusBar;
 };
 
 #endif

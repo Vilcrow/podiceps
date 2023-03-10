@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  table_widget.h                                                        */
+/*  find_widget.h                                                         */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,60 +25,51 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef TABLE_WIDGET_VIL_H
-#define TABLE_WIDGET_VIL_H
+#ifndef FIND_WIDGET_VIL_H
+#define FIND_WIDGET_VIL_H
 
-#include "table_model.h"
-#include <QSettings>
-#include <QTableView>
 #include <QWidget>
 
-class DictionaryWidget;
-class QSortFilterProxyModel;
+class QLineEdit;
+class QPushButton;
+class QRadioButton;
 
-class TableWidget : public QWidget {
+class FindWidget : public QWidget {
     Q_OBJECT
 public:
-    enum Columns { OriginalColumn, TranscriptionColumn, TranslationColumn,
-                   StatusColumn, DateColumn, CommentColumn };
+    void setFocus();
+    QString getFilter() const;
+    int getChecked() const;
 
-    bool isSaved() const;
-    void setSaved(bool value);
+    void clearFilter();
 
-    void sortByColumn(int column, Qt::SortOrder order = Qt::AscendingOrder);
-
-    bool addEntry(const WordLine &word);
-    bool editEntry(const WordLine &word);
-    void removeEntry();
-    void fillTable(const QList<WordLine> words);
-    void clear();
-
-    void setFilter(int col = -1, const QRegExp &exp = QRegExp());
-    int getRowCount() const;
-    QString getColumnName(int col) const;
-
-    QList<WordLine> getWords() const;
-    WordLine getSelectedWord() const;
-
-    QTableView* getTableView() const;
-
-    void clearSelection();
-
-    TableWidget(QWidget *parent = nullptr);
-    virtual ~TableWidget();
+    FindWidget(QWidget *parent = nullptr);
+    virtual ~FindWidget();
 signals:
-    void dataChanged();
-    void selectionChanged();
-public slots:
-    void updateSettings();
-    void rowClicked(const QModelIndex &index);
-    void openWordCard();
+    void setClicked();
+    void clearClicked();
+    void closeClicked();
+private slots:
+    void buttonChanged(bool checked);
 private:
-    QSettings settings;
-    bool changesSaved;
-    TableModel *tableModel;
-    QTableView *tableView;
-    QSortFilterProxyModel *proxyModel;
+    enum Buttons { OriginalButton, TranscriptionButton, TranslationButton,
+                   StatusButton, DateButton, CommentButton };
+
+    enum { MaxFilterLength = 100 };
+
+    QLineEdit *filterLineEdit;
+
+    QRadioButton *originalButton;
+    QRadioButton *transcriptionButton;
+    QRadioButton *translationButton;
+    QRadioButton *statusButton;
+    QRadioButton *dateButton;
+    QRadioButton *commentButton;
+    int checkedButton;
+
+    QPushButton *setButton;
+    QPushButton *clearButton;
+    QPushButton *closeButton;
 };
 
 #endif

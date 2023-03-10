@@ -50,6 +50,7 @@ public:
     void setInput(int index, const QString &value);
     void setEnabled(int index, bool value = true);
     void setStyleSheet(int index, const QString &style);
+    void setFocus();
 
     void clearInput(int index = AllLines);
     bool isEmpty(int index = AllLines) const;
@@ -69,8 +70,8 @@ private:
 
     QPushButton *addButton;
     QPushButton *editButton;
-    QPushButton *findButton;
     QPushButton *deleteButton;
+    QPushButton *findButton;
 };
 
 #endif

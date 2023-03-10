@@ -190,6 +190,11 @@ void InputWidget::setStyleSheet(int index, const QString &style)
     }
 }
 
+void InputWidget::setFocus()
+{
+    originalLineEdit->setFocus(Qt::OtherFocusReason);
+}
+
 void InputWidget::clearInput(int index)
 {
     switch(index) {
@@ -262,51 +267,50 @@ InputWidget::InputWidget(QWidget *parent)
       transcriptionLineEdit(new QLineEdit), translationLineEdit(new QLineEdit),
       statusLineEdit(new QLineEdit)
 {
+    originalLineEdit->setPlaceholderText(tr("Original..."));
     originalLineEdit->setMaxLength(WordLine::MaxOriginalLength);
+
+    transcriptionLineEdit->setPlaceholderText(tr("Transcription..."));
     transcriptionLineEdit->setMaxLength(WordLine::MaxOriginalLength);
+
+    translationLineEdit->setPlaceholderText(tr("Translation..."));
     translationLineEdit->setMaxLength(WordLine::MaxTranslationLength);
+
+    statusLineEdit->setPlaceholderText(tr("Status..."));
     statusLineEdit->setMaxLength(WordLine::MaxStatusLength);
 
-    QLabel *originalLabel = new QLabel(tr("Original"));
-    QLabel *transcriptionLabel = new QLabel(tr("Transcription"));
-    QLabel *translationLabel = new QLabel(tr("Translation"));
-    QLabel *statusLabel = new QLabel(tr("Status"));
+    QGridLayout *mainLayout = new QGridLayout(this);
+
+    mainLayout->addWidget(originalLineEdit, 0, 0);
+    mainLayout->addWidget(transcriptionLineEdit, 0, 1);
+    mainLayout->addWidget(translationLineEdit, 0, 2);
+    mainLayout->addWidget(statusLineEdit, 0, 3);
 
     addButton = new QPushButton(tr("&Add"));
 
     editButton = new QPushButton(tr("Ed&it"));
     editButton->setEnabled(false);
 
-    findButton = new QPushButton(tr("Fi&nd"));
-
     deleteButton = new QPushButton(tr("&Delete"));
     deleteButton->setEnabled(false);
 
-    QGridLayout *mainLayout = new QGridLayout(this);
-    mainLayout->addWidget(originalLabel, 0, 0, Qt::AlignCenter);
-    mainLayout->addWidget(transcriptionLabel, 0, 1, Qt::AlignCenter);
-    mainLayout->addWidget(translationLabel, 0, 2, Qt::AlignCenter);
-    mainLayout->addWidget(statusLabel, 0, 3, Qt::AlignCenter);
+    findButton = new QPushButton(tr("Fi&nd"));
 
-    mainLayout->addWidget(originalLineEdit, 1, 0);
-    mainLayout->addWidget(transcriptionLineEdit, 1, 1);
-    mainLayout->addWidget(translationLineEdit, 1, 2);
-    mainLayout->addWidget(statusLineEdit, 1, 3);
+    mainLayout->addWidget(addButton, 1, 0);
+    mainLayout->addWidget(editButton, 1, 1);
+    mainLayout->addWidget(deleteButton, 1, 2);
+    mainLayout->addWidget(findButton, 1, 3);
 
-    mainLayout->addWidget(addButton, 2, 0);
-    mainLayout->addWidget(editButton, 2, 1);
-    mainLayout->addWidget(findButton, 2, 2);
-    mainLayout->addWidget(deleteButton, 2, 3);
     setLayout(mainLayout);
 
     connect(addButton, &QAbstractButton::clicked,
             this, &InputWidget::addClicked);
     connect(editButton, &QAbstractButton::clicked,
             this, &InputWidget::editClicked);
-    connect(findButton, &QAbstractButton::clicked,
-            this, &InputWidget::findClicked);
     connect(deleteButton, &QAbstractButton::clicked,
             this, &InputWidget::deleteClicked);
+    connect(findButton, &QAbstractButton::clicked,
+            this, &InputWidget::findClicked);
 }
 
 InputWidget::~InputWidget()

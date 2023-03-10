@@ -31,6 +31,7 @@
 #include <QSettings>
 #include <QWidget>
 
+class FindWidget;
 class InputWidget;
 class TableWidget;
 class WordLine;
@@ -66,9 +67,12 @@ public slots:
     void createNewFile();
     void addEntrySlot();
     void editEntry();
-    void findEntry();
+    void setFilter();
+    void clearFilter();
     void removeEntry();
     void updateSettings();
+    void openFind();
+    void closeFind();
 private slots:
     void updateInput();
 private:
@@ -76,6 +80,7 @@ private:
     QString lastFileName;
 
     TableWidget *tableWidget;
+    FindWidget *findWidget;
     InputWidget *inputWidget;
 };
 
