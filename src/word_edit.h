@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  main_window.h                                                         */
+/*  word_edit.h                                                           */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,86 +25,41 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef MAIN_WINDOW_VIL_H
-#define MAIN_WINDOW_VIL_H
+#ifndef WORD_EDIT_VIL_H
+#define WORD_EDIT_VIL_H
 
-#include <QMainWindow>
-#include <QSettings>
+#include "word_line.h"
+#include <QDialog>
 
-class DictionaryWidget;
-class QCloseEvent;
-class QResizeEvent;
+class QLineEdit;
 class QStatusBar;
+class QTextEdit;
 
-class MainWindow: public QMainWindow {
+class WordEdit : public QDialog {
     Q_OBJECT
 public:
-    static void appendFormat(QString &name, const QString &format);
+    WordLine getWord() const;
+    void setWord(const WordLine &pWord);
 
-    MainWindow(QWidget *parent = nullptr);
-    virtual ~MainWindow();
-signals:
-    void preferencesChanged();
-    void resized(int w, int h);
-public slots:
-    void updateActions();
-private slots:
-    void openFile();
-    void createFile();
-    bool saveChanges();
-    void saveFile();
-    bool trySaveChanges();
     void showMessage(const QString &msg);
-    void showStatistics();
-    void openTutorial();
-    void openAbout();
-    void openPreferences();
-    void quitApp();
 
-    // Should be deleted in in the future.
-    void importFile(); // Import the podicepses .txt to .xml.
-    void exportFile();
-protected:
-    void closeEvent(QCloseEvent *event) override;
-    void resizeEvent(QResizeEvent *event) override;
+    WordEdit(QWidget *parent = nullptr, const WordLine &pWord = WordLine());
+    virtual ~WordEdit();
+public slots:
+    void accept() override;
+private slots:
+    void truncateComment();
 private:
-    QSettings mainWindowSettings;
-    bool closeImmediately;
-    DictionaryWidget *dictWidget;
+    WordLine word;
+
+    QLineEdit *originalText;
+    QLineEdit *transcriptionText;
+    QLineEdit *translationText;
+    QLineEdit *statusText;
+    QLineEdit *dateText;
+    QTextEdit *commentText;
+
     QStatusBar *statusBar;
-
-    QMenu *fileMenu;
-    QAction *newAct;
-    QAction *openAct;
-    QAction *saveAct;
-    QAction *saveAsAct;
-    QAction *importAct;
-    QAction *exportAct;
-    QAction *exitAct;
-
-    QMenu *editMenu;
-    QAction *addAct;
-    QAction *findAct;
-    QAction *editAct;
-    QAction *deleteAct;
-    QAction *preferencesAct;
-
-    QMenu *toolsMenu;
-    QAction *showStatisticsAct;
-    QAction *clearInputAct;
-
-    QMenu *helpMenu;
-    QAction *openTutorialAct;
-    QAction *openAboutAct;
-
-    void createMenus();
-    void createFileMenu();
-    void createEditMenu();
-    void createToolsMenu();
-    void createHelpMenu();
-
-    void readSettings();
-    void writeSettings();
 };
 
 #endif

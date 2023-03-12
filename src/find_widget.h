@@ -39,9 +39,9 @@ class FindWidget : public QWidget {
 public:
     void setFocus();
     QString getFilter() const;
+    void clearFilter();
     int getChecked() const;
 
-    void clearFilter();
 
     FindWidget(QWidget *parent = nullptr);
     virtual ~FindWidget();
@@ -58,6 +58,9 @@ private:
     enum { MaxFilterLength = 100 };
 
     QLineEdit *filterLineEdit;
+    QPushButton *setButton;
+    QPushButton *clearButton;
+    QPushButton *closeButton;
 
     QRadioButton *originalButton;
     QRadioButton *transcriptionButton;
@@ -66,10 +69,6 @@ private:
     QRadioButton *dateButton;
     QRadioButton *commentButton;
     int checkedButton;
-
-    QPushButton *setButton;
-    QPushButton *clearButton;
-    QPushButton *closeButton;
 };
 
 #endif

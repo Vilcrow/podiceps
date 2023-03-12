@@ -34,6 +34,7 @@
 #include <QLabel>
 #include <QMenuBar>
 #include <QPushButton>
+#include <QResizeEvent>
 #include <QStatusBar>
 #include <QVBoxLayout>
 
@@ -48,86 +49,42 @@ void MainWindow::appendFormat(QString &name, const QString &format)
     }
 }
 
-void MainWindow::createMenus()
+void MainWindow::updateActions()
 {
-    createFileMenu();
-    createEditMenu();
-    createToolsMenu();
-    createHelpMenu();
-}
+    if(dictWidget->getRowCount() != 0) {
+        newAct->setEnabled(true);
+        if(!dictWidget->isSaved() && !dictWidget->getLastFileName().isEmpty()) {
+            saveAct->setEnabled(true);
+        }
+        else {
+            saveAct->setEnabled(false);
+        }
+        saveAsAct->setEnabled(true);
+        exportAct->setEnabled(true);
 
-void MainWindow::createFileMenu()
-{
-    fileMenu = menuBar()->addMenu(tr("&File"));
-    newAct = new QAction(tr("&New..."), this);
-    newAct->setShortcut(Qt::CTRL + Qt::Key_N);
-    fileMenu->addAction(newAct);
-    connect(newAct, &QAction::triggered, this, &MainWindow::createFile);
-    connect(newAct, &QAction::triggered, this, &MainWindow::updateActions);
-    openAct = new QAction(tr("&Open..."), this);
-    openAct->setShortcut(Qt::CTRL + Qt::Key_O);
-    fileMenu->addAction(openAct);
-    connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
-    saveAct = new QAction(tr("&Save"), this);
-    saveAct->setShortcut(Qt::CTRL + Qt::Key_S);
-    fileMenu->addAction(saveAct);
-    connect(saveAct, &QAction::triggered, this, &MainWindow::saveChanges);
-    saveAsAct = new QAction(tr("S&ave As..."), this);
-    //saveAsAct->setShortcut(Qt::CTRL + Qt::Key_S);
-    fileMenu->addAction(saveAsAct);
-    connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveFile);
-    fileMenu->addSeparator();
-    importAct = new QAction(tr("&Import..."), this);
-    importAct->setShortcut(Qt::CTRL + Qt::Key_I);
-    fileMenu->addAction(importAct);
-    connect(importAct, &QAction::triggered, this, &MainWindow::importFile);
-    exportAct = new QAction(tr("&Export..."), this);
-    exportAct->setShortcut(Qt::CTRL + Qt::Key_E);
-    fileMenu->addAction(exportAct);
-    connect(exportAct, &QAction::triggered, this, &MainWindow::exportFile);
-    fileMenu->addSeparator();
-    exitAct = new QAction(tr("E&xit"), this);
-    exitAct->setShortcut(Qt::CTRL + Qt::Key_W);
-    fileMenu->addAction(exitAct);
-    connect(exitAct, &QAction::triggered, this, &MainWindow::quitApp);
-}
+        if(dictWidget->hasSelectedWords()) {
+            editAct->setEnabled(true);
+            deleteAct->setEnabled(true);
+        }
+        else {
+            editAct->setEnabled(false);
+            deleteAct->setEnabled(false);
+        }
+    }
+    else {
+        newAct->setEnabled(false);
+        if(!dictWidget->isSaved() && !dictWidget->getLastFileName().isEmpty()) {
+            saveAct->setEnabled(true);
+        }
+        else {
+            saveAct->setEnabled(false);
+        }
+        saveAsAct->setEnabled(false);
+        exportAct->setEnabled(false);
 
-void MainWindow::createEditMenu()
-{
-    editMenu = menuBar()->addMenu(tr("&Edit"));
-    preferencesAct = new QAction(tr("&Preferences"), this);
-    preferencesAct->setShortcut(Qt::CTRL + Qt::Key_P);
-    editMenu->addAction(preferencesAct);
-    connect(preferencesAct, &QAction::triggered,
-            this, &MainWindow::openPreferences);
-}
-
-void MainWindow::createToolsMenu()
-{
-    toolsMenu = menuBar()->addMenu(tr("&Tools"));
-    showStatisticsAct = new QAction(tr("&Statistics"), this);
-    showStatisticsAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N);
-    toolsMenu->addAction(showStatisticsAct);
-    connect(showStatisticsAct, &QAction::triggered,
-            this, &MainWindow::showStatistics);
-    clearInputAct = new QAction(tr("&Clear input"), this);
-    clearInputAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
-    toolsMenu->addAction(clearInputAct);
-    connect(clearInputAct, &QAction::triggered,
-            dictWidget, &DictionaryWidget::clearInput);
-}
-
-void MainWindow::createHelpMenu()
-{
-    helpMenu = menuBar()->addMenu(tr("&Help"));
-    openTutorialAct = new QAction(tr("&Tutorial"), this);
-    helpMenu->addAction(openTutorialAct);
-    openTutorialAct->setEnabled(false);
-    connect(openTutorialAct, &QAction::triggered,
-            this, &MainWindow::openTutorial);
-    openAboutAct = new QAction(tr("&About"), this);
-    helpMenu->addAction(openAboutAct);
-    connect(openAboutAct, &QAction::triggered, this, &MainWindow::openAbout);
+        editAct->setEnabled(false);
+        deleteAct->setEnabled(false);
+    }
 }
 
 void MainWindow::openFile()
@@ -147,6 +104,42 @@ void MainWindow::openFile()
     }
 }
 
+void MainWindow::createFile()
+{
+    bool ok = true;
+    if(!dictWidget->isSaved()) {
+        ok = trySaveChanges();
+    }
+
+    if(ok) {
+        dictWidget->createNewFile();
+    }
+}
+
+bool MainWindow::saveChanges()
+{
+    bool success = false;
+
+    QString fileName = dictWidget->getLastFileName();
+    if(fileName.isEmpty()) {
+        fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
+                                         "", tr("XML Files (*.xml)"));
+    }
+
+    if(!fileName.isEmpty()) {
+        appendFormat(fileName, "xml");
+        dictWidget->writeToFile(fileName);
+        dictWidget->setSaved(true);
+        updateActions();
+        success = true;
+    }
+    else {
+        success = false;
+    }
+
+    return success;
+}
+
 void MainWindow::saveFile()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
@@ -155,6 +148,28 @@ void MainWindow::saveFile()
         appendFormat(fileName, "xml");
         dictWidget->writeToFile(fileName);
     }
+}
+
+bool MainWindow::trySaveChanges()
+{
+    bool success = false;
+
+    SaveDialog sDialog(this);
+    QString fileName = dictWidget->getLastFileName();
+    int result = sDialog.trySave();
+    switch(result) {
+    case SaveDialog::Accepted:
+        success = saveChanges();
+        break;
+    case SaveDialog::Rejected:
+        success = true;
+        break;
+    case SaveDialog::Cancelled:
+        success = false;
+        break;
+    }
+
+    return success;
 }
 
 void MainWindow::showMessage(const QString &msg)
@@ -196,6 +211,27 @@ void MainWindow::openAbout()
     aboutWidget->exec();
 }
 
+void MainWindow::openPreferences()
+{
+    PreferencesWidget preferences(this);
+    if(preferences.exec() == QDialog::Accepted) {
+        emit preferencesChanged();
+    }
+}
+
+void MainWindow::quitApp()
+{
+    bool ok = true;
+    if(!dictWidget->isSaved()) {
+        ok = trySaveChanges();
+    }
+    if(ok) {
+        closeImmediately = true;
+        writeSettings();
+        close();
+    }
+}
+
 void MainWindow::importFile()
 {
     bool ok = true;
@@ -225,128 +261,6 @@ void MainWindow::exportFile()
     }
 }
 
-void MainWindow::readSettings()
-{
-/*
-    mainSettings.beginGroup("/Settings");
-    mainSettings.endGroup();
-*/
-}
-
-void MainWindow::writeSettings()
-{
-/*
-    mainSettings.beginGroup("/Settings");
-    mainSettings.endGroup();
-*/
-    dictWidget->writeSettings();
-}
-
-void MainWindow::openPreferences()
-{
-    PreferencesWidget preferences(this);
-    if(preferences.exec() == QDialog::Accepted) {
-        emit preferencesChanged();
-    }
-}
-
-bool MainWindow::saveChanges()
-{
-    bool success = false;
-
-    QString fileName = dictWidget->getLastFileName();
-    if(fileName.isEmpty()) {
-        fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
-                                         "", tr("XML Files (*.xml)"));
-    }
-
-    if(!fileName.isEmpty()) {
-        appendFormat(fileName, "xml");
-        dictWidget->writeToFile(fileName);
-        dictWidget->setSaved(true);
-        updateActions();
-        success = true;
-    }
-    else {
-        success = false;
-    }
-
-    return success;
-}
-
-bool MainWindow::trySaveChanges()
-{
-    bool success = false;
-
-    SaveDialog sDialog(this);
-    QString fileName = dictWidget->getLastFileName();
-    int result = sDialog.trySave();
-    switch(result) {
-    case SaveDialog::Accepted:
-        success = saveChanges();
-        break;
-    case SaveDialog::Rejected:
-        success = true;
-        break;
-    case SaveDialog::Cancelled:
-        success = false;
-        break;
-    }
-
-    return success;
-}
-
-void MainWindow::updateActions()
-{
-    if(dictWidget->getRowCount() != 0) {
-        newAct->setEnabled(true);
-        if(!dictWidget->isSaved() && !dictWidget->getLastFileName().isEmpty()) {
-            saveAct->setEnabled(true);
-        }
-        else {
-            saveAct->setEnabled(false);
-        }
-        saveAsAct->setEnabled(true);
-        exportAct->setEnabled(true);
-    }
-    else {
-        newAct->setEnabled(false);
-        if(!dictWidget->isSaved() && !dictWidget->getLastFileName().isEmpty()) {
-            saveAct->setEnabled(true);
-        }
-        else {
-            saveAct->setEnabled(false);
-        }
-        saveAsAct->setEnabled(false);
-        exportAct->setEnabled(false);
-    }
-}
-
-void MainWindow::createFile()
-{
-    bool ok = true;
-    if(!dictWidget->isSaved()) {
-        ok = trySaveChanges();
-    }
-
-    if(ok) {
-        dictWidget->createNewFile();
-    }
-}
-
-void MainWindow::quitApp()
-{
-    bool ok = true;
-    if(!dictWidget->isSaved()) {
-        ok = trySaveChanges();
-    }
-    if(ok) {
-        closeImmediately = true;
-        writeSettings();
-        close();
-    }
-}
-
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if(closeImmediately) {
@@ -363,27 +277,170 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), mainWindowSettings("Vilcrow", "podiceps")
+void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    closeImmediately = false;
+    emit resized(width(), height());
+
+    QMainWindow::resizeEvent(event);
+}
+
+void MainWindow::createMenus()
+{
+    createFileMenu();
+    createEditMenu();
+    createToolsMenu();
+    createHelpMenu();
+}
+
+void MainWindow::createFileMenu()
+{
+    fileMenu = menuBar()->addMenu(tr("&File"));
+
+    newAct = new QAction(tr("&New..."), this);
+    newAct->setShortcut(Qt::CTRL + Qt::Key_N);
+    fileMenu->addAction(newAct);
+    connect(newAct, &QAction::triggered, this, &MainWindow::createFile);
+    connect(newAct, &QAction::triggered, this, &MainWindow::updateActions);
+
+    openAct = new QAction(tr("&Open..."), this);
+    openAct->setShortcut(Qt::CTRL + Qt::Key_O);
+    fileMenu->addAction(openAct);
+    connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
+
+    saveAct = new QAction(tr("&Save"), this);
+    saveAct->setShortcut(Qt::CTRL + Qt::Key_S);
+    fileMenu->addAction(saveAct);
+    connect(saveAct, &QAction::triggered, this, &MainWindow::saveChanges);
+
+    saveAsAct = new QAction(tr("S&ave As..."), this);
+    saveAsAct->setShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_S);
+    fileMenu->addAction(saveAsAct);
+    connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveFile);
+    fileMenu->addSeparator();
+
+    importAct = new QAction(tr("&Import..."), this);
+    importAct->setShortcut(Qt::CTRL + Qt::Key_I);
+    fileMenu->addAction(importAct);
+    connect(importAct, &QAction::triggered, this, &MainWindow::importFile);
+
+    exportAct = new QAction(tr("&Export..."), this);
+    exportAct->setShortcut(Qt::CTRL + Qt::Key_E);
+    fileMenu->addAction(exportAct);
+    connect(exportAct, &QAction::triggered, this, &MainWindow::exportFile);
+    fileMenu->addSeparator();
+
+    exitAct = new QAction(tr("E&xit"), this);
+    exitAct->setShortcut(Qt::CTRL + Qt::Key_W);
+    fileMenu->addAction(exitAct);
+    connect(exitAct, &QAction::triggered, this, &MainWindow::quitApp);
+}
+
+void MainWindow::createEditMenu()
+{
+    editMenu = menuBar()->addMenu(tr("&Edit"));
+
+    addAct = new QAction(tr("&Add..."), this);
+    addAct->setShortcut(Qt::CTRL + Qt::Key_A);
+    editMenu->addAction(addAct);
+    connect(addAct, SIGNAL(triggered()),
+            dictWidget, SIGNAL(addWordRequested()));
+
+    findAct = new QAction(tr("&Find..."), this);
+    findAct->setShortcut(Qt::CTRL + Qt::Key_F);
+    editMenu->addAction(findAct);
+    connect(findAct, &QAction::triggered,
+            dictWidget, &DictionaryWidget::openFindWidget);
+
+    editMenu->addSeparator();
+
+    editAct = new QAction(tr("&Edit"), this);
+    editAct->setShortcut(Qt::CTRL + Qt::Key_E);
+    editMenu->addAction(editAct);
+    connect(editAct, &QAction::triggered,
+            dictWidget, &DictionaryWidget::editWordRequested);
+
+    deleteAct = new QAction(tr("&Delete"), this);
+    deleteAct->setShortcut(Qt::Key_Delete);
+    editMenu->addAction(deleteAct);
+    connect(deleteAct, &QAction::triggered,
+            dictWidget, &DictionaryWidget::deleteWordRequested);
+
+    editMenu->addSeparator();
+
+    preferencesAct = new QAction(tr("&Preferences"), this);
+    preferencesAct->setShortcut(Qt::CTRL + Qt::Key_P);
+    editMenu->addAction(preferencesAct);
+    connect(preferencesAct, &QAction::triggered,
+            this, &MainWindow::openPreferences);
+}
+
+void MainWindow::createToolsMenu()
+{
+    toolsMenu = menuBar()->addMenu(tr("&Tools"));
+    showStatisticsAct = new QAction(tr("&Statistics"), this);
+    showStatisticsAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N);
+    toolsMenu->addAction(showStatisticsAct);
+    connect(showStatisticsAct, &QAction::triggered,
+            this, &MainWindow::showStatistics);
+    clearInputAct = new QAction(tr("&Clear input"), this);
+    clearInputAct->setShortcut(Qt::Key_Escape);
+    toolsMenu->addAction(clearInputAct);
+    connect(clearInputAct, &QAction::triggered,
+            dictWidget, &DictionaryWidget::clearInput);
+}
+
+void MainWindow::createHelpMenu()
+{
+    helpMenu = menuBar()->addMenu(tr("&Help"));
+    openTutorialAct = new QAction(tr("&Tutorial"), this);
+    helpMenu->addAction(openTutorialAct);
+    openTutorialAct->setEnabled(false);
+    connect(openTutorialAct, &QAction::triggered,
+            this, &MainWindow::openTutorial);
+    openAboutAct = new QAction(tr("&About"), this);
+    helpMenu->addAction(openAboutAct);
+    connect(openAboutAct, &QAction::triggered, this, &MainWindow::openAbout);
+}
+
+void MainWindow::readSettings()
+{
+
+}
+
+void MainWindow::writeSettings()
+{
+    dictWidget->writeSettings();
+}
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent), mainWindowSettings("Vilcrow", "podiceps"),
+      closeImmediately(false)
+{
     readSettings();
+
     setWindowTitle("podiceps");
+
     dictWidget = new DictionaryWidget(this);
     setCentralWidget(dictWidget);
+
     createMenus();
+
     statusBar = new QStatusBar;
     setStatusBar(statusBar);
+
     updateActions();
+
     connect(dictWidget, &DictionaryWidget::actionCompleted,
             this, &MainWindow::showMessage);
     connect(dictWidget, &DictionaryWidget::stateChanged,
             this, &MainWindow::updateActions);
     connect(this, &MainWindow::preferencesChanged,
             dictWidget, &DictionaryWidget::updateSettings);
+    connect(this, &MainWindow::resized,
+            dictWidget, &DictionaryWidget::resize);
 }
 
 MainWindow::~MainWindow()
 {
-    writeSettings();
+
 }

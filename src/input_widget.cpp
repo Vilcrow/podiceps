@@ -26,7 +26,6 @@
 /**************************************************************************/
 
 #include "input_widget.h"
-#include "dictionary_widget.h"
 #include "word_line.h"
 #include <QDebug>
 #include <QGridLayout>
@@ -78,6 +77,14 @@ QString InputWidget::getInput(int index) const
     return ret;
 }
 
+void InputWidget::setInput(const WordLine &word)
+{
+    originalLineEdit->setText(word.getOriginal());
+    transcriptionLineEdit->setText(word.getTranscription());
+    translationLineEdit->setText(word.getTranslation());
+    statusLineEdit->setText(word.getStatus());
+}
+
 void InputWidget::setInput(int index, const QString &value)
 {
     switch(index) {
@@ -96,14 +103,6 @@ void InputWidget::setInput(int index, const QString &value)
     case AllLines:
         break;
     }
-}
-
-void InputWidget::setInput(const WordLine &word)
-{
-    originalLineEdit->setText(word.getOriginal());
-    transcriptionLineEdit->setText(word.getTranscription());
-    translationLineEdit->setText(word.getTranslation());
-    statusLineEdit->setText(word.getStatus());
 }
 
 void InputWidget::setEnabled(int index, bool value)
@@ -144,48 +143,6 @@ void InputWidget::setEnabled(int index, bool value)
         editButton->setEnabled(value);
         findButton->setEnabled(value);
         deleteButton->setEnabled(value);
-        break;
-    }
-}
-
-void InputWidget::setStyleSheet(int index, const QString &style)
-{
-    switch(index) {
-    case OriginalLine:
-        originalLineEdit->setStyleSheet(style);
-        break;
-    case TranscriptionLine:
-        transcriptionLineEdit->setStyleSheet(style);
-        break;
-    case TranslationLine:
-        translationLineEdit->setStyleSheet(style);
-        break;
-    case StatusLine:
-        statusLineEdit->setStyleSheet(style);
-        break;
-    case AllLines:
-        originalLineEdit->setStyleSheet(style);
-        transcriptionLineEdit->setStyleSheet(style);
-        translationLineEdit->setStyleSheet(style);
-        statusLineEdit->setStyleSheet(style);
-        break;
-    case AddButton:
-        addButton->setStyleSheet(style);
-        break;
-    case EditButton:
-        editButton->setStyleSheet(style);
-        break;
-    case FindButton:
-        findButton->setStyleSheet(style);
-        break;
-    case DeleteButton:
-        deleteButton->setStyleSheet(style);
-        break;
-    case AllButtons:
-        addButton->setStyleSheet(style);
-        editButton->setStyleSheet(style);
-        findButton->setStyleSheet(style);
-        deleteButton->setStyleSheet(style);
         break;
     }
 }
@@ -262,6 +219,14 @@ bool InputWidget::isEmpty(int index) const
     return ret;
 }
 
+void InputWidget::addWord()
+{
+    WordLine word = getInput();
+    word.setCurrentDate();
+    clearInput();
+    emit addWordRequested(word);
+}
+
 InputWidget::InputWidget(QWidget *parent)
     : QWidget(parent), originalLineEdit(new QLineEdit),
       transcriptionLineEdit(new QLineEdit), translationLineEdit(new QLineEdit),
@@ -287,13 +252,10 @@ InputWidget::InputWidget(QWidget *parent)
     mainLayout->addWidget(statusLineEdit, 0, 3);
 
     addButton = new QPushButton(tr("&Add"));
-
     editButton = new QPushButton(tr("Ed&it"));
     editButton->setEnabled(false);
-
     deleteButton = new QPushButton(tr("&Delete"));
     deleteButton->setEnabled(false);
-
     findButton = new QPushButton(tr("Fi&nd"));
 
     mainLayout->addWidget(addButton, 1, 0);
@@ -303,8 +265,17 @@ InputWidget::InputWidget(QWidget *parent)
 
     setLayout(mainLayout);
 
+    connect(originalLineEdit, &QLineEdit::returnPressed,
+            this, &InputWidget::addWord);
+    connect(transcriptionLineEdit, &QLineEdit::returnPressed,
+            this, &InputWidget::addWord);
+    connect(translationLineEdit, &QLineEdit::returnPressed,
+            this, &InputWidget::addWord);
+    connect(statusLineEdit, &QLineEdit::returnPressed,
+            this, &InputWidget::addWord);
+
     connect(addButton, &QAbstractButton::clicked,
-            this, &InputWidget::addClicked);
+            this, &InputWidget::addWord);
     connect(editButton, &QAbstractButton::clicked,
             this, &InputWidget::editClicked);
     connect(deleteButton, &QAbstractButton::clicked,

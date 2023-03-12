@@ -42,6 +42,7 @@ public:
     virtual ~SaveDialog();
 private:
     bool cancelled;
+
     void cancel();
 };
 

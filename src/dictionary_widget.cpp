@@ -223,6 +223,11 @@ int DictionaryWidget::getRowCount() const
     return tableWidget->getRowCount();
 }
 
+bool DictionaryWidget::hasSelectedWords() const
+{
+    return tableWidget->hasSelectedWords();
+}
+
 void DictionaryWidget::readSettings()
 {
     settings.beginGroup("/Settings");
@@ -237,10 +242,19 @@ void DictionaryWidget::writeSettings()
     settings.endGroup();
 }
 
-void DictionaryWidget::clearInput()
+void DictionaryWidget::addWord(const WordLine& word)
 {
-    inputWidget->clearInput();
-    tableWidget->clearSelection();
+    tableWidget->openWordAdd(word);
+}
+
+void DictionaryWidget::editWord()
+{
+    tableWidget->editEntry();
+}
+
+void DictionaryWidget::deleteWord()
+{
+    tableWidget->deleteEntry();
 }
 
 void DictionaryWidget::createNewFile()
@@ -250,56 +264,14 @@ void DictionaryWidget::createNewFile()
     inputWidget->clearInput();
 }
 
-void DictionaryWidget::addEntrySlot()
+void DictionaryWidget::clearInput()
 {
-    WordLine word = inputWidget->getInput();
-
-    if(word.getOriginal().isEmpty()) {
-        inputWidget->setStyleSheet(InputWidget::OriginalLine,
-                                   "border: 1px solid red");
-        emit actionCompleted(tr("Enter the original word"));
-        return;
+    tableWidget->clearSelection();
+    if(!inputWidget->isHidden()) {
+        inputWidget->clearInput();
     }
-
-    // User didn't specify the status.
-    if(word.getStatus().isEmpty()) {
-        word.setStatus(tr("new"));
-    }
-
-    // Set the current date instead of the invalid date.
-    word.setCurrentDate();
-
-    QString result;
-    if(tableWidget->addEntry(word)) {
-        inputWidget->setStyleSheet(InputWidget::OriginalLine, "");
-        result = QString(tr("Added"));
-        emit stateChanged();
-    }
-    else {
-        result = QString(tr("Duplicate word. The word \"%1\" already exists.")
-                                                       .arg(word.getOriginal()));
-    }
-
-    emit actionCompleted(result);
-}
-
-void DictionaryWidget::editEntry()
-{
-    WordLine word = inputWidget->getInput();
-    if(word.getOriginal().isEmpty()) {
-        inputWidget->setStyleSheet(InputWidget::OriginalLine,
-                                   "border: 1px solid red");
-        emit actionCompleted(tr("Enter the original word"));
-        return;
-    }
-
-    if(tableWidget->editEntry(word)) {
-        emit stateChanged();
-        emit actionCompleted(tr("Edited"));
-    }
-    else {
-        emit actionCompleted(tr("The word \"%1\" already exists.")
-                         .arg(word.getOriginal()));
+    if(!findWidget->isHidden()) {
+        findWidget->clearFilter();
     }
 }
 
@@ -316,18 +288,23 @@ void DictionaryWidget::clearFilter()
     tableWidget->setFilter();
 }
 
-void DictionaryWidget::removeEntry()
+void DictionaryWidget::openFindWidget()
 {
-    tableWidget->removeEntry();
-    emit stateChanged();
-    actionCompleted(tr("Deleted"));
+    inputWidget->hide();
+    findWidget->show();
+    findWidget->setFocus();
+}
+
+void DictionaryWidget::closeFindWidget()
+{
+    findWidget->hide();
+    inputWidget->show();
+    inputWidget->setFocus();
 }
 
 void DictionaryWidget::updateInput()
 {
-    WordLine word = tableWidget->getSelectedWord();
-    if(!word.isEmpty()) {
-        inputWidget->setInput(word);
+    if(tableWidget->hasSelectedWords()) {
         inputWidget->setEnabled(InputWidget::DeleteButton, true);
         inputWidget->setEnabled(InputWidget::EditButton, true);
     }
@@ -343,18 +320,9 @@ void DictionaryWidget::updateSettings()
     tableWidget->updateSettings();
 }
 
-void DictionaryWidget::openFind()
+void DictionaryWidget::resize(int w, int h)
 {
-    inputWidget->hide();
-    findWidget->show();
-    findWidget->setFocus();
-}
-
-void DictionaryWidget::closeFind()
-{
-    findWidget->hide();
-    inputWidget->show();
-    inputWidget->setFocus();
+    tableWidget->resize(w, h);
 }
 
 DictionaryWidget::DictionaryWidget(QWidget *parent)
@@ -382,26 +350,37 @@ DictionaryWidget::DictionaryWidget(QWidget *parent)
             this, &DictionaryWidget::stateChanged);
     connect(tableWidget, &TableWidget::selectionChanged,
             this, &DictionaryWidget::updateInput);
+    connect(tableWidget, &TableWidget::selectionChanged,
+            this, &DictionaryWidget::stateChanged);
 
     connect(findWidget, &FindWidget::setClicked,
             this, &DictionaryWidget::setFilter);
     connect(findWidget, &FindWidget::clearClicked,
             this, &DictionaryWidget::clearFilter);
     connect(findWidget, &FindWidget::closeClicked,
-            this, &DictionaryWidget::closeFind);
+            this, &DictionaryWidget::closeFindWidget);
 
-    connect(inputWidget, &InputWidget::addClicked,
-            this, &DictionaryWidget::addEntrySlot);
+    connect(inputWidget, &InputWidget::addWordRequested,
+            this, &DictionaryWidget::addWordRequested);
     connect(inputWidget, &InputWidget::editClicked,
-            tableWidget, &TableWidget::openWordCard);
+            this, &DictionaryWidget::editWordRequested);
     connect(inputWidget, &InputWidget::findClicked,
-            this, &DictionaryWidget::openFind);
+            this, &DictionaryWidget::openFindWidget);
     connect(inputWidget, &InputWidget::deleteClicked,
-            this, &DictionaryWidget::removeEntry);
+            this, &DictionaryWidget::deleteWordRequested);
+
+    connect(this, &DictionaryWidget::addWordRequested,
+            tableWidget, &TableWidget::addWord);
+    connect(this, &DictionaryWidget::editWordRequested,
+            tableWidget, &TableWidget::editEntry);
+    connect(this, &DictionaryWidget::deleteWordRequested,
+            tableWidget, &TableWidget::deleteEntry);
 
     if(!lastFileName.isEmpty()) {
         readFromFile(lastFileName);
     }
+
+    inputWidget->setFocus();
 }
 
 DictionaryWidget::~DictionaryWidget()

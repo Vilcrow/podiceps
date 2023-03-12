@@ -40,6 +40,7 @@ class PreferencesWidget : public QDialog {
     Q_OBJECT
 public:
     enum Theme { LightTheme, DarkTheme, CustomTheme };
+
     static QString getTheme(int theme);
 
     enum Language { EnglishLang };
@@ -54,13 +55,6 @@ private slots:
     void themeChanged(bool checked);
     void tableSettingsChanged(int state);
 private:
-    static QMap<int, QString> themePaths;
-    static void setThemePaths();
-
-    void readSettings();
-    void writeSettings();
-    void setupIntefaceTab();
-
     QSettings settings;
     int appLanguage;
     int appTheme;
@@ -81,6 +75,12 @@ private:
     QRadioButton *customThemeButton;
     QLineEdit *customLineEdit;
 
+    static QMap<int, QString> themePaths;
+    static void setThemePaths();
+
+    void readSettings();
+    void writeSettings();
+    void setupInterfaceTab();
 };
 
 #endif

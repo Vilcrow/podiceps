@@ -103,31 +103,13 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation,
     return QVariant();
 }
 
-bool TableModel::insertRows(int position, int rows, const QModelIndex &index)
+Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 {
-    Q_UNUSED(index);
-
-    beginInsertRows(QModelIndex(), position, position + rows - 1);
-    for(int row = 0; row < rows; ++row) {
-        WordLine word;
-        words.insert(position, word);
+    if(!index.isValid()) {
+        return Qt::ItemIsEnabled;
     }
-    endInsertRows();
 
-    return true;
-}
-
-bool TableModel::removeRows(int position, int rows, const QModelIndex &index)
-{
-    Q_UNUSED(index);
-
-    beginRemoveRows(QModelIndex(), position, position + rows - 1);
-    for(int row = 0; row < rows; ++row) {
-        words.removeAt(position);
-    }
-    endRemoveRows();
-
-    return true;
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
 }
 
 bool TableModel::setData(const QModelIndex &index, const QVariant &value,
@@ -166,13 +148,31 @@ bool TableModel::setData(const QModelIndex &index, const QVariant &value,
     return false;
 }
 
-Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
+bool TableModel::insertRows(int position, int rows, const QModelIndex &index)
 {
-    if(!index.isValid()) {
-        return Qt::ItemIsEnabled;
-    }
+    Q_UNUSED(index);
 
-    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+    beginInsertRows(QModelIndex(), position, position + rows - 1);
+    for(int row = 0; row < rows; ++row) {
+        WordLine word;
+        words.insert(position, word);
+    }
+    endInsertRows();
+
+    return true;
+}
+
+bool TableModel::removeRows(int position, int rows, const QModelIndex &index)
+{
+    Q_UNUSED(index);
+
+    beginRemoveRows(QModelIndex(), position, position + rows - 1);
+    for(int row = 0; row < rows; ++row) {
+        words.removeAt(position);
+    }
+    endRemoveRows();
+
+    return true;
 }
 
 QList<WordLine> TableModel::getWords() const

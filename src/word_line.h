@@ -80,10 +80,6 @@ public:
     WordLine(const QDomElement &element);
     ~WordLine();
 private:
-    static QString DefaultDateFormat;
-
-    void truncate();
-
     QString original;
     QString translation;
     QString status;
@@ -91,6 +87,10 @@ private:
     QString dateFormat;
     QString comment;
     QString transcription;
+
+    static QString DefaultDateFormat;
+
+    void truncate();
 };
 
 #endif

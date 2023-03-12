@@ -3,6 +3,7 @@ set(CMAKE_AUTOMOC ON)
 set(APP_LIB_SOURCE
     dictionary_widget.cpp
     find_widget.cpp
+    header_menu.cpp
     input_widget.cpp
     main_window.cpp
     podiceps_application.cpp
@@ -10,7 +11,7 @@ set(APP_LIB_SOURCE
     save_dialog.cpp
     table_model.cpp
     table_widget.cpp
-    word_card.cpp
+    word_edit.cpp
     word_line.cpp
 )
 

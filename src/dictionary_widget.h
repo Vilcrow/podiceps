@@ -28,19 +28,17 @@
 #ifndef DICTIONARY_WIDGET_VIL_H
 #define DICTIONARY_WIDGET_VIL_H
 
+#include "word_line.h"
 #include <QSettings>
 #include <QWidget>
 
 class FindWidget;
 class InputWidget;
 class TableWidget;
-class WordLine;
 
 class DictionaryWidget : public QWidget {
     Q_OBJECT
 public:
-    QString addEntry(const WordLine &word);
-
     void readFromFile(const QString &fileName);
     void writeToFile (const QString &fileName);
     bool writeToXmlFile(const QString &fileName);
@@ -54,6 +52,8 @@ public:
     QString getLastFileName() const;
     int getRowCount() const;
 
+    bool hasSelectedWords() const;
+
     void readSettings();
     void writeSettings();
 
@@ -62,19 +62,24 @@ public:
 signals:
     void actionCompleted(const QString &msg);
     void stateChanged();
+
+    void addWordRequested(const WordLine& word = WordLine());
+    void editWordRequested();
+    void deleteWordRequested();
 public slots:
-    void clearInput();
+    void addWord(const WordLine& word);
+    void editWord();
+    void deleteWord();
+
     void createNewFile();
-    void addEntrySlot();
-    void editEntry();
+    void clearInput();
     void setFilter();
     void clearFilter();
-    void removeEntry();
-    void updateSettings();
-    void openFind();
-    void closeFind();
-private slots:
+    void openFindWidget();
+    void closeFindWidget();
     void updateInput();
+    void updateSettings();
+    void resize(int w, int h);
 private:
     QSettings settings;
     QString lastFileName;

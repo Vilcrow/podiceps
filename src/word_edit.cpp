@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  word_card.cpp                                                         */
+/*  word_edit.cpp                                                         */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,7 +25,7 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#include "word_card.h"
+#include "word_edit.h"
 #include "word_line.h"
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -36,7 +36,7 @@
 #include <QTextEdit>
 #include <QVBoxLayout>
 
-void WordCard::accept()
+void WordEdit::accept()
 {
     word.setOriginal(originalText->text());
     word.setTranslation(translationText->text());
@@ -47,22 +47,22 @@ void WordCard::accept()
     QDialog::accept();
 }
 
-WordLine WordCard::getWord() const
+WordLine WordEdit::getWord() const
 {
     return word;
 }
 
-void WordCard::setWord(const WordLine &pWord)
+void WordEdit::setWord(const WordLine &pWord)
 {
     word = pWord;
 }
 
-void WordCard::showMessage(const QString &msg)
+void WordEdit::showMessage(const QString &msg)
 {
     statusBar->showMessage(msg, 5000);
 }
 
-void WordCard::truncateComment()
+void WordEdit::truncateComment()
 {
     if(commentText->toPlainText().length() > WordLine::MaxCommentLength) {
         QTextCursor cursor = commentText->textCursor();
@@ -71,7 +71,7 @@ void WordCard::truncateComment()
     }
 }
 
-WordCard::WordCard(QWidget *parent, const WordLine &pWord)
+WordEdit::WordEdit(QWidget *parent, const WordLine &pWord)
     : QDialog(parent), word(pWord), originalText(new QLineEdit),
       transcriptionText(new QLineEdit), translationText(new QLineEdit),
       statusText(new QLineEdit), dateText(new QLineEdit),
@@ -135,10 +135,10 @@ WordCard::WordCard(QWidget *parent, const WordLine &pWord)
     connect(cancelButton, &QAbstractButton::clicked, this, &QDialog::reject);
 
     connect(commentText, &QTextEdit::textChanged,
-            this, &WordCard::truncateComment);
+            this, &WordEdit::truncateComment);
 }
 
-WordCard::~WordCard()
+WordEdit::~WordEdit()
 {
 
 }

@@ -49,7 +49,6 @@ public:
     void setInput(const WordLine &word);
     void setInput(int index, const QString &value);
     void setEnabled(int index, bool value = true);
-    void setStyleSheet(int index, const QString &style);
     void setFocus();
 
     void clearInput(int index = AllLines);
@@ -58,10 +57,12 @@ public:
     InputWidget(QWidget *parent = nullptr);
     virtual ~InputWidget();
 signals:
-    void addClicked();
+    void addWordRequested(const WordLine &word);
     void editClicked();
     void findClicked();
     void deleteClicked();
+private slots:
+    void addWord();
 private:
     QLineEdit *originalLineEdit;
     QLineEdit *transcriptionLineEdit;

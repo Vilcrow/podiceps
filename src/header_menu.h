@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  word_card.h                                                           */
+/*  header_menu.h                                                         */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,41 +25,31 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef WORD_CARD_VIL_H
-#define WORD_CARD_VIL_H
+#ifndef HEADER_MENU_VIL_H
+#define HEADER_MENU_VIL_H
 
-#include "word_line.h"
-#include <QDialog>
+#include <QMenu>
+#include <QSettings>
 
-class QLineEdit;
-class QStatusBar;
-class QTextEdit;
-
-class WordCard : public QDialog {
+class HeaderMenu : public QMenu {
     Q_OBJECT
 public:
-    WordLine getWord() const;
-    void setWord(const WordLine &pWord);
-
-    void showMessage(const QString &msg);
-
-    WordCard(QWidget *parent = nullptr, const WordLine &pWord = WordLine());
-    virtual ~WordCard();
-public slots:
-    void accept() override;
+    HeaderMenu(const QPoint &position, QWidget *parent = nullptr);
+    virtual ~HeaderMenu();
 private slots:
-    void truncateComment();
+    void updateSettings(bool checked);
 private:
-    WordLine word;
+    QSettings settings;
+    QAction *transcriptionAct;
+    QAction *statusAct;
+    QAction *dateAct;
 
-    QLineEdit *originalText;
-    QLineEdit *transcriptionText;
-    QLineEdit *translationText;
-    QLineEdit *statusText;
-    QLineEdit *dateText;
-    QTextEdit *commentText;
+    bool showTranscription;
+    bool showStatus;
+    bool showDate;
 
-    QStatusBar *statusBar;
+    void readSettings();
+    void writeSettings();
 };
 
 #endif

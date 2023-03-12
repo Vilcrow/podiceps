@@ -33,7 +33,6 @@
 #include <QTableView>
 #include <QWidget>
 
-class DictionaryWidget;
 class QSortFilterProxyModel;
 
 class TableWidget : public QWidget {
@@ -48,8 +47,9 @@ public:
     void sortByColumn(int column, Qt::SortOrder order = Qt::AscendingOrder);
 
     bool addEntry(const WordLine &word);
-    bool editEntry(const WordLine &word);
-    void removeEntry();
+    void editEntry();
+    void deleteEntry();
+    void deleteRow(const QModelIndex &index);
     void fillTable(const QList<WordLine> words);
     void clear();
 
@@ -58,7 +58,9 @@ public:
     QString getColumnName(int col) const;
 
     QList<WordLine> getWords() const;
-    WordLine getSelectedWord() const;
+    bool hasSelectedWords() const;
+    WordLine getWord(const QModelIndex &index = QModelIndex()) const;
+    bool containsWord(const WordLine &word) const;
 
     QTableView* getTableView() const;
 
@@ -70,15 +72,29 @@ signals:
     void dataChanged();
     void selectionChanged();
 public slots:
+    void addWord(const WordLine &word);
     void updateSettings();
-    void rowClicked(const QModelIndex &index);
-    void openWordCard();
+    void openWordAdd(const WordLine &word = WordLine(),
+                     const QString &msg = QString());
+    void openWordEdit(const QModelIndex &index);
+    void resize(int w, int h);
+private slots:
+    void rowDoubleClicked(const QModelIndex &index);
+    void openContextMenu(const QPoint &pos);
+    void openHeaderContextMenu(const QPoint &pos);
 private:
     QSettings settings;
     bool changesSaved;
+    int visibleColumns;
+
+    QList<WordLine> wordAddQueue;
+    QList<QModelIndex> wordDeleteQueue;
+
     TableModel *tableModel;
     QTableView *tableView;
     QSortFilterProxyModel *proxyModel;
+
+    bool processQueues();
 };
 
 #endif

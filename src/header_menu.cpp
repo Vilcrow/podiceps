@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  podiceps_application.hpp                                              */
+/*  header_menu.cpp                                                       */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,40 +25,74 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#include "podiceps_application.h"
-#include "preferences_widget.h"
+#include "header_menu.h"
 
-int PodicepsApplication::exec()
+void HeaderMenu::updateSettings(bool checked)
 {
-    updateSettings();
-    mainWindow->show();
-    return QApplication::exec();
+    QAction *action = static_cast<QAction*>(sender());
+    if(action == transcriptionAct) {
+        showTranscription = checked;
+    }
+    else if(action == statusAct) {
+        showStatus = checked;
+    }
+    else if(action == dateAct) {
+        showDate = checked;
+    }
+
+    writeSettings();
 }
 
-void PodicepsApplication::setTheme()
+void HeaderMenu::readSettings()
 {
     settings.beginGroup("/Settings/Interface");
-    int appTheme = settings.value("/app_theme", 0).toInt();
+    showTranscription = settings.value("/table/show_transcription", true)
+                                       .toBool();
+    showStatus = settings.value("/table/show_status", true).toBool();
+    showDate = settings.value("/table/show_date", true).toBool();
     settings.endGroup();
-
-    QString theme = PreferencesWidget::getTheme(appTheme);
-    setStyleSheet(theme);
 }
 
-void PodicepsApplication::updateSettings()
+void HeaderMenu::writeSettings()
 {
-    setTheme();
+    settings.beginGroup("/Settings/Interface");
+    settings.setValue("/table/show_transcription", showTranscription);
+    settings.setValue("/table/show_status", showStatus);
+    settings.setValue("/table/show_date", showDate);
+    settings.endGroup();
 }
 
-PodicepsApplication::PodicepsApplication(int &argc, char **argv)
-    : QApplication(argc, argv), settings("Vilcrow", "podiceps"),
-      mainWindow(new MainWindow())
+HeaderMenu::HeaderMenu(const QPoint &position, QWidget *parent)
+    : QMenu(parent), settings("Vilcrow", "podiceps")
 {
-    connect(mainWindow, &MainWindow::preferencesChanged,
-            this, &PodicepsApplication::updateSettings);
+    readSettings();
+
+    transcriptionAct = new QAction(tr("Transcription"), this);
+    transcriptionAct->setCheckable(true);
+    transcriptionAct->setChecked(showTranscription);
+    addAction(transcriptionAct);
+
+    statusAct = new QAction(tr("Status"), this);
+    statusAct->setCheckable(true);
+    statusAct->setChecked(showStatus);
+    addAction(statusAct);
+
+    dateAct = new QAction(tr("Date"), this);
+    dateAct->setCheckable(true);
+    dateAct->setChecked(showDate);
+    addAction(dateAct);
+
+    connect(transcriptionAct, &QAction::toggled,
+            this, &HeaderMenu::updateSettings);
+    connect(statusAct, &QAction::toggled,
+            this, &HeaderMenu::updateSettings);
+    connect(dateAct, &QAction::toggled,
+            this, &HeaderMenu::updateSettings);
+
+    exec(position);
 }
 
-PodicepsApplication::~PodicepsApplication()
+HeaderMenu::~HeaderMenu()
 {
 
 }

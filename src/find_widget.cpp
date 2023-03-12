@@ -105,15 +105,10 @@ FindWidget::FindWidget(QWidget *parent)
     originalButton = new QRadioButton(tr("&original"));
     originalButton->setChecked(true);
     checkedButton = OriginalButton;
-
     transcriptionButton = new QRadioButton(tr("t&ranscription"));
-
     translationButton = new QRadioButton(tr("&translation"));
-
     statusButton = new QRadioButton(tr("&status"));
-
     dateButton = new QRadioButton(tr("&date"));
-
     commentButton = new QRadioButton(tr("&comment"));
 
     radioButtonsLayout->addWidget(originalButton);
@@ -127,6 +122,17 @@ FindWidget::FindWidget(QWidget *parent)
     mainLayout->addWidget(radioButtonsGroupBox);
     setLayout(mainLayout);
 
+    connect(filterLineEdit, &QLineEdit::returnPressed,
+            this, &FindWidget::setClicked);
+    connect(this, &FindWidget::clearClicked, this, &FindWidget::clearFilter);
+
+    connect(setButton, &QAbstractButton::clicked,
+            this, &FindWidget::setClicked);
+    connect(clearButton, &QAbstractButton::clicked,
+            this, &FindWidget::clearClicked);
+    connect(closeButton, &QAbstractButton::clicked,
+            this, &FindWidget::closeClicked);
+
     connect(originalButton, &QAbstractButton::toggled,
             this, &FindWidget::buttonChanged);
     connect(transcriptionButton, &QAbstractButton::toggled,
@@ -139,11 +145,6 @@ FindWidget::FindWidget(QWidget *parent)
             this, &FindWidget::buttonChanged);
     connect(commentButton, &QAbstractButton::toggled,
             this, &FindWidget::buttonChanged);
-
-    connect(setButton, &QAbstractButton::clicked, this, &FindWidget::setClicked);
-    connect(clearButton, &QAbstractButton::clicked, this, &FindWidget::clearClicked);
-    connect(this, &FindWidget::clearClicked, this, &FindWidget::clearFilter);
-    connect(closeButton, &QAbstractButton::clicked, this, &FindWidget::closeClicked);
 }
 
 FindWidget::~FindWidget()

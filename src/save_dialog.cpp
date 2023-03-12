@@ -31,12 +31,6 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-void SaveDialog::cancel()
-{
-    cancelled = true;
-    reject();
-}
-
 bool SaveDialog::isCancelled() const
 {
     return cancelled;
@@ -56,6 +50,12 @@ int SaveDialog::trySave()
     else {
         return SaveDialog::Rejected;
     }
+}
+
+void SaveDialog::cancel()
+{
+    cancelled = true;
+    reject();
 }
 
 SaveDialog::SaveDialog(QWidget *parent)

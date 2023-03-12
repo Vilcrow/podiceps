@@ -30,7 +30,6 @@
 #include <QFileDialog>
 #include <QGroupBox>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QRadioButton>
@@ -49,7 +48,7 @@ void PreferencesWidget::setThemePaths()
     themePaths[DarkTheme] = "../../themes/theme_dark.qss";
 
     QSettings settings("Vilcrow", "podiceps");
-    settings.beginGroup("/Settings/Inteface");
+    settings.beginGroup("/Settings/Interface");
     themePaths[CustomTheme] = settings.value("/custom_theme_path", "").toString();
     settings.endGroup();
 }
@@ -157,7 +156,7 @@ void PreferencesWidget::tableSettingsChanged(int state)
 
 void PreferencesWidget::readSettings()
 {
-    settings.beginGroup("/Settings/Inteface");
+    settings.beginGroup("/Settings/Interface");
     appLanguage = settings.value("/app_language", 0).toInt();
     appTheme = settings.value("/app_theme", 0).toInt();
     themePaths[CustomTheme] = settings.value("/custom_theme_path", "").toString();
@@ -169,7 +168,7 @@ void PreferencesWidget::readSettings()
 
 void PreferencesWidget::writeSettings()
 {
-    settings.beginGroup("/Settings/Inteface");
+    settings.beginGroup("/Settings/Interface");
     settings.setValue("/app_language", appLanguage);
     settings.setValue("/app_theme", appTheme);
     settings.setValue("/custom_theme_path", customLineEdit->text());
@@ -179,7 +178,7 @@ void PreferencesWidget::writeSettings()
     settings.endGroup();
 }
 
-void PreferencesWidget::setupIntefaceTab()
+void PreferencesWidget::setupInterfaceTab()
 {
     if(!tabWidget) {
         return;
@@ -281,7 +280,7 @@ PreferencesWidget::PreferencesWidget(QWidget *parent)
 {
     readSettings();
     tabWidget = new QTabWidget(this);
-    setupIntefaceTab();
+    setupInterfaceTab();
 
     setWindowTitle(tr("Preferences"));
     QVBoxLayout *vLayout = new QVBoxLayout;
