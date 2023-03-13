@@ -31,41 +31,38 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-bool SaveDialog::isCancelled() const
+int SaveDialog::askSave()
 {
-    return cancelled;
-}
-
-int SaveDialog::trySave()
-{
-    cancelled = false;
+    needSave = true;
 
     int result = exec();
     if(result == QDialog::Accepted) {
-        return SaveDialog::Accepted;
-    }
-    else if(cancelled) {
-        return SaveDialog::Cancelled;
+        if(needSave) {
+            return SaveDialog::Save;
+        }
+        else {
+            return SaveDialog::Ignore;
+        }
     }
     else {
-        return SaveDialog::Rejected;
+        return SaveDialog::Cancel;
     }
 }
 
-void SaveDialog::cancel()
+void SaveDialog::ignore()
 {
-    cancelled = true;
-    reject();
+    needSave = false;
+    QDialog::accept();
 }
 
 SaveDialog::SaveDialog(QWidget *parent)
-    : QDialog(parent), cancelled(false)
+    : QDialog(parent), needSave(true)
 {
     setWindowTitle(tr("Save changes"));
     QLabel *infoLabel = new QLabel(tr("Save changes to the current file?"));
-    QPushButton *saveButton = new QPushButton(tr("&Save"));
-    QPushButton *noButton = new QPushButton(tr("&No"));
-    QPushButton *cancelButton = new QPushButton(tr("&Cancel"));
+    QPushButton *saveButton = new QPushButton(tr("Save"));
+    QPushButton *noButton = new QPushButton(tr("No"));
+    QPushButton *cancelButton = new QPushButton(tr("Cancel"));
 
     QVBoxLayout *vLayout = new QVBoxLayout;
     vLayout->addWidget(infoLabel);
@@ -77,8 +74,8 @@ SaveDialog::SaveDialog(QWidget *parent)
     setLayout(vLayout);
 
     connect(saveButton, &QAbstractButton::clicked, this, &QDialog::accept);
-    connect(noButton, &QAbstractButton::clicked, this, &QDialog::reject);
-    connect(cancelButton, &QAbstractButton::clicked, this, &SaveDialog::cancel);
+    connect(noButton, &QAbstractButton::clicked, this, &SaveDialog::ignore);
+    connect(cancelButton, &QAbstractButton::clicked, this, &QDialog::reject);
 }
 
 SaveDialog::~SaveDialog()

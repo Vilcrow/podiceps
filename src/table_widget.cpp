@@ -76,6 +76,10 @@ bool TableWidget::addEntry(const WordLine &word)
         index = tableModel->index(0, CommentColumn, QModelIndex());
         tableModel->setData(index, word.getComment(), Qt::EditRole);
 
+        changesSaved = false;
+        emit dataChanged();
+        emit actionCompleted(tr("Added"));
+
         return true;
     }
 
@@ -93,11 +97,7 @@ void TableWidget::editEntry() {
         openWordEdit(idx);
     }
 
-    if(processQueues()) {
-        changesSaved = false;
-        emit dataChanged();
-    }
-
+    processQueues();
     clearSelection();
 }
 
@@ -109,14 +109,8 @@ void TableWidget::deleteEntry()
         return;
     }
 
-    std::reverse(indexes.begin(), indexes.end());
-    for(QModelIndex index : indexes) {
-        int row = proxyModel->mapToSource(index).row();
-        tableModel->removeRows(row, 1, QModelIndex());
-    }
-
-    changesSaved = false;
-    emit dataChanged();
+    wordDeleteQueue.append(indexes);
+    processQueues();
 }
 
 void TableWidget::deleteRow(const QModelIndex &index)
@@ -315,8 +309,6 @@ void TableWidget::openWordAdd(const WordLine &word, const QString &msg)
         }
         else if(!word.getOriginal().isEmpty()) {
             if(addEntry(word)) {
-                changesSaved = false;
-                emit dataChanged();
                 break;
             }
             else {
@@ -370,11 +362,11 @@ void TableWidget::openWordEdit(const QModelIndex &index)
             }
             else {
                 wordDeleteQueue.append(index);
-                wordAddQueue.append(word);
+                wordAddQueue.append(changedWord);
                 break;
             }
         }
-        // Without changes.
+        // Save without changes.
         else {
             break;
         }
@@ -399,6 +391,9 @@ void TableWidget::rowDoubleClicked(const QModelIndex &index)
 {
     Q_UNUSED(index);
     openWordEdit(index);
+
+    processQueues();
+    clearSelection();
 }
 
 void TableWidget::openContextMenu(const QPoint &pos)
@@ -432,10 +427,11 @@ void TableWidget::openHeaderContextMenu(const QPoint &pos)
     QPoint position(mapToGlobal(pos));
     position.setY(position.y()+20);
     HeaderMenu(position, this);
+
     updateSettings();
 }
 
-bool TableWidget::processQueues()
+void TableWidget::processQueues()
 {
     // Have there been any changes?
     bool changed = false;
@@ -448,6 +444,7 @@ bool TableWidget::processQueues()
         }
         wordDeleteQueue.clear();
         changed = true;
+        emit actionCompleted(tr("Deleted"));
     }
 
     if(!wordAddQueue.isEmpty()) {
@@ -456,9 +453,13 @@ bool TableWidget::processQueues()
         }
         wordAddQueue.clear();
         changed = true;
+        emit actionCompleted(tr("Edited"));
     }
 
-    return changed;
+    if(changed) {
+        changesSaved = false;
+        emit dataChanged();
+    }
 }
 
 TableWidget::TableWidget(QWidget *parent)

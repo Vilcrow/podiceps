@@ -54,7 +54,7 @@ private slots:
     bool saveChanges();
     void saveFile();
     bool trySaveChanges();
-    void showMessage(const QString &msg);
+    void showMessage(const QString &msg, int timeout = 5000);
     void showStatistics();
     void openTutorial();
     void openAbout();

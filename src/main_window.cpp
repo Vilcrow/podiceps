@@ -154,17 +154,17 @@ bool MainWindow::trySaveChanges()
 {
     bool success = false;
 
-    SaveDialog sDialog(this);
+    SaveDialog saveDialog(this);
     QString fileName = dictWidget->getLastFileName();
-    int result = sDialog.trySave();
+    int result = saveDialog.askSave();
     switch(result) {
-    case SaveDialog::Accepted:
+    case SaveDialog::Save:
         success = saveChanges();
         break;
-    case SaveDialog::Rejected:
+    case SaveDialog::Ignore:
         success = true;
         break;
-    case SaveDialog::Cancelled:
+    case SaveDialog::Cancel:
         success = false;
         break;
     }
@@ -172,15 +172,15 @@ bool MainWindow::trySaveChanges()
     return success;
 }
 
-void MainWindow::showMessage(const QString &msg)
+void MainWindow::showMessage(const QString &msg, int timeout)
 {
-    statusBar->showMessage(msg, 5000);
+    statusBar->showMessage(msg, timeout);
 }
 
 void MainWindow::showStatistics()
 {
     int count = dictWidget->getRowCount();
-    statusBar->showMessage(tr("Word count: %1").arg(count));
+    showMessage(tr("Word count: %1").arg(count));
 }
 
 void MainWindow::openTutorial()
@@ -430,8 +430,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     updateActions();
 
-    connect(dictWidget, &DictionaryWidget::actionCompleted,
-            this, &MainWindow::showMessage);
+    connect(dictWidget, SIGNAL(actionCompleted(const QString&)),
+            this, SLOT(showMessage(const QString&)));
     connect(dictWidget, &DictionaryWidget::stateChanged,
             this, &MainWindow::updateActions);
     connect(this, &MainWindow::preferencesChanged,

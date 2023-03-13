@@ -260,7 +260,6 @@ void DictionaryWidget::deleteWord()
 void DictionaryWidget::createNewFile()
 {
     tableWidget->clear();
-    lastFileName = "";
     inputWidget->clearInput();
 }
 
@@ -344,6 +343,8 @@ DictionaryWidget::DictionaryWidget(QWidget *parent)
     inputWidget = new InputWidget(this);
     mainLayout->addWidget(inputWidget);
 
+    connect(tableWidget, &TableWidget::actionCompleted,
+            this, &DictionaryWidget::actionCompleted);
     connect(tableWidget, &TableWidget::dataChanged,
             this, &DictionaryWidget::updateInput);
     connect(tableWidget, &TableWidget::dataChanged,

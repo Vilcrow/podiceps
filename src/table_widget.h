@@ -69,6 +69,7 @@ public:
     TableWidget(QWidget *parent = nullptr);
     virtual ~TableWidget();
 signals:
+    void actionCompleted(const QString &msg);
     void dataChanged();
     void selectionChanged();
 public slots:
@@ -94,7 +95,7 @@ private:
     QTableView *tableView;
     QSortFilterProxyModel *proxyModel;
 
-    bool processQueues();
+    void processQueues();
 };
 
 #endif

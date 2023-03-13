@@ -84,9 +84,9 @@ FindWidget::FindWidget(QWidget *parent)
     filterLineEdit->setPlaceholderText(tr("Enter a filter to search for..."));
     filterLineEdit->setMaxLength(MaxFilterLength);
 
-    setButton = new QPushButton(tr("S&et"));
-    clearButton = new QPushButton(tr("Cle&ar"));
-    closeButton = new QPushButton(tr("C&lose"));
+    setButton = new QPushButton(tr("Set"));
+    clearButton = new QPushButton(tr("Clear"));
+    closeButton = new QPushButton(tr("Close"));
 
     QHBoxLayout *filterLayout = new QHBoxLayout;
 

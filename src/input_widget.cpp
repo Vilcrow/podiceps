@@ -251,12 +251,12 @@ InputWidget::InputWidget(QWidget *parent)
     mainLayout->addWidget(translationLineEdit, 0, 2);
     mainLayout->addWidget(statusLineEdit, 0, 3);
 
-    addButton = new QPushButton(tr("&Add"));
-    editButton = new QPushButton(tr("Ed&it"));
+    addButton = new QPushButton(tr("Add"));
+    editButton = new QPushButton(tr("Edit"));
     editButton->setEnabled(false);
-    deleteButton = new QPushButton(tr("&Delete"));
+    deleteButton = new QPushButton(tr("Delete"));
     deleteButton->setEnabled(false);
-    findButton = new QPushButton(tr("Fi&nd"));
+    findButton = new QPushButton(tr("Find"));
 
     mainLayout->addWidget(addButton, 1, 0);
     mainLayout->addWidget(editButton, 1, 1);

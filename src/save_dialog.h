@@ -33,17 +33,16 @@
 class SaveDialog : public QDialog {
     Q_OBJECT
 public:
-    enum SaveDialogCode { Rejected, Accepted, Cancelled };
-
-    bool isCancelled() const;
-    int trySave();
+    enum SaveDialogCode { Save, Ignore, Cancel };
 
     SaveDialog(QWidget *parent = nullptr);
     virtual ~SaveDialog();
+public slots:
+    int askSave();
+private slots:
+    void ignore();
 private:
-    bool cancelled;
-
-    void cancel();
+    bool needSave;
 };
 
 #endif
