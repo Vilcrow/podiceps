@@ -26,6 +26,7 @@
 /**************************************************************************/
 
 #include "word_edit.h"
+#include "status_spin_box.h"
 #include "word_line.h"
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -40,7 +41,7 @@ void WordEdit::accept()
 {
     word.setOriginal(originalText->text());
     word.setTranslation(translationText->text());
-    word.setStatus(statusText->text());
+    word.setStatus(statusSpinBox->getValue());
     word.setComment(commentText->toPlainText());
     word.setTranscription(transcriptionText->text());
 
@@ -74,19 +75,18 @@ void WordEdit::truncateComment()
 WordEdit::WordEdit(QWidget *parent, const WordLine &pWord)
     : QDialog(parent), word(pWord), originalText(new QLineEdit),
       transcriptionText(new QLineEdit), translationText(new QLineEdit),
-      statusText(new QLineEdit), dateText(new QLineEdit),
+      statusSpinBox(new StatusSpinBox), dateText(new QLineEdit),
       commentText(new QTextEdit), statusBar(new QStatusBar(this))
 {
     originalText->setMaxLength(WordLine::MaxOriginalLength);
     transcriptionText->setMaxLength(WordLine::MaxOriginalLength);
     translationText->setMaxLength(WordLine::MaxTranslationLength);
-    statusText->setMaxLength(WordLine::MaxStatusLength);
     dateText->setMaxLength(WordLine::MaxDateLength);
 
     originalText->setText(word.getOriginal());
     transcriptionText->setText(word.getTranscription());
     translationText->setText(word.getTranslation());
-    statusText->setText(word.getStatus());
+    statusSpinBox->setValue(word.getStatus());
     dateText->setText(word.getDate());
     dateText->setEnabled(false);
     commentText->setText(word.getComment());
@@ -107,7 +107,7 @@ WordEdit::WordEdit(QWidget *parent, const WordLine &pWord)
     gridLayout->addWidget(translationLabel, 2, 0);
     gridLayout->addWidget(translationText, 2, 1);
     gridLayout->addWidget(statusLabel, 3, 0);
-    gridLayout->addWidget(statusText, 3, 1);
+    gridLayout->addWidget(statusSpinBox, 3, 1);
     gridLayout->addWidget(dateLabel, 4, 0);
     gridLayout->addWidget(dateText, 4, 1);
     gridLayout->addWidget(commentLabel, 5, 0, Qt::AlignTop);

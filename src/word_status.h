@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  word_edit.h                                                           */
+/*  word_status.h                                                         */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,42 +25,40 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef WORD_EDIT_VIL_H
-#define WORD_EDIT_VIL_H
+#ifndef WORD_STATUS_VIL_H
+#define WORD_STATUS_VIL_H
 
-#include "word_line.h"
-#include <QDialog>
+#include <QColor>
+#include <QMap>
+#include <QString>
 
-class StatusSpinBox;
-class QLineEdit;
-class QStatusBar;
-class QTextEdit;
-
-class WordEdit : public QDialog {
-    Q_OBJECT
+class WordStatus {
 public:
-    WordLine getWord() const;
-    void setWord(const WordLine &pWord);
+    enum Status { New, Middle, Learned };
 
-    void showMessage(const QString &msg);
+    static QColor getColor(int i);
 
-    WordEdit(QWidget *parent = nullptr, const WordLine &pWord = WordLine());
-    virtual ~WordEdit();
-public slots:
-    void accept() override;
-private slots:
-    void truncateComment();
+    void setStatus(int i);
+    void setStatus(const QString s);
+
+    QString getStatus() const;
+    int getStatusInt() const;
+
+    const WordStatus& operator=(const WordStatus &other);
+    bool operator==(const WordStatus &other) const;
+    bool operator!=(const WordStatus &other) const;
+    bool operator>(const WordStatus &other) const;
+    bool operator<(const WordStatus &other) const;
+    bool operator>=(const WordStatus &other) const;
+    bool operator<=(const WordStatus &other) const;
+
+    WordStatus(const QString s = QString());
+    WordStatus(int s);
+    virtual ~WordStatus();
 private:
-    WordLine word;
+    Status status;
 
-    QLineEdit *originalText;
-    QLineEdit *transcriptionText;
-    QLineEdit *translationText;
-    StatusSpinBox *statusSpinBox;
-    QLineEdit *dateText;
-    QTextEdit *commentText;
-
-    QStatusBar *statusBar;
+    static QMap<int, QColor> map;
 };
 
 #endif

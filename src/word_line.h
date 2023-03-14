@@ -28,6 +28,7 @@
 #ifndef WORD_LINE_VIL_H
 #define WORD_LINE_VIL_H
 
+#include "word_status.h"
 #include <QDate>
 #include <QDomElement>
 #include <QObject>
@@ -82,7 +83,7 @@ public:
 private:
     QString original;
     QString translation;
-    QString status;
+    WordStatus status;
     QDate date;
     QString dateFormat;
     QString comment;

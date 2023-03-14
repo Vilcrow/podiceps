@@ -55,7 +55,7 @@ TEST(EmptyWordLineGroup, GetMethods)
 {
     CHECK(word->getOriginal() == "");
     CHECK(word->getTranslation() == "");
-    CHECK(word->getStatus() == "");
+    CHECK(word->getStatus() == "new");
     CHECK(word->getDate() == "");
     CHECK(word->getDate("dd-MM-yyyy") == "");
     // Default format.
@@ -72,8 +72,11 @@ TEST(EmptyWordLineGroup, SetMethods)
     word->setTranslation("мир");
     CHECK(word->getTranslation() == "мир");
 
-    word->setStatus("remembered");
-    CHECK(word->getStatus() == "remembered");
+    word->setStatus("learned");
+    CHECK(word->getStatus() == "learned");
+
+    word->setStatus("trash");
+    CHECK(word->getStatus() == "new");
 
     word->setDate("12-10-2012", "dd-MM-yyyy");
     CHECK(word->getDate() == "2012-10-12");
@@ -99,9 +102,6 @@ TEST(EmptyWordLineGroup, MaxLength)
 
     word->setTranslation(QString(2 * WordLine::MaxTranslationLength, 't'));
     CHECK_EQUAL(word->getTranslation().length(), WordLine::MaxTranslationLength);
-
-    word->setStatus(QString(2 * WordLine::MaxStatusLength, 's'));
-    CHECK_EQUAL(word->getStatus().length(), WordLine::MaxStatusLength);
 
     word->setDateFormat(QString(2 * WordLine::MaxDateLength, 'f'));
     CHECK_EQUAL(word->getDateFormat().length(), WordLine::MaxDateLength);
@@ -135,7 +135,7 @@ TEST_GROUP(FullWordLineGroup)
     void setup()
     {
         MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
-        word = new WordLine("word", "слово", "new",
+        word = new WordLine("word", "слово", "middle",
                             "01-01-2023", "dd-MM-yyyy");
         word->setComment("Comment.");
         word->setTranscription("wɜːd");
@@ -158,7 +158,7 @@ TEST(FullWordLineGroup, GetMethods)
 {
     CHECK(word->getOriginal() == "word");
     CHECK(word->getTranslation() == "слово");
-    CHECK(word->getStatus() == "new");
+    CHECK(word->getStatus() == "middle");
     CHECK(word->getDate() == "01-01-2023");
     CHECK(word->getDateFormat() == "dd-MM-yyyy");
     CHECK(word->getComment() == "Comment.");
@@ -199,7 +199,7 @@ TEST_GROUP(WordLineFromQDomElementGroup)
         doc.appendChild(*element);
         element->setAttribute("original", "world");
         element->setAttribute("translation", "мир");
-        element->setAttribute("status", "new");
+        element->setAttribute("status", "learned");
         element->setAttribute("date", "03-11-2023");
         element->setAttribute("dateFormat", "MM-dd-yyyy");
         element->setAttribute("comment", "Any comment.");
@@ -225,7 +225,7 @@ TEST(WordLineFromQDomElementGroup, GetMethods)
 {
     CHECK(word->getOriginal() == "world");
     CHECK(word->getTranslation() == "мир");
-    CHECK(word->getStatus() == "new");
+    CHECK(word->getStatus() == "learned");
     CHECK(word->getDate() == "03-11-2023");
     CHECK(word->getDateFormat() == "MM-dd-yyyy");
     CHECK(word->getComment() == "Any comment.");
@@ -241,7 +241,7 @@ TEST(WordLineFromQDomElementGroup, SetDomElement)
 
     CHECK(e.attribute("original") =="world");
     CHECK(e.attribute("translation") == "мир");
-    CHECK(e.attribute("status") == "new");
+    CHECK(e.attribute("status") == "learned");
     CHECK(e.attribute("date") == "03-11-2023");
     CHECK(e.attribute("dateFormat") == "MM-dd-yyyy");
     CHECK(e.attribute("comment") == "Any comment.");

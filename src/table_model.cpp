@@ -28,6 +28,7 @@
 #include "table_model.h"
 #include "table_widget.h"
 #include <QModelIndex>
+#include <QColor>
 
 int TableModel::rowCount(const QModelIndex &parent) const
 {
@@ -70,6 +71,13 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         }
         else if(index.column() == TableWidget::CommentColumn) {
             return word.getComment();
+        }
+    }
+    else if(role == Qt::BackgroundRole) {
+        const WordLine &word = words.at(index.row());
+        if(index.column() == TableWidget::StatusColumn) {
+            WordStatus s(word.getStatus());
+            return WordStatus::getColor(s.getStatusInt());
         }
     }
 

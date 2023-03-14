@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  word_edit.h                                                           */
+/*  status_spin_box.h                                                     */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,42 +25,27 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef WORD_EDIT_VIL_H
-#define WORD_EDIT_VIL_H
+#ifndef STATUS_SPIN_BOX_VIL_H
+#define STATUS_SPIN_BOX_VIL_H
 
-#include "word_line.h"
-#include <QDialog>
+#include <QSpinBox>
 
-class StatusSpinBox;
-class QLineEdit;
-class QStatusBar;
-class QTextEdit;
-
-class WordEdit : public QDialog {
+class StatusSpinBox : public QSpinBox {
     Q_OBJECT
 public:
-    WordLine getWord() const;
-    void setWord(const WordLine &pWord);
+    QString getValue() const;
+    void setValue(const QString &value);
 
-    void showMessage(const QString &msg);
-
-    WordEdit(QWidget *parent = nullptr, const WordLine &pWord = WordLine());
-    virtual ~WordEdit();
-public slots:
-    void accept() override;
+    StatusSpinBox(QWidget *parent = nullptr);
+    virtual ~StatusSpinBox();
+signals:
+    void returnPressed();
 private slots:
-    void truncateComment();
-private:
-    WordLine word;
-
-    QLineEdit *originalText;
-    QLineEdit *transcriptionText;
-    QLineEdit *translationText;
-    StatusSpinBox *statusSpinBox;
-    QLineEdit *dateText;
-    QTextEdit *commentText;
-
-    QStatusBar *statusBar;
+    void changeColor(int i);
+protected:
+    QString textFromValue(int value) const override;
+    int valueFromText(const QString &text) const override;
+    void keyPressEvent(QKeyEvent *event);
 };
 
 #endif

@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  word_edit.h                                                           */
+/*  status_spin_box.cpp                                                   */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,42 +25,62 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef WORD_EDIT_VIL_H
-#define WORD_EDIT_VIL_H
+#include "status_spin_box.h"
+#include "word_status.h"
+#include <QKeyEvent>
+#include <QLineEdit>
 
-#include "word_line.h"
-#include <QDialog>
+QString StatusSpinBox::getValue() const
+{
+    return textFromValue(value());
+}
 
-class StatusSpinBox;
-class QLineEdit;
-class QStatusBar;
-class QTextEdit;
+void StatusSpinBox::setValue(const QString &value)
+{
+    QSpinBox::setValue(valueFromText(value));
+}
 
-class WordEdit : public QDialog {
-    Q_OBJECT
-public:
-    WordLine getWord() const;
-    void setWord(const WordLine &pWord);
+QString StatusSpinBox::textFromValue(int value) const
+{
+    WordStatus status;
+    status.setStatus(value);
+    return status.getStatus();
+}
 
-    void showMessage(const QString &msg);
+int StatusSpinBox::valueFromText(const QString &text) const
+{
+    WordStatus status(text);
+    return status.getStatusInt();
+}
 
-    WordEdit(QWidget *parent = nullptr, const WordLine &pWord = WordLine());
-    virtual ~WordEdit();
-public slots:
-    void accept() override;
-private slots:
-    void truncateComment();
-private:
-    WordLine word;
+void StatusSpinBox::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Return) {
+        emit returnPressed();
+    }
+}
 
-    QLineEdit *originalText;
-    QLineEdit *transcriptionText;
-    QLineEdit *translationText;
-    StatusSpinBox *statusSpinBox;
-    QLineEdit *dateText;
-    QTextEdit *commentText;
+void StatusSpinBox::changeColor(int i)
+{
+    WordStatus status;
+    status = i;
+    QColor color = WordStatus::getColor(status.getStatusInt());
+    QString name = color.name();
+    this->setStyleSheet("background-color: " + name);
+}
 
-    QStatusBar *statusBar;
-};
+StatusSpinBox::StatusSpinBox(QWidget *parent)
+    : QSpinBox(parent)
+{
+    setRange(WordStatus::New, WordStatus::Learned);
+    changeColor(0);
+    lineEdit()->setReadOnly(true);
 
-#endif
+    connect(this, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &StatusSpinBox::changeColor);
+}
+
+StatusSpinBox::~StatusSpinBox()
+{
+
+}

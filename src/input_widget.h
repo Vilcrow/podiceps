@@ -30,29 +30,26 @@
 
 #include <QWidget>
 
+class StatusSpinBox;
 class WordLine;
-class QPushButton;
 class QLineEdit;
+class QPushButton;
 
 class InputWidget : public QWidget {
     Q_OBJECT
 public:
     enum Lines { OriginalLine, TranscriptionLine, TranslationLine,
-                 StatusLine, AllLines };
+                 StatusSpin, AllLines };
 
     enum Buttons { AddButton = AllLines + 1, EditButton,
                    FindButton, DeleteButton, AllButtons };
 
     WordLine getInput() const;
-    QString getInput(int index) const;
-
     void setInput(const WordLine &word);
-    void setInput(int index, const QString &value);
+    void clearInput();
+
     void setEnabled(int index, bool value = true);
     void setFocus();
-
-    void clearInput(int index = AllLines);
-    bool isEmpty(int index = AllLines) const;
 
     InputWidget(QWidget *parent = nullptr);
     virtual ~InputWidget();
@@ -67,7 +64,7 @@ private:
     QLineEdit *originalLineEdit;
     QLineEdit *transcriptionLineEdit;
     QLineEdit *translationLineEdit;
-    QLineEdit *statusLineEdit;
+    StatusSpinBox *statusSpinBox;
 
     QPushButton *addButton;
     QPushButton *editButton;
