@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  status_spin_box.cpp                                                   */
+/*  word_status_test.cpp                                                  */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,64 +25,57 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#include "status_spin_box.h"
-#include "word_status.h"
-#include <QKeyEvent>
-#include <QLineEdit>
+#include "word_status_test.h"
 
-QString StatusSpinBox::getValue() const
-{
-    return textFromValue(value());
-}
-
-void StatusSpinBox::setValue(const QString &value)
-{
-    QSpinBox::setValue(valueFromText(value));
-}
-
-QString StatusSpinBox::textFromValue(int value) const
+void WordStatusTest::setAndGetStatus()
 {
     WordStatus status;
-    status.setStatus(value);
-    return status.getStatus();
+
+    // The default value.
+    QCOMPARE(status.getStatus(), "new");
+    QCOMPARE(status.getStatusInt(), WordStatus::New);
+
+    status.setStatus("middle");
+    QCOMPARE(status.getStatus(), "middle");
+    QCOMPARE(status.getStatusInt(), WordStatus::Middle);
+
+    status.setStatus("invalid argument");
+    QCOMPARE(status.getStatus(), "new");
+    QCOMPARE(status.getStatusInt(), WordStatus::New);
+
+    status.setStatus(2);
+    QCOMPARE(status.getStatus(), "learned");
+    QCOMPARE(status.getStatusInt(), WordStatus::Learned);
+
+    // Invalid value.
+    status.setStatus(342);
+    QCOMPARE(status.getStatus(), "new");
+    QCOMPARE(status.getStatusInt(), WordStatus::New);
 }
 
-int StatusSpinBox::valueFromText(const QString &text) const
+void WordStatusTest::operators()
 {
-    WordStatus status(text);
-    return status.getStatusInt();
-}
+    WordStatus first;
+    WordStatus second;
 
-void StatusSpinBox::keyPressEvent(QKeyEvent *event)
-{
-    if(event->key() == Qt::Key_Return) {
-        emit returnPressed();
-    }
+    QCOMPARE(first.getStatus(), second.getStatus());
+    QVERIFY(first == second);
 
-    QSpinBox::keyPressEvent(event);
-}
+    second.setStatus(WordStatus::Middle);
+    QCOMPARE(first == second, false);
+    QCOMPARE(first != second, true);
+    QCOMPARE(first > second, false);
+    QCOMPARE(first >= second, false);
+    QCOMPARE(first < second, true);
+    QCOMPARE(first <= second, true);
 
-void StatusSpinBox::changeColor(int i)
-{
-    WordStatus status;
-    status = i;
-    QColor color = WordStatus::getColor(status.getStatusInt());
-    QString name = color.name();
-    this->setStyleSheet("background-color: " + name);
-}
-
-StatusSpinBox::StatusSpinBox(QWidget *parent)
-    : QSpinBox(parent)
-{
-    setRange(WordStatus::New, WordStatus::Learned);
-    changeColor(0);
-    lineEdit()->setReadOnly(true);
-
-    connect(this, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, &StatusSpinBox::changeColor);
-}
-
-StatusSpinBox::~StatusSpinBox()
-{
-
+    first = second;
+    QVERIFY(first == second);
+    QCOMPARE(first == second, true);
+    QCOMPARE(first != second, false);
+    QCOMPARE(first > second, false);
+    QCOMPARE(first >= second, true);
+    QCOMPARE(first < second, false);
+    QCOMPARE(first <= second, true);
+    QCOMPARE(first.getStatus(), second.getStatus());
 }

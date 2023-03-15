@@ -231,12 +231,12 @@ void WordLine::truncate()
 WordLine::WordLine(const QString &pOriginal, const QString &pTranslation,
                    const QString &pStatus, const QString &pDate,
                    const QString &format)
-    : original(pOriginal), translation(pTranslation), status(WordStatus(pStatus))
+    : original(pOriginal), transcription(QString()), translation(pTranslation),
+      status(WordStatus(pStatus))
 {
     dateFormat = format.isEmpty() ? DefaultDateFormat : format;
     date = QDate::fromString(pDate, dateFormat);
     comment = QString();
-    transcription = QString();
     truncate();
 }
 

@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  status_spin_box.cpp                                                   */
+/*  word_edit_test.cpp                                                    */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,64 +25,22 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#include "status_spin_box.h"
-#include "word_status.h"
-#include <QKeyEvent>
-#include <QLineEdit>
+#include "word_edit_test.h"
+#include "word_line.h"
 
-QString StatusSpinBox::getValue() const
+void WordEditTest::setAndGetWord()
 {
-    return textFromValue(value());
-}
+    WordEdit wordEdit;
+    QVERIFY(wordEdit.getWord().isEmpty());
 
-void StatusSpinBox::setValue(const QString &value)
-{
-    QSpinBox::setValue(valueFromText(value));
-}
-
-QString StatusSpinBox::textFromValue(int value) const
-{
-    WordStatus status;
-    status.setStatus(value);
-    return status.getStatus();
-}
-
-int StatusSpinBox::valueFromText(const QString &text) const
-{
-    WordStatus status(text);
-    return status.getStatusInt();
-}
-
-void StatusSpinBox::keyPressEvent(QKeyEvent *event)
-{
-    if(event->key() == Qt::Key_Return) {
-        emit returnPressed();
-    }
-
-    QSpinBox::keyPressEvent(event);
-}
-
-void StatusSpinBox::changeColor(int i)
-{
-    WordStatus status;
-    status = i;
-    QColor color = WordStatus::getColor(status.getStatusInt());
-    QString name = color.name();
-    this->setStyleSheet("background-color: " + name);
-}
-
-StatusSpinBox::StatusSpinBox(QWidget *parent)
-    : QSpinBox(parent)
-{
-    setRange(WordStatus::New, WordStatus::Learned);
-    changeColor(0);
-    lineEdit()->setReadOnly(true);
-
-    connect(this, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, &StatusSpinBox::changeColor);
-}
-
-StatusSpinBox::~StatusSpinBox()
-{
-
+    WordLine word("dream", "мечта", "learned", "04-11-2022", "dd-MM-yyyy");
+    word.setTranscription("driːm");
+    word.setComment("Comment.");
+    wordEdit.setWord(word);
+    QCOMPARE(wordEdit.getWord().getOriginal(), "dream");
+    QCOMPARE(wordEdit.getWord().getTranscription(), "driːm");
+    QCOMPARE(wordEdit.getWord().getTranslation(), "мечта");
+    QCOMPARE(wordEdit.getWord().getStatus(), "learned");
+    QCOMPARE(wordEdit.getWord().getDate("dd-MM-yyyy"), "04-11-2022");
+    QCOMPARE(wordEdit.getWord().getComment(), "Comment.");
 }

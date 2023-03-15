@@ -25,226 +25,315 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#include "word_line.h"
-#include "CppUTest/TestHarness.h"
+#include "word_line_test.h"
 
-TEST_GROUP(EmptyWordLineGroup)
+void WordLineTest::getMethods()
 {
-    WordLine *word = nullptr;
+    QFETCH(WordLine, word);
+    QFETCH(QString, original);
+    QFETCH(QString, transcription);
+    QFETCH(QString, translation);
+    QFETCH(QString, status);
+    QFETCH(QString, date);
+    QFETCH(QString, dateFormat);
+    QFETCH(QString, comment);
 
-    void setup()
-    {
-        // CppUTest detects memory leaks for the QDate object.
-        MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
-        word = new WordLine();
-    }
-
-    void teardown()
-    {
-        delete word;
-        MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
-    }
-};
-
-TEST(EmptyWordLineGroup, Constructor)
-{
-    CHECK(word->isEmpty());
+    QCOMPARE(word.getOriginal(), original);
+    QCOMPARE(word.getTranscription(), transcription);
+    QCOMPARE(word.getTranslation(), translation);
+    QCOMPARE(word.getStatus(), status);
+    QCOMPARE(word.getDate(), date);
+    QCOMPARE(word.getDateFormat(), dateFormat);
+    QCOMPARE(word.getComment(), comment);
 }
 
-TEST(EmptyWordLineGroup, GetMethods)
+void WordLineTest::getMethods_data()
 {
-    CHECK(word->getOriginal() == "");
-    CHECK(word->getTranslation() == "");
-    CHECK(word->getStatus() == "new");
-    CHECK(word->getDate() == "");
-    CHECK(word->getDate("dd-MM-yyyy") == "");
-    // Default format.
-    CHECK(word->getDateFormat() == "yyyy-MM-dd");
-    CHECK(word->getComment() == "");
-    CHECK(word->getTranscription() == "");
-}
+    QTest::addColumn<WordLine>("word");
+    QTest::addColumn<QString>("original");
+    QTest::addColumn<QString>("transcription");
+    QTest::addColumn<QString>("translation");
+    QTest::addColumn<QString>("status");
+    QTest::addColumn<QString>("date");
+    QTest::addColumn<QString>("dateFormat");
+    QTest::addColumn<QString>("comment");
 
-TEST(EmptyWordLineGroup, SetMethods)
-{
-    word->setOriginal("world");
-    CHECK(word->getOriginal() == "world");
+    QString defaultDateFormat = "yyyy-MM-dd";
 
-    word->setTranslation("мир");
-    CHECK(word->getTranslation() == "мир");
+    WordLine emptyWord;
+    QTest::newRow("Empty") << emptyWord
+                           << ""
+                           << ""
+                           << ""
+                           << "new"
+                           << ""
+                           << defaultDateFormat
+                           << "";
 
-    word->setStatus("learned");
-    CHECK(word->getStatus() == "learned");
+    WordLine fullWord("power", "сила", "learned", "01-03-2022", "dd-MM-yyyy");
+    fullWord.setTranscription("ˈpaʊə");
+    fullWord.setComment("Comment.");
+    QTest::newRow("Full") << fullWord
+                          << "power"
+                          << "ˈpaʊə"
+                          << "сила"
+                          << "learned"
+                          << "01-03-2022"
+                          << "dd-MM-yyyy"
+                          << "Comment.";
 
-    word->setStatus("trash");
-    CHECK(word->getStatus() == "new");
-
-    word->setDate("12-10-2012", "dd-MM-yyyy");
-    CHECK(word->getDate() == "2012-10-12");
-    CHECK(word->getDateFormat() == "yyyy-MM-dd");
-    word->setDateFormat("MM-dd-yyyy");
-    CHECK(word->getDate() == "10-12-2012");
-
-    word->setDateFormat("MM.dd.yyyy");
-    CHECK(word->getDate() == "10.12.2012");
-    CHECK(word->getDate("yyyy") == "2012");
-
-    word->setComment("Hello, world!");
-    CHECK(word->getComment() == "Hello, world!");
-
-    word->setTranscription("wɜːld");
-    CHECK(word->getTranscription() == "wɜːld");
-}
-
-TEST(EmptyWordLineGroup, MaxLength)
-{
-    word->setOriginal(QString(2 * WordLine::MaxOriginalLength, 'o'));
-    CHECK_EQUAL(word->getOriginal().length(), WordLine::MaxOriginalLength);
-
-    word->setTranslation(QString(2 * WordLine::MaxTranslationLength, 't'));
-    CHECK_EQUAL(word->getTranslation().length(), WordLine::MaxTranslationLength);
-
-    word->setDateFormat(QString(2 * WordLine::MaxDateLength, 'f'));
-    CHECK_EQUAL(word->getDateFormat().length(), WordLine::MaxDateLength);
-
-    word->setComment(QString(2 * WordLine::MaxCommentLength, 'c'));
-    CHECK_EQUAL(word->getComment().length(), WordLine::MaxCommentLength);
-
-    word->setTranscription(QString(2 * WordLine::MaxOriginalLength, 't'));
-    CHECK_EQUAL(word->getTranscription().length(), WordLine::MaxOriginalLength);
-}
-
-TEST(EmptyWordLineGroup, InvalidDate)
-{
-    CHECK_FALSE(word->isDateValid());
-
-    word->setDate("12-10-2010", "dd-MM-yyyy");
-    CHECK(word->isDateValid());
-
-    word->setDate("-10-2010", "dd-MM-yyyy");
-    CHECK(word->isDateValid());
-    CHECK(word->getDate() == "2010-10-12");
-
-    word->clear();
-    CHECK_FALSE(word->isDateValid());
-}
-
-TEST_GROUP(FullWordLineGroup)
-{
-    WordLine *word = nullptr;
-
-    void setup()
-    {
-        MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
-        word = new WordLine("word", "слово", "middle",
-                            "01-01-2023", "dd-MM-yyyy");
-        word->setComment("Comment.");
-        word->setTranscription("wɜːd");
-    }
-
-    void teardown()
-    {
-        delete word;
-        MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
-    }
-};
-
-TEST(FullWordLineGroup, Constructor)
-{
-    CHECK_FALSE(word->isEmpty());
-    CHECK(word->isDateValid());
-}
-
-TEST(FullWordLineGroup, GetMethods)
-{
-    CHECK(word->getOriginal() == "word");
-    CHECK(word->getTranslation() == "слово");
-    CHECK(word->getStatus() == "middle");
-    CHECK(word->getDate() == "01-01-2023");
-    CHECK(word->getDateFormat() == "dd-MM-yyyy");
-    CHECK(word->getComment() == "Comment.");
-    CHECK(word->getTranscription() == "wɜːd");
-}
-
-TEST(FullWordLineGroup, ClearMethod)
-{
-    word->clear();
-    CHECK(word->isEmpty());
-}
-
-TEST(FullWordLineGroup, Operators)
-{
-    WordLine other("word");
-    CHECK(*word == other);
-    CHECK(*word != other);
-    other.setOriginal("world");
-    CHECK_FALSE(*word == other);
-    CHECK(*word != other);
-    CHECK(*word < other);
-    CHECK_FALSE(*word > other);
-    CHECK(*word <= other);
-    CHECK_FALSE(*word >= other);
-}
-
-TEST_GROUP(WordLineFromQDomElementGroup)
-{
-    WordLine *word = nullptr;
-    QDomElement *element = nullptr;
-
-    void setup()
-    {
-        MemoryLeakWarningPlugin::saveAndDisableNewDeleteOverloads();
-        QDomDocument doc;
-        element = new QDomElement();
-        *element = doc.createElement("word");
-        doc.appendChild(*element);
-        element->setAttribute("original", "world");
-        element->setAttribute("translation", "мир");
-        element->setAttribute("status", "learned");
-        element->setAttribute("date", "03-11-2023");
-        element->setAttribute("dateFormat", "MM-dd-yyyy");
-        element->setAttribute("comment", "Any comment.");
-        element->setAttribute("transcription", "wɜːld");
-
-        word = new WordLine(*element);
-    }
-
-    void teardown()
-    {
-        delete word;
-        delete element;
-        MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
-    }
-};
-
-TEST(WordLineFromQDomElementGroup, Constructor)
-{
-    CHECK_FALSE(word->isEmpty());
-}
-
-TEST(WordLineFromQDomElementGroup, GetMethods)
-{
-    CHECK(word->getOriginal() == "world");
-    CHECK(word->getTranslation() == "мир");
-    CHECK(word->getStatus() == "learned");
-    CHECK(word->getDate() == "03-11-2023");
-    CHECK(word->getDateFormat() == "MM-dd-yyyy");
-    CHECK(word->getComment() == "Any comment.");
-    CHECK(word->getTranscription() == "wɜːld");
-}
-
-TEST(WordLineFromQDomElementGroup, SetDomElement)
-{
     QDomDocument doc;
-    QDomElement e = doc.createElement("word");
-    doc.appendChild(e);
-    word->setDomElement(e);
+    QDomElement element = doc.createElement("word");
+    doc.appendChild(element);
+    element.setAttribute("original", "world");
+    element.setAttribute("translation", "мир");
+    element.setAttribute("status", "learned");
+    element.setAttribute("date", "03-11-2023");
+    element.setAttribute("dateFormat", "MM-dd-yyyy");
+    element.setAttribute("comment", "Any comment.");
+    element.setAttribute("transcription", "wɜːld");
 
-    CHECK(e.attribute("original") =="world");
-    CHECK(e.attribute("translation") == "мир");
-    CHECK(e.attribute("status") == "learned");
-    CHECK(e.attribute("date") == "03-11-2023");
-    CHECK(e.attribute("dateFormat") == "MM-dd-yyyy");
-    CHECK(e.attribute("comment") == "Any comment.");
-    CHECK(e.attribute("transcription") == "wɜːld");
-    CHECK(e.attribute("trash") == "");
+    WordLine xmlWord(element);
+    QTest::newRow("Xml") << xmlWord
+                         << "world"
+                         << "wɜːld"
+                         << "мир"
+                         << "learned"
+                         << "03-11-2023"
+                         << "MM-dd-yyyy"
+                         << "Any comment.";
+}
+
+void WordLineTest::setMethods()
+{
+    QFETCH(WordLine, word);
+    QFETCH(QString, original);
+    QFETCH(QString, transcription);
+    QFETCH(QString, translation);
+    QFETCH(QString, status);
+    QFETCH(QString, date);
+    QFETCH(QString, dateFormat);
+    QFETCH(QString, comment);
+
+    QCOMPARE(word.getOriginal(), original);
+    QCOMPARE(word.getTranscription(), transcription);
+    QCOMPARE(word.getTranslation(), translation);
+    QCOMPARE(word.getStatus(), status);
+    QCOMPARE(word.getDate(), date);
+    QCOMPARE(word.getDateFormat(), dateFormat);
+    QCOMPARE(word.getComment(), comment);
+}
+
+void WordLineTest::setMethods_data()
+{
+    QTest::addColumn<WordLine>("word");
+    QTest::addColumn<QString>("original");
+    QTest::addColumn<QString>("transcription");
+    QTest::addColumn<QString>("translation");
+    QTest::addColumn<QString>("status");
+    QTest::addColumn<QString>("date");
+    QTest::addColumn<QString>("dateFormat");
+    QTest::addColumn<QString>("comment");
+
+    QString defaultDateFormat = "yyyy-MM-dd";
+
+    WordLine word;
+    word.setOriginal("orange");
+    word.setTranscription("ˈɒrɪnʤ");
+    word.setTranslation("оранжевый, апельсин");
+    word.setStatus("learned");
+    word.setDate("20-02-2020", "dd-MM-yyyy");
+    word.setDateFormat("yyyy");
+    word.setComment("Comment.");
+    QTest::newRow("Empty") << word
+                           << "orange"
+                           << "ˈɒrɪnʤ"
+                           << "оранжевый, апельсин"
+                           << "learned"
+                           << "2020"
+                           << "yyyy"
+                           << "Comment.";
+}
+
+void WordLineTest::isEmptyMethod()
+{
+    QFETCH(bool, result);
+    QFETCH(bool, expected);
+
+    QCOMPARE(result, expected);
+}
+
+void WordLineTest::isEmptyMethod_data()
+{
+    QTest::addColumn<bool>("result");
+    QTest::addColumn<bool>("expected");
+
+    WordLine word;
+    QTest::newRow("empty") << word.isEmpty() << true;
+
+    word.setOriginal("hello");
+    QTest::newRow("with-original") << word.isEmpty() << false;
+}
+
+void WordLineTest::clearMethod()
+{
+    QFETCH(bool, result);
+    QFETCH(bool, expected);
+
+    QCOMPARE(result, expected);
+}
+
+void WordLineTest::clearMethod_data()
+{
+    QTest::addColumn<bool>("result");
+    QTest::addColumn<bool>("expected");
+
+    WordLine word("hello");
+    QTest::newRow("with-original-not-empty") << word.isEmpty() << false;
+    word.clear();
+    QTest::newRow("with-original-cleared") << word.isEmpty() << true;
+
+    word.setTranscription("t");
+    QTest::newRow("with-transcription-not-empty") << word.isEmpty() << false;
+    word.clear();
+    QTest::newRow("with-transcription-cleared") << word.isEmpty() << true;
+
+    word.setTranslation("t");
+    QTest::newRow("with-translation-not-empty") << word.isEmpty() << false;
+    word.clear();
+    QTest::newRow("with-translation-cleared") << word.isEmpty() << true;
+
+    WordLine fullWord("apple", "яблоко", "middle", "2020-10-01", "yyyy-dd-MM");
+    fullWord.setTranscription("æpl");
+    fullWord.setComment("Any comment.");
+    QTest::newRow("full-not-empty") << fullWord.isEmpty() << false;
+    fullWord.clear();
+    QTest::newRow("full-cleared") << fullWord.isEmpty() << true;
+}
+
+void WordLineTest::maxLength()
+{
+    QFETCH(WordLine, word);
+    QFETCH(int, original);
+    QFETCH(int, transcription);
+    QFETCH(int, translation);
+    QFETCH(int, status);
+    QFETCH(int, date);
+    QFETCH(int, dateFormat);
+    QFETCH(int, comment);
+
+    QCOMPARE(word.getOriginal().length(), original);
+    QCOMPARE(word.getTranscription().length(), transcription);
+    QCOMPARE(word.getTranslation().length(), translation);
+    QCOMPARE(word.getStatus().length(), status);
+    QCOMPARE(word.getDate().length(), date);
+    QCOMPARE(word.getDateFormat().length(), dateFormat);
+    QCOMPARE(word.getComment().length(), comment);
+}
+
+void WordLineTest::maxLength_data()
+{
+    QTest::addColumn<WordLine>("word");
+    QTest::addColumn<int>("original");
+    QTest::addColumn<int>("transcription");
+    QTest::addColumn<int>("translation");
+    QTest::addColumn<int>("status");
+    QTest::addColumn<int>("date");
+    QTest::addColumn<int>("dateFormat");
+    QTest::addColumn<int>("comment");
+
+    int maxOriginal = WordLine::MaxOriginalLength;
+    int maxTranscription = WordLine::MaxOriginalLength;
+    int maxTranslation = WordLine::MaxTranslationLength;
+    int maxDate = WordLine::MaxDateLength;
+    int maxComment = WordLine::MaxCommentLength;
+
+    WordLine word;
+    int defaultDate = word.getDateFormat().length();
+    QTest::newRow("zero") << word
+                          << 0
+                          << 0
+                          << 0
+                          << 3
+                          << 0
+                          << defaultDate
+                          << 0;
+
+    word.setOriginal(QString(2 * WordLine::MaxOriginalLength, 'o'));
+    word.setTranscription(QString(2 * WordLine::MaxOriginalLength, 't'));
+    word.setTranslation(QString(2 * WordLine::MaxTranslationLength, 't'));
+    word.setStatus("invalid argument");
+    word.setDateFormat(QString(2 * WordLine::MaxDateLength, 'f'));
+    word.setComment(QString(2 * WordLine::MaxCommentLength, 'c'));
+
+    QTest::newRow("full") << word
+                          << maxOriginal
+                          << maxTranscription
+                          << maxTranslation
+                          << 3
+                          << 0
+                          << maxDate
+                          << maxComment;
+}
+
+void WordLineTest::operators()
+{
+    QFETCH(bool, statement);
+    QFETCH(bool, result);
+
+    QCOMPARE(statement, result);
+}
+
+void WordLineTest::operators_data()
+{
+    QTest::addColumn<bool>("statement");
+    QTest::addColumn<bool>("result");
+
+    WordLine word;
+    WordLine otherWord("other");
+    QTest::newRow("different ==") << (word == otherWord) << false;
+    QTest::newRow("different !=") << (word != otherWord) << true;
+    QTest::newRow("different >") << (word > otherWord) << false;
+    QTest::newRow("different >=") << (word >= otherWord) << false;
+    QTest::newRow("different <") << (word < otherWord) << true;
+    QTest::newRow("different <=") << (word <= otherWord) << true;
+
+    word.setOriginal("other");
+    QTest::newRow("same ==") << (word == otherWord) << true;
+    QTest::newRow("same !=") << (word != otherWord) << false;
+    QTest::newRow("same >") << (word > otherWord) << false;
+    QTest::newRow("same >=") << (word >= otherWord) << true;
+    QTest::newRow("same <") << (word < otherWord) << false;
+    QTest::newRow("same <=") << (word <= otherWord) << true;
+}
+
+void WordLineTest::setDomElement()
+{
+    QFETCH(QDomElement, element);
+    QFETCH(WordLine, word);
+
+    QCOMPARE(element.attribute("original"), word.getOriginal());
+    QCOMPARE(element.attribute("transcription"), word.getTranscription());
+    QCOMPARE(element.attribute("translation"), word.getTranslation());
+    QCOMPARE(element.attribute("status"), word.getStatus());
+    QCOMPARE(element.attribute("date"), word.getDate());
+    QCOMPARE(element.attribute("dateFormat"), word.getDateFormat());
+    QCOMPARE(element.attribute("comment"), word.getComment());
+}
+
+void WordLineTest::setDomElement_data()
+{
+    QTest::addColumn<QDomElement>("element");
+    QTest::addColumn<WordLine>("word");
+
+    QDomDocument doc;
+    QDomElement element = doc.createElement("word");
+    doc.appendChild(element);
+
+    WordLine fullWord("word", "слово", "middle", "2023-03-01", "yyyy-MM-dd");
+    fullWord.setTranscription("wɜːd");
+    fullWord.setComment("Hello.");
+
+    fullWord.setDomElement(element);
+    QTest::newRow("Full") << element << fullWord;
 }

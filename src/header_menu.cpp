@@ -82,11 +82,18 @@ HeaderMenu::HeaderMenu(const QPoint &position, QWidget *parent)
     dateAct->setChecked(showDate);
     addAction(dateAct);
 
+    addSeparator();
+
+    alignAct = new QAction(tr("Align"), this);
+    addAction(alignAct);
+
     connect(transcriptionAct, &QAction::toggled,
             this, &HeaderMenu::updateSettings);
     connect(statusAct, &QAction::toggled,
             this, &HeaderMenu::updateSettings);
     connect(dateAct, &QAction::toggled,
+            this, &HeaderMenu::updateSettings);
+    connect(alignAct, &QAction::triggered,
             this, &HeaderMenu::updateSettings);
 
     exec(position);

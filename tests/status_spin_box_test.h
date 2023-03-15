@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  utests.cpp                                                            */
+/*  status_spin_box_test.h                                                */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,9 +25,18 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#include "CppUTest/CommandLineTestRunner.h"
+#ifndef STATUS_SPIN_BOX_TEST_VIL_H
+#define STATUS_SPIN_BOX_TEST_VIL_H
 
-int main(int argc, char **argv)
-{
-    return CommandLineTestRunner::RunAllTests(argc, argv);
-}
+#include "status_spin_box.h"
+#include <QTest>
+
+class StatusSpinBoxTest : public QObject {
+    Q_OBJECT
+private slots:
+    void inputEvents();
+    void setValue();
+    void getValue();
+};
+
+#endif

@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  status_spin_box.cpp                                                   */
+/*  status_spin_box_test.cpp                                              */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,64 +25,63 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#include "status_spin_box.h"
+#include "status_spin_box_test.h"
 #include "word_status.h"
-#include <QKeyEvent>
-#include <QLineEdit>
 
-QString StatusSpinBox::getValue() const
+void StatusSpinBoxTest::inputEvents()
 {
-    return textFromValue(value());
+    StatusSpinBox spinBox;
+
+    // The default value.
+    QCOMPARE(spinBox.getValue(), "new");
+
+    QTest::keyPress(&spinBox, Qt::Key_Up);
+    QCOMPARE(spinBox.getValue(), "middle");
+
+    QTest::keyPress(&spinBox, Qt::Key_Up);
+    QCOMPARE(spinBox.getValue(), "learned");
+
+    // The maximum value was reached.
+    QTest::keyPress(&spinBox, Qt::Key_Up);
+    QCOMPARE(spinBox.getValue(), "learned");
+
+    QTest::keyPress(&spinBox, Qt::Key_Down);
+    QCOMPARE(spinBox.getValue(), "middle");
+
+    QTest::keyPress(&spinBox, Qt::Key_Down);
+    QCOMPARE(spinBox.getValue(), "new");
+
+    // The minimum value was reached.
+    QTest::keyPress(&spinBox, Qt::Key_Down);
+    QCOMPARE(spinBox.getValue(), "new");
 }
 
-void StatusSpinBox::setValue(const QString &value)
+void StatusSpinBoxTest::setValue()
 {
-    QSpinBox::setValue(valueFromText(value));
+    StatusSpinBox spinBox;
+
+    // The default value.
+    QCOMPARE(spinBox.value(), WordStatus::New);
+    QCOMPARE(spinBox.getValue(), "new");
+
+    spinBox.setValue("learned");
+    QCOMPARE(spinBox.value(), WordStatus::Learned);
+
+    spinBox.setValue("invalid value");
+    QCOMPARE(spinBox.value(), WordStatus::New);
 }
 
-QString StatusSpinBox::textFromValue(int value) const
+void StatusSpinBoxTest::getValue()
 {
-    WordStatus status;
-    status.setStatus(value);
-    return status.getStatus();
-}
+    StatusSpinBox spinBox;
 
-int StatusSpinBox::valueFromText(const QString &text) const
-{
-    WordStatus status(text);
-    return status.getStatusInt();
-}
+    // The default value.
+    QCOMPARE(spinBox.value(), WordStatus::New);
+    QCOMPARE(spinBox.getValue(), "new");
 
-void StatusSpinBox::keyPressEvent(QKeyEvent *event)
-{
-    if(event->key() == Qt::Key_Return) {
-        emit returnPressed();
-    }
+    spinBox.setValue("learned");
+    QCOMPARE(spinBox.getValue(), "learned");
 
-    QSpinBox::keyPressEvent(event);
-}
-
-void StatusSpinBox::changeColor(int i)
-{
-    WordStatus status;
-    status = i;
-    QColor color = WordStatus::getColor(status.getStatusInt());
-    QString name = color.name();
-    this->setStyleSheet("background-color: " + name);
-}
-
-StatusSpinBox::StatusSpinBox(QWidget *parent)
-    : QSpinBox(parent)
-{
-    setRange(WordStatus::New, WordStatus::Learned);
-    changeColor(0);
-    lineEdit()->setReadOnly(true);
-
-    connect(this, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, &StatusSpinBox::changeColor);
-}
-
-StatusSpinBox::~StatusSpinBox()
-{
-
+    spinBox.setValue("invalid value");
+    QCOMPARE(spinBox.getValue(), "new");
 }

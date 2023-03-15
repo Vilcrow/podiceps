@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  status_spin_box.cpp                                                   */
+/*  main_test.cpp                                                         */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,64 +25,43 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#include "status_spin_box.h"
-#include "word_status.h"
-#include <QKeyEvent>
-#include <QLineEdit>
+#include "status_spin_box_test.h"
+#include "word_edit_test.h"
+#include "word_line_test.h"
+#include "word_status_test.h"
+#include <QTest>
+#include <QApplication>
 
-QString StatusSpinBox::getValue() const
+int main(int argc, char **argv)
 {
-    return textFromValue(value());
-}
+    // For the GUI tests.
+    QApplication app(argc, argv);
 
-void StatusSpinBox::setValue(const QString &value)
-{
-    QSpinBox::setValue(valueFromText(value));
-}
+    int status = 0;
 
-QString StatusSpinBox::textFromValue(int value) const
-{
-    WordStatus status;
-    status.setStatus(value);
-    return status.getStatus();
-}
-
-int StatusSpinBox::valueFromText(const QString &text) const
-{
-    WordStatus status(text);
-    return status.getStatusInt();
-}
-
-void StatusSpinBox::keyPressEvent(QKeyEvent *event)
-{
-    if(event->key() == Qt::Key_Return) {
-        emit returnPressed();
+    // StatusSpinBox.
+    {
+        StatusSpinBoxTest test;
+        status |= QTest::qExec(&test, argc, argv);
     }
 
-    QSpinBox::keyPressEvent(event);
-}
+    // WordEdit.
+    {
+        WordEditTest test;
+        status |= QTest::qExec(&test, argc, argv);
+    }
 
-void StatusSpinBox::changeColor(int i)
-{
-    WordStatus status;
-    status = i;
-    QColor color = WordStatus::getColor(status.getStatusInt());
-    QString name = color.name();
-    this->setStyleSheet("background-color: " + name);
-}
+    // WordLine.
+    {
+        WordLineTest test;
+        status |= QTest::qExec(&test, argc, argv);
+    }
 
-StatusSpinBox::StatusSpinBox(QWidget *parent)
-    : QSpinBox(parent)
-{
-    setRange(WordStatus::New, WordStatus::Learned);
-    changeColor(0);
-    lineEdit()->setReadOnly(true);
+    // WordStatus.
+    {
+        WordStatusTest test;
+        status |= QTest::qExec(&test, argc, argv);
+    }
 
-    connect(this, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, &StatusSpinBox::changeColor);
-}
-
-StatusSpinBox::~StatusSpinBox()
-{
-
+    return status;
 }

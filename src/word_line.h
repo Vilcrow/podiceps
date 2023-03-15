@@ -37,8 +37,7 @@
 class WordLine {
 public:
     enum { MaxOriginalLength = 50, MaxTranslationLength = 100,
-           MaxStatusLength = 20, MaxDateLength = 20,
-           MaxCommentLength = 500 };
+           MaxDateLength = 20, MaxCommentLength = 500 };
 
     QString getOriginal() const;
     QString getTranslation() const;
@@ -82,12 +81,12 @@ public:
     ~WordLine();
 private:
     QString original;
+    QString transcription;
     QString translation;
     WordStatus status;
     QDate date;
     QString dateFormat;
     QString comment;
-    QString transcription;
 
     static QString DefaultDateFormat;
 

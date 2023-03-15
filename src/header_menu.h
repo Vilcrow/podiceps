@@ -43,6 +43,7 @@ private:
     QAction *transcriptionAct;
     QAction *statusAct;
     QAction *dateAct;
+    QAction *alignAct;
 
     bool showTranscription;
     bool showStatus;
