@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  dictionary_widget.h                                                   */
+/*  action_base.h                                                         */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,70 +25,23 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef DICTIONARY_WIDGET_VIL_H
-#define DICTIONARY_WIDGET_VIL_H
+#ifndef ACTION_BASE_VIL_H
+#define ACTION_BASE_VIL_H
 
+#include <QObject>
 #include "word_line.h"
-#include <QSettings>
-#include <QWidget>
 
-class FindWidget;
-class InputWidget;
-class TableWidget;
-
-class DictionaryWidget : public QWidget {
+class ActionBase : public QObject {
     Q_OBJECT
 public:
-    void readFromFile(const QString &fileName);
-    void writeToFile (const QString &fileName);
-    bool writeToXmlFile(const QString &fileName);
-    void setLastFileName(const QString &newLast);
-    void importFromFile(const QString &fileName);
-    void exportToFile(const QString &fileName);
+    virtual void undo() = 0;
+    virtual void redo() = 0;
 
-    bool isSaved() const;
-    void setSaved(bool value);
-
-    QString getLastFileName() const;
-    int getRowCount() const;
-
-    bool hasSelectedWords() const;
-
-    void readSettings();
-    void writeSettings();
-
-    DictionaryWidget(QWidget *parent = nullptr);
-    virtual ~DictionaryWidget();
+    ActionBase();
+    virtual ~ActionBase();
 signals:
-    void actionCompleted(const QString &msg);
-    void stateChanged();
-
-    void addWordRequested(const WordLine& word = WordLine());
-    void editWordRequested();
-    void deleteWordRequested();
-    void undoRequested();
-    void redoRequested();
-public slots:
-    void addWord(const WordLine& word);
-    void editWord();
-    void deleteWord();
-
-    void createNewFile();
-    void clearInput();
-    void setFilter();
-    void clearFilter();
-    void openFindWidget();
-    void closeFindWidget();
-    void updateInput();
-    void updateSettings();
-    void resize(int w, int h);
-private:
-    QSettings settings;
-    QString lastFileName;
-
-    TableWidget *tableWidget;
-    FindWidget *findWidget;
-    InputWidget *inputWidget;
+    void addWord(const WordLine &word, bool addToLog = false);
+    void deleteWord(const WordLine &word, bool addToLog = false);
 };
 
 #endif

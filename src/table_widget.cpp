@@ -26,6 +26,9 @@
 /**************************************************************************/
 
 #include "table_widget.h"
+#include "action_add.h"
+#include "action_delete.h"
+#include "action_edit.h"
 #include "header_menu.h"
 #include "word_edit.h"
 #include <algorithm>
@@ -43,6 +46,7 @@ bool TableWidget::isSaved() const
 void TableWidget::setSaved(bool value)
 {
     changesSaved = value;
+    actionLog->clear();
 }
 
 void TableWidget::sortByColumn(int column, Qt::SortOrder order)
@@ -109,6 +113,12 @@ void TableWidget::deleteEntry()
         return;
     }
 
+    for(QModelIndex i : indexes) {
+        WordLine word = getWord(i);
+        ActionDelete *act = new ActionDelete(word);
+        makeLogEntry(act);
+    }
+
     wordDeleteQueue.append(indexes);
     processQueues();
 }
@@ -143,6 +153,7 @@ void TableWidget::clear()
 {
     tableModel->removeRows(0, tableModel->rowCount(QModelIndex()),
                            QModelIndex());
+    actionLog->clear();
 }
 
 void TableWidget::setFilter(int col, const QRegExp &exp)
@@ -236,7 +247,7 @@ void TableWidget::clearSelection()
     tableView->clearSelection();
 }
 
-void TableWidget::addWord(const WordLine &word)
+void TableWidget::addWord(const WordLine &word, bool addToLog)
 {
     if(word.isEmpty()) {
         openWordAdd();
@@ -250,6 +261,29 @@ void TableWidget::addWord(const WordLine &word)
             QString msg = tr("The word \"%1\" already exists.")
                              .arg(word.getOriginal());
             openWordAdd(word, msg);
+        }
+        else if(addToLog) {
+            ActionAdd *act = new ActionAdd(word);
+            makeLogEntry(act);
+        }
+    }
+}
+
+void TableWidget::deleteWord(const WordLine &word, bool addToLog)
+{
+    int rows = tableModel->rowCount(QModelIndex());
+    QModelIndex idx;
+    QString original = word.getOriginal();
+
+    for(int row = 0; row < rows; ++row) {
+        idx = tableModel->index(row, TableWidget::OriginalColumn, QModelIndex());
+        if(tableModel->data(idx, Qt::DisplayRole) == original) {
+            tableModel->removeRows(row, 1, QModelIndex());
+            if(addToLog) {
+                ActionDelete *act = new ActionDelete(word);
+                makeLogEntry(act);
+            }
+            break;
         }
     }
 }
@@ -309,6 +343,8 @@ void TableWidget::openWordAdd(const WordLine &word, const QString &msg)
         }
         else if(!word.getOriginal().isEmpty()) {
             if(addEntry(word)) {
+                ActionAdd *act = new ActionAdd(word);
+                makeLogEntry(act);
                 break;
             }
             else {
@@ -348,6 +384,8 @@ void TableWidget::openWordEdit(const QModelIndex &index)
             // The original was changed.
             else if(changedWord.getOriginal() != word.getOriginal()) {
                 if(!containsWord(changedWord)) {
+                    ActionEdit *act = new ActionEdit(word, changedWord);
+                    makeLogEntry(act);
                     wordDeleteQueue.append(index);
                     wordAddQueue.append(changedWord);
                     break;
@@ -361,6 +399,8 @@ void TableWidget::openWordEdit(const QModelIndex &index)
                 }
             }
             else {
+                ActionEdit *act = new ActionEdit(word, changedWord);
+                makeLogEntry(act);
                 wordDeleteQueue.append(index);
                 wordAddQueue.append(changedWord);
                 break;
@@ -385,6 +425,16 @@ void TableWidget::resize(int w, int h)
     QRect g = geometry();
     g.setWidth(w);
     setGeometry(g);
+}
+
+void TableWidget::undo()
+{
+    actionLog->undo();
+}
+
+void TableWidget::redo()
+{
+    actionLog->redo();
 }
 
 void TableWidget::rowDoubleClicked(const QModelIndex &index)
@@ -462,12 +512,20 @@ void TableWidget::processQueues()
     }
 }
 
+void TableWidget::makeLogEntry(ActionBase *act)
+{
+    if(!actionLog->addAction(act)) {
+        delete act;
+        act = nullptr;
+    }
+}
+
 TableWidget::TableWidget(QWidget *parent)
     : QWidget(parent), settings("Vilcrow", "podiceps"),
       changesSaved(true), visibleColumns(TableModel::ColumnCount-1),
       wordAddQueue(QList<WordLine>()), wordDeleteQueue(QList<QModelIndex>()),
       tableModel(new TableModel(this)), tableView(new QTableView),
-      proxyModel(new QSortFilterProxyModel(this))
+      proxyModel(new QSortFilterProxyModel(this)), actionLog(new ActionLog())
 {
     proxyModel->setSourceModel(tableModel);
     proxyModel->setFilterKeyColumn(OriginalColumn);
@@ -503,9 +561,15 @@ TableWidget::TableWidget(QWidget *parent)
             this, &TableWidget::openContextMenu);
     connect(tableView->horizontalHeader(), &QWidget::customContextMenuRequested,
             this, &TableWidget::openHeaderContextMenu);
+    connect(actionLog, &ActionLog::addWord,
+            this, &TableWidget::addWord);
+    connect(actionLog, &ActionLog::deleteWord,
+            this, &TableWidget::deleteWord);
+    connect(actionLog, &ActionLog::sendStatus,
+            this, &TableWidget::actionCompleted);
 }
 
 TableWidget::~TableWidget()
 {
-
+    delete actionLog;
 }

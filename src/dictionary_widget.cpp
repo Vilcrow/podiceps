@@ -353,6 +353,10 @@ DictionaryWidget::DictionaryWidget(QWidget *parent)
             this, &DictionaryWidget::updateInput);
     connect(tableWidget, &TableWidget::selectionChanged,
             this, &DictionaryWidget::stateChanged);
+    connect(this, &DictionaryWidget::undoRequested,
+            tableWidget, &TableWidget::undo);
+    connect(this, &DictionaryWidget::redoRequested,
+            tableWidget, &TableWidget::redo);
 
     connect(findWidget, &FindWidget::setClicked,
             this, &DictionaryWidget::setFilter);
@@ -370,8 +374,8 @@ DictionaryWidget::DictionaryWidget(QWidget *parent)
     connect(inputWidget, &InputWidget::deleteClicked,
             this, &DictionaryWidget::deleteWordRequested);
 
-    connect(this, &DictionaryWidget::addWordRequested,
-            tableWidget, &TableWidget::addWord);
+    connect(this, SIGNAL(addWordRequested(const WordLine&)),
+            tableWidget, SLOT(addWord(const WordLine&)));
     connect(this, &DictionaryWidget::editWordRequested,
             tableWidget, &TableWidget::editEntry);
     connect(this, &DictionaryWidget::deleteWordRequested,

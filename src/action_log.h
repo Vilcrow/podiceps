@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  dictionary_widget.h                                                   */
+/*  action_log.h                                                          */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,70 +25,40 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef DICTIONARY_WIDGET_VIL_H
-#define DICTIONARY_WIDGET_VIL_H
+#ifndef ACTION_LOG_VIL_H
+#define ACTION_LOG_VIL_H
 
-#include "word_line.h"
-#include <QSettings>
-#include <QWidget>
+#include "action_base.h"
+#include <QList>
+#include <QObject>
+#include <QString>
 
-class FindWidget;
-class InputWidget;
-class TableWidget;
-
-class DictionaryWidget : public QWidget {
+class ActionLog : public QObject {
     Q_OBJECT
 public:
-    void readFromFile(const QString &fileName);
-    void writeToFile (const QString &fileName);
-    bool writeToXmlFile(const QString &fileName);
-    void setLastFileName(const QString &newLast);
-    void importFromFile(const QString &fileName);
-    void exportToFile(const QString &fileName);
+    enum { MaxSize = 1000 };
 
-    bool isSaved() const;
-    void setSaved(bool value);
+    bool addAction(ActionBase *act);
+    void erase(int begin, int end);
+    void clear();
 
-    QString getLastFileName() const;
-    int getRowCount() const;
+    void undo();
+    void redo();
 
-    bool hasSelectedWords() const;
-
-    void readSettings();
-    void writeSettings();
-
-    DictionaryWidget(QWidget *parent = nullptr);
-    virtual ~DictionaryWidget();
+    ActionLog();
+    virtual ~ActionLog();
 signals:
-    void actionCompleted(const QString &msg);
-    void stateChanged();
-
-    void addWordRequested(const WordLine& word = WordLine());
-    void editWordRequested();
-    void deleteWordRequested();
-    void undoRequested();
-    void redoRequested();
-public slots:
-    void addWord(const WordLine& word);
-    void editWord();
-    void deleteWord();
-
-    void createNewFile();
-    void clearInput();
-    void setFilter();
-    void clearFilter();
-    void openFindWidget();
-    void closeFindWidget();
-    void updateInput();
-    void updateSettings();
-    void resize(int w, int h);
+    void addWord(const WordLine &word, bool makeLog = false);
+    void deleteWord(const WordLine &word, bool makeLog = false);
+    void sendStatus(const QString &msg);
 private:
-    QSettings settings;
-    QString lastFileName;
+    int pos;
+    QList<ActionBase*> log;
 
-    TableWidget *tableWidget;
-    FindWidget *findWidget;
-    InputWidget *inputWidget;
+    void eraseAfterCurrent();
+    bool isFull() const;
+    bool isLastPossible() const;
+    bool isLastAction() const;
 };
 
 #endif

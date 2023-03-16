@@ -1,6 +1,11 @@
 set(CMAKE_AUTOMOC ON)
 
 set(APP_LIB_SOURCE
+    action_add.cpp
+    action_base.cpp
+    action_delete.cpp
+    action_edit.cpp
+    action_log.cpp
     dictionary_widget.cpp
     find_widget.cpp
     header_menu.cpp

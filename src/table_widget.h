@@ -28,6 +28,7 @@
 #ifndef TABLE_WIDGET_VIL_H
 #define TABLE_WIDGET_VIL_H
 
+#include "action_log.h"
 #include "table_model.h"
 #include <QSettings>
 #include <QTableView>
@@ -73,12 +74,15 @@ signals:
     void dataChanged();
     void selectionChanged();
 public slots:
-    void addWord(const WordLine &word);
+    void addWord(const WordLine &word, bool addToLog = true);
+    void deleteWord(const WordLine &word, bool addToLog = true);
     void updateSettings();
     void openWordAdd(const WordLine &word = WordLine(),
                      const QString &msg = QString());
     void openWordEdit(const QModelIndex &index);
     void resize(int w, int h);
+    void undo();
+    void redo();
 private slots:
     void rowDoubleClicked(const QModelIndex &index);
     void openContextMenu(const QPoint &pos);
@@ -95,7 +99,10 @@ private:
     QTableView *tableView;
     QSortFilterProxyModel *proxyModel;
 
+    ActionLog *actionLog;
+
     void processQueues();
+    void makeLogEntry(ActionBase *act);
 };
 
 #endif

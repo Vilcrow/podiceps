@@ -339,6 +339,20 @@ void MainWindow::createEditMenu()
 {
     editMenu = menuBar()->addMenu(tr("&Edit"));
 
+    undoAct = new QAction(tr("Undo"), this);
+    undoAct->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_Z);
+    editMenu->addAction(undoAct);
+    connect(undoAct, &QAction::triggered,
+            dictWidget, &DictionaryWidget::undoRequested);
+
+    redoAct = new QAction(tr("Redo"), this);
+    redoAct->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_Y);
+    editMenu->addAction(redoAct);
+    connect(redoAct, &QAction::triggered,
+            dictWidget, &DictionaryWidget::redoRequested);
+
+    editMenu->addSeparator();
+
     addAct = new QAction(tr("&Add..."), this);
     addAct->setShortcut(Qt::CTRL + Qt::Key_A);
     editMenu->addAction(addAct);

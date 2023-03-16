@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  dictionary_widget.h                                                   */
+/*  action_base.cpp                                                       */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,70 +25,14 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef DICTIONARY_WIDGET_VIL_H
-#define DICTIONARY_WIDGET_VIL_H
+#include "action_base.h"
 
-#include "word_line.h"
-#include <QSettings>
-#include <QWidget>
+ActionBase::ActionBase()
+{
 
-class FindWidget;
-class InputWidget;
-class TableWidget;
+}
 
-class DictionaryWidget : public QWidget {
-    Q_OBJECT
-public:
-    void readFromFile(const QString &fileName);
-    void writeToFile (const QString &fileName);
-    bool writeToXmlFile(const QString &fileName);
-    void setLastFileName(const QString &newLast);
-    void importFromFile(const QString &fileName);
-    void exportToFile(const QString &fileName);
+ActionBase::~ActionBase()
+{
 
-    bool isSaved() const;
-    void setSaved(bool value);
-
-    QString getLastFileName() const;
-    int getRowCount() const;
-
-    bool hasSelectedWords() const;
-
-    void readSettings();
-    void writeSettings();
-
-    DictionaryWidget(QWidget *parent = nullptr);
-    virtual ~DictionaryWidget();
-signals:
-    void actionCompleted(const QString &msg);
-    void stateChanged();
-
-    void addWordRequested(const WordLine& word = WordLine());
-    void editWordRequested();
-    void deleteWordRequested();
-    void undoRequested();
-    void redoRequested();
-public slots:
-    void addWord(const WordLine& word);
-    void editWord();
-    void deleteWord();
-
-    void createNewFile();
-    void clearInput();
-    void setFilter();
-    void clearFilter();
-    void openFindWidget();
-    void closeFindWidget();
-    void updateInput();
-    void updateSettings();
-    void resize(int w, int h);
-private:
-    QSettings settings;
-    QString lastFileName;
-
-    TableWidget *tableWidget;
-    FindWidget *findWidget;
-    InputWidget *inputWidget;
-};
-
-#endif
+}

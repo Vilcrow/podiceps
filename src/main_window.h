@@ -83,6 +83,8 @@ private:
     QAction *exitAct;
 
     QMenu *editMenu;
+    QAction *undoAct;
+    QAction *redoAct;
     QAction *addAct;
     QAction *findAct;
     QAction *editAct;
