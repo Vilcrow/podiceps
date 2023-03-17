@@ -32,18 +32,18 @@ QMap<int, QColor> WordStatus::map = { { New, QColor(51, 51, 255) },
                                       { Middle, QColor(204, 102, 0) },
                                       { Learned, QColor(0, 153, 0) } };
 
-QColor WordStatus::getColor(int i)
+QColor WordStatus::getColor(int status)
 {
-    if(i < New || i > Learned) {
-        i = New;
+    if(status < New || status > Learned) {
+        status = New;
     }
 
-    return map[i];
+    return map[status];
 }
 
-void WordStatus::setStatus(int i)
+void WordStatus::setStatus(int pStatus)
 {
-    switch(i) {
+    switch(pStatus) {
     case New:
         status = New;
         break;
@@ -59,12 +59,12 @@ void WordStatus::setStatus(int i)
     }
 }
 
-void WordStatus::setStatus(const QString s)
+void WordStatus::setStatus(const QString str)
 {
-    if(s == QObject::tr("middle")) {
+    if(str == QObject::tr("middle")) {
         status = Middle;
     }
-    else if(s == QObject::tr("learned")) {
+    else if(str == QObject::tr("learned")) {
         status = Learned;
     }
     else {
@@ -132,16 +132,16 @@ bool WordStatus::operator<=(const WordStatus &other) const
     return status <= other.status;
 }
 
-WordStatus::WordStatus(const QString s)
+WordStatus::WordStatus(const QString str)
     : status(New)
 {
-    setStatus(s);
+    setStatus(str);
 }
 
-WordStatus::WordStatus(int s)
+WordStatus::WordStatus(int pStatus)
     : status(New)
 {
-    setStatus(s);
+    setStatus(pStatus);
 }
 
 WordStatus::~WordStatus()

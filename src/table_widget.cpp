@@ -512,6 +512,7 @@ void TableWidget::processQueues()
     }
 }
 
+// Tries to make a log entry. If it fails, deletes the passed action.
 void TableWidget::makeLogEntry(ActionBase *act)
 {
     if(!actionLog->addAction(act)) {

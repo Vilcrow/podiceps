@@ -43,8 +43,6 @@ public:
     void writeToFile (const QString &fileName);
     bool writeToXmlFile(const QString &fileName);
     void setLastFileName(const QString &newLast);
-    void importFromFile(const QString &fileName);
-    void exportToFile(const QString &fileName);
 
     bool isSaved() const;
     void setSaved(bool value);

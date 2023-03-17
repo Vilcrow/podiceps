@@ -60,10 +60,6 @@ private slots:
     void openAbout();
     void openPreferences();
     void quitApp();
-
-    // Should be deleted in in the future.
-    void importFile(); // Import the podicepses .txt to .xml.
-    void exportFile();
 protected:
     void closeEvent(QCloseEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;

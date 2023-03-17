@@ -39,7 +39,7 @@ bool ActionLog::addAction(ActionBase *act)
                           "Save the changes to resume the log"));
         }
         else if(isFull()) {
-            sendStatus(tr("The actions isn't logged"));
+            sendStatus(tr("The action isn't logged"));
             return false;
         }
 

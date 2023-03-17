@@ -60,7 +60,6 @@ void MainWindow::updateActions()
             saveAct->setEnabled(false);
         }
         saveAsAct->setEnabled(true);
-        exportAct->setEnabled(true);
 
         if(dictWidget->hasSelectedWords()) {
             editAct->setEnabled(true);
@@ -80,7 +79,6 @@ void MainWindow::updateActions()
             saveAct->setEnabled(false);
         }
         saveAsAct->setEnabled(false);
-        exportAct->setEnabled(false);
 
         editAct->setEnabled(false);
         deleteAct->setEnabled(false);
@@ -232,35 +230,6 @@ void MainWindow::quitApp()
     }
 }
 
-void MainWindow::importFile()
-{
-    bool ok = true;
-    if(!dictWidget->isSaved()) {
-        ok = trySaveChanges();
-    }
-
-    if(ok) {
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Import File"),
-                                                "", tr("Text files (*.txt)"));
-        if(!fileName.isEmpty()) {
-            appendFormat(fileName, "txt");
-            dictWidget->importFromFile(fileName);
-            dictWidget->setLastFileName("");
-        }
-    }
-}
-
-void MainWindow::exportFile()
-{
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Export File"),
-                                              "", tr("Text Files (*.txt)"));
-    if(!fileName.isEmpty()) {
-        appendFormat(fileName, "txt");
-        dictWidget->exportToFile(fileName);
-        dictWidget->setLastFileName(fileName);
-    }
-}
-
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if(closeImmediately) {
@@ -316,17 +285,6 @@ void MainWindow::createFileMenu()
     saveAsAct->setShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_S);
     fileMenu->addAction(saveAsAct);
     connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveFile);
-    fileMenu->addSeparator();
-
-    importAct = new QAction(tr("&Import..."), this);
-    importAct->setShortcut(Qt::CTRL + Qt::Key_I);
-    fileMenu->addAction(importAct);
-    connect(importAct, &QAction::triggered, this, &MainWindow::importFile);
-
-    exportAct = new QAction(tr("&Export..."), this);
-    exportAct->setShortcut(Qt::CTRL + Qt::Key_E);
-    fileMenu->addAction(exportAct);
-    connect(exportAct, &QAction::triggered, this, &MainWindow::exportFile);
     fileMenu->addSeparator();
 
     exitAct = new QAction(tr("E&xit"), this);

@@ -55,18 +55,31 @@ int StatusSpinBox::valueFromText(const QString &text) const
 
 void StatusSpinBox::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key() == Qt::Key_Return) {
+    int key = event->key();
+
+    switch(key) {
+    case Qt::Key_Return:
         emit returnPressed();
+        break;
+    case Qt::Key_W:
+    case Qt::Key_K:
+        stepUp();
+        break;
+    case Qt::Key_S:
+    case Qt::Key_J:
+        stepDown();
+        break;
+    default:
+        break;
     }
 
     QSpinBox::keyPressEvent(event);
 }
 
-void StatusSpinBox::changeColor(int i)
+void StatusSpinBox::setColor(int status)
 {
-    WordStatus status;
-    status = i;
-    QColor color = WordStatus::getColor(status.getStatusInt());
+    WordStatus s(status);
+    QColor color = WordStatus::getColor(s.getStatusInt());
     QString name = color.name();
     this->setStyleSheet("background-color: " + name);
 }
@@ -75,11 +88,12 @@ StatusSpinBox::StatusSpinBox(QWidget *parent)
     : QSpinBox(parent)
 {
     setRange(WordStatus::New, WordStatus::Learned);
-    changeColor(0);
+    setColor(0);
     lineEdit()->setReadOnly(true);
+    setContextMenuPolicy(Qt::NoContextMenu);
 
     connect(this, QOverload<int>::of(&QSpinBox::valueChanged),
-            this, &StatusSpinBox::changeColor);
+            this, &StatusSpinBox::setColor);
 }
 
 StatusSpinBox::~StatusSpinBox()

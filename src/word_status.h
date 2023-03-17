@@ -36,10 +36,10 @@ class WordStatus {
 public:
     enum Status { New, Middle, Learned };
 
-    static QColor getColor(int i);
+    static QColor getColor(int status);
 
-    void setStatus(int i);
-    void setStatus(const QString s);
+    void setStatus(int pStatus);
+    void setStatus(const QString str);
 
     QString getStatus() const;
     int getStatusInt() const;
@@ -52,8 +52,8 @@ public:
     bool operator>=(const WordStatus &other) const;
     bool operator<=(const WordStatus &other) const;
 
-    WordStatus(const QString s = QString());
-    WordStatus(int s);
+    WordStatus(const QString str = QString());
+    WordStatus(int pStatus);
     virtual ~WordStatus();
 private:
     Status status;

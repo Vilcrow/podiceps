@@ -41,7 +41,7 @@ public:
 signals:
     void returnPressed();
 private slots:
-    void changeColor(int i);
+    void setColor(int status);
 protected:
     QString textFromValue(int value) const override;
     int valueFromText(const QString &text) const override;
