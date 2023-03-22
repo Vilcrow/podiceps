@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  word_edit_test.h                                                      */
+/*  word_add_test.cpp                                                     */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,16 +25,22 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef WORD_EDIT_TEST_VIL_H
-#define WORD_EDIT_TEST_VIL_H
+#include "word_add_test.h"
+#include "word_line.h"
 
-#include "word_edit.h"
-#include <QTest>
+void WordAddTest::setAndGetWord()
+{
+    WordAdd wordAdd;
+    QVERIFY(wordAdd.getWord().isEmpty());
 
-class WordEditTest : public QObject {
-    Q_OBJECT
-private slots:
-    void setAndGetWord();
-};
-
-#endif
+    WordLine word("dream", "мечта", "learned", "04-11-2022", "dd-MM-yyyy");
+    word.setTranscription("driːm");
+    word.setComment("Comment.");
+    wordAdd.setWord(word);
+    QCOMPARE(wordAdd.getWord().getOriginal(), "dream");
+    QCOMPARE(wordAdd.getWord().getTranscription(), "driːm");
+    QCOMPARE(wordAdd.getWord().getTranslation(), "мечта");
+    QCOMPARE(wordAdd.getWord().getStatus(), "learned");
+    QCOMPARE(wordAdd.getWord().getDate("dd-MM-yyyy"), "04-11-2022");
+    QCOMPARE(wordAdd.getWord().getComment(), "Comment.");
+}

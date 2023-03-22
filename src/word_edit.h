@@ -32,6 +32,7 @@
 #include <QDialog>
 
 class StatusSpinBox;
+class QLabel;
 class QLineEdit;
 class QStatusBar;
 class QTextEdit;
@@ -39,19 +40,41 @@ class QTextEdit;
 class WordEdit : public QDialog {
     Q_OBJECT
 public:
-    WordLine getWord() const;
-    void setWord(const WordLine &pWord);
+    QList<WordLine> getWords() const;
 
-    void showMessage(const QString &msg);
-
-    WordEdit(QWidget *parent = nullptr, const WordLine &pWord = WordLine());
+    WordEdit(const QList<WordLine> &pWords,
+             const QList<int> &pPositions, QWidget *parent = nullptr);
     virtual ~WordEdit();
 public slots:
     void accept() override;
 private slots:
     void truncateComment();
+    void saveWord();
+    void deleteWord();
+    void recoverWord();
+    void stepPrev();
+    void stepNext();
 private:
-    WordLine word;
+    QList<WordLine> words;
+    QList<int> positions;
+    int position;
+    int posIndex;
+
+    QMap<int, WordLine> sourceValues;
+    QList<int> deletedWords;
+
+    QLabel *originalLabel;
+    QLabel *transcriptionLabel;
+    QLabel *translationLabel;
+    QLabel *statusLabel;
+    QLabel *dateLabel;
+    QLabel *commentLabel;
+
+    QPushButton *saveButton;
+    QPushButton *deleteButton;
+    QPushButton *recoverButton;
+    QPushButton *prevButton;
+    QPushButton *nextButton;
 
     QLineEdit *originalText;
     QLineEdit *transcriptionText;
@@ -59,8 +82,14 @@ private:
     StatusSpinBox *statusSpinBox;
     QLineEdit *dateText;
     QTextEdit *commentText;
-
     QStatusBar *statusBar;
+
+    void update();
+    void setWord();
+    WordLine getWord() const;
+    void setEditable(bool value);
+    void showMessage(const QString &msg);
+    void fillFields(const WordLine &word);
 };
 
 #endif

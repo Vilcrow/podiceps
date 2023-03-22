@@ -184,7 +184,6 @@ void PreferencesWidget::setupInterfaceTab()
         return;
     }
 
-    // Interface tab.
     QWidget *interfaceTab = new QWidget(tabWidget);
     QVBoxLayout *mainLayout = new QVBoxLayout;
     interfaceTab->setLayout(mainLayout);
@@ -193,7 +192,7 @@ void PreferencesWidget::setupInterfaceTab()
     // Language settings.
     QGroupBox *langGroupBox = new QGroupBox(tr("Language"));
     QVBoxLayout *langLayout = new QVBoxLayout;
-    engLangButton = new QRadioButton("English");
+    engLangButton = new QRadioButton("&English");
     langLayout->addWidget(engLangButton);
     connect(engLangButton, &QRadioButton::toggled,
             this, &PreferencesWidget::languageChanged);
@@ -248,24 +247,35 @@ void PreferencesWidget::setupInterfaceTab()
     themeLayout->addLayout(customLayout);
     themeGroupBox->setLayout(themeLayout);
     mainLayout->addWidget(themeGroupBox);
+}
 
-    // Table settings.
-    QGroupBox *tableGroupBox = new QGroupBox(tr("Table"));
+void PreferencesWidget::setupTableTab()
+{
+    if(!tabWidget) {
+        return;
+    }
+
+    QWidget *tableTab = new QWidget(tabWidget);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    tableTab->setLayout(mainLayout);
+    tabWidget->addTab(tableTab, tr("&Table"));
+
+    QGroupBox *tableGroupBox = new QGroupBox(tr("Table Content"));
     QVBoxLayout *tableLayout = new QVBoxLayout;
 
-    showTranscriptionCheckBox = new QCheckBox(tr("&Transcription column"), interfaceTab);
+    showTranscriptionCheckBox = new QCheckBox(tr("T&ranscription"), tableTab);
     showTranscriptionCheckBox->setChecked(showTranscription);
     tableLayout->addWidget(showTranscriptionCheckBox);
     connect(showTranscriptionCheckBox, &QCheckBox::stateChanged,
             this, &PreferencesWidget::tableSettingsChanged);
 
-    showStatusCheckBox = new QCheckBox(tr("S&tatus column"), interfaceTab);
+    showStatusCheckBox = new QCheckBox(tr("Stat&us"), tableTab);
     showStatusCheckBox->setChecked(showStatus);
     tableLayout->addWidget(showStatusCheckBox);
     connect(showStatusCheckBox, &QCheckBox::stateChanged,
             this, &PreferencesWidget::tableSettingsChanged);
 
-    showDateCheckBox = new QCheckBox(tr("D&ate column"), interfaceTab);
+    showDateCheckBox = new QCheckBox(tr("&Date"), tableTab);
     showDateCheckBox->setChecked(showDate);
     tableLayout->addWidget(showDateCheckBox);
     connect(showDateCheckBox, &QCheckBox::stateChanged,
@@ -281,6 +291,7 @@ PreferencesWidget::PreferencesWidget(QWidget *parent)
     readSettings();
     tabWidget = new QTabWidget(this);
     setupInterfaceTab();
+    setupTableTab();
 
     setWindowTitle(tr("Preferences"));
     QVBoxLayout *vLayout = new QVBoxLayout;

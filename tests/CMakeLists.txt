@@ -5,7 +5,7 @@ set(TEST_APP_NAME ${APP_NAME}_tests)
 set(TEST_SOURCES
     main_test.cpp
     status_spin_box_test.cpp
-    word_edit_test.cpp
+    word_add_test.cpp
     word_line_test.cpp
     word_status_test.cpp
 )

@@ -232,12 +232,10 @@ void DictionaryWidget::updateInput()
 {
     if(tableWidget->hasSelectedWords()) {
         inputWidget->setEnabled(InputWidget::DeleteButton, true);
-        inputWidget->setEnabled(InputWidget::EditButton, true);
     }
     else { // Dictionary is empty or the row don't selected.
         inputWidget->clearInput();
         inputWidget->setEnabled(InputWidget::DeleteButton, false);
-        inputWidget->setEnabled(InputWidget::EditButton, false);
     }
 }
 

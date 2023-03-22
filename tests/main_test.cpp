@@ -26,7 +26,7 @@
 /**************************************************************************/
 
 #include "status_spin_box_test.h"
-#include "word_edit_test.h"
+#include "word_add_test.h"
 #include "word_line_test.h"
 #include "word_status_test.h"
 #include <QTest>
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 
     // WordEdit.
     {
-        WordEditTest test;
+        WordAddTest test;
         status |= QTest::qExec(&test, argc, argv);
     }
 

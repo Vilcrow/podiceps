@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  preferences_widget.h                                                  */
+/*  word_add_test.h                                                       */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,63 +25,16 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef PREFERENCES_WIDGET_VIL_H
-#define PREFERENCES_WIDGET_VIL_H
+#ifndef WORD_ADD_TEST_VIL_H
+#define WORD_ADD_TEST_VIL_H
 
-#include <QDialog>
-#include <QSettings>
-#include <QTabWidget>
+#include "word_add.h"
+#include <QTest>
 
-class QCheckBox;
-class QLineEdit;
-class QRadioButton;
-
-class PreferencesWidget : public QDialog {
+class WordAddTest : public QObject {
     Q_OBJECT
-public:
-    enum Theme { LightTheme, DarkTheme, CustomTheme };
-
-    static QString getTheme(int theme);
-
-    enum Language { EnglishLang };
-
-    PreferencesWidget(QWidget *parent = nullptr);
-    virtual ~PreferencesWidget();
-public slots:
-    void accept() override;
 private slots:
-    void setCustomThemePath();
-    void languageChanged(bool checked);
-    void themeChanged(bool checked);
-    void tableSettingsChanged(int state);
-private:
-    QSettings settings;
-    int appLanguage;
-    int appTheme;
-    bool showTranscription;
-    bool showStatus;
-    bool showDate;
-
-    QTabWidget *tabWidget;
-
-    QRadioButton *engLangButton;
-
-    QCheckBox *showTranscriptionCheckBox;
-    QCheckBox *showStatusCheckBox;
-    QCheckBox *showDateCheckBox;
-
-    QRadioButton *lightThemeButton;
-    QRadioButton *darkThemeButton;
-    QRadioButton *customThemeButton;
-    QLineEdit *customLineEdit;
-
-    static QMap<int, QString> themePaths;
-    static void setThemePaths();
-
-    void readSettings();
-    void writeSettings();
-    void setupInterfaceTab();
-    void setupTableTab();
+    void setAndGetWord();
 };
 
 #endif

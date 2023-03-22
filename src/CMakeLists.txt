@@ -17,6 +17,7 @@ set(APP_LIB_SOURCE
     status_spin_box.cpp
     table_model.cpp
     table_widget.cpp
+    word_add.cpp
     word_edit.cpp
     word_line.cpp
     word_status.cpp

@@ -62,11 +62,9 @@ void MainWindow::updateActions()
         saveAsAct->setEnabled(true);
 
         if(dictWidget->hasSelectedWords()) {
-            editAct->setEnabled(true);
             deleteAct->setEnabled(true);
         }
         else {
-            editAct->setEnabled(false);
             deleteAct->setEnabled(false);
         }
     }

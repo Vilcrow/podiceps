@@ -30,6 +30,7 @@
 #include "action_delete.h"
 #include "action_edit.h"
 #include "header_menu.h"
+#include "word_add.h"
 #include "word_edit.h"
 #include <algorithm>
 #include <QDebug>
@@ -93,13 +94,7 @@ bool TableWidget::addEntry(const WordLine &word)
 void TableWidget::editEntry() {
     QModelIndexList indexes = tableView->selectionModel()->selectedRows();
 
-    if(indexes.isEmpty()) {
-        return;
-    }
-
-    for(QModelIndex idx : indexes) {
-        openWordEdit(idx);
-    }
+    openWordEdit(indexes);
 
     processQueues();
     clearSelection();
@@ -330,14 +325,14 @@ void TableWidget::openWordAdd(const WordLine &word, const QString &msg)
         w = word;
     }
 
-    WordEdit *wordEdit = new WordEdit(this, w);
+    WordAdd *wordAdd = new WordAdd(w, this);
     if(!msg.isEmpty()) {
-        wordEdit->showMessage(msg);
+        wordAdd->showMessage(msg);
     }
 
     while(true) {
-        int result = wordEdit->exec();
-        WordLine word = wordEdit->getWord();
+        int result = wordAdd->exec();
+        WordLine word = wordAdd->getWord();
         if(result == QDialog::Rejected) {
             break;
         }
@@ -348,68 +343,45 @@ void TableWidget::openWordAdd(const WordLine &word, const QString &msg)
                 break;
             }
             else {
-                wordEdit = new WordEdit(this, word);
+                wordAdd = new WordAdd(word, this);
                 QString msg = tr("The word \"%1\" already exists.")
-                                 .arg(wordEdit->getWord().getOriginal());
-                wordEdit->showMessage(msg);
+                                 .arg(wordAdd->getWord().getOriginal());
+                wordAdd->showMessage(msg);
                 continue;
             }
         }
         else {
-            wordEdit = new WordEdit(this, word);
-            wordEdit->showMessage(tr("Enter the original word"));
+            wordAdd = new WordAdd(word, this);
+            wordAdd->showMessage(tr("Enter the original word"));
             continue;
         }
     }
 }
 
-void TableWidget::openWordEdit(const QModelIndex &index)
+void TableWidget::openWordEdit(const QModelIndexList &indexes)
 {
-    WordLine word = getWord(index);
-    WordEdit *wordEdit = new WordEdit(this, word);
+    QList<int> rows;
+    if(indexes.isEmpty()) {  // Without selection.
+        for(int i = 0; i < tableModel->rowCount(QModelIndex()); ++i) {
+            QModelIndex idx = proxyModel->index(i, 0);
+            rows.append(proxyModel->mapToSource(idx).row());
+        }
+    }
+    else {
+        for(int i = 0; i < indexes.size(); ++i) {
+            rows.append(proxyModel->mapToSource(indexes[i]).row());
+        }
+    }
 
-    while(true) {
-        int result = wordEdit->exec();
-        WordLine changedWord = wordEdit->getWord();
-        if(result == QDialog::Rejected) {
-            break;
-        }
-        // Changes have been made.
-        else if(word != changedWord) {
-            if(changedWord.getOriginal().isEmpty()) {
-                wordEdit = new WordEdit(this, changedWord);
-                wordEdit->showMessage(tr("Enter the original word"));
-                continue;
-            }
-            // The original was changed.
-            else if(changedWord.getOriginal() != word.getOriginal()) {
-                if(!containsWord(changedWord)) {
-                    ActionEdit *act = new ActionEdit(word, changedWord);
-                    makeLogEntry(act);
-                    wordDeleteQueue.append(index);
-                    wordAddQueue.append(changedWord);
-                    break;
-                }
-                else {
-                    wordEdit = new WordEdit(this, changedWord);
-                    QString msg = tr("The word \"%1\" already exists.")
-                                     .arg(changedWord.getOriginal());
-                    wordEdit->showMessage(msg);
-                    continue;
-                }
-            }
-            else {
-                ActionEdit *act = new ActionEdit(word, changedWord);
-                makeLogEntry(act);
-                wordDeleteQueue.append(index);
-                wordAddQueue.append(changedWord);
-                break;
-            }
-        }
-        // Save without changes.
-        else {
-            break;
-        }
+    if(rows.isEmpty()) {
+        return;
+    }
+
+    QList<WordLine> words = tableModel->getWords();
+    WordEdit wordEdit(words, rows, this);
+    if(wordEdit.exec() == QDialog::Accepted) {
+        // Need fix.
+        fillTable(wordEdit.getWords());
     }
 }
 
@@ -439,8 +411,7 @@ void TableWidget::redo()
 
 void TableWidget::rowDoubleClicked(const QModelIndex &index)
 {
-    Q_UNUSED(index);
-    openWordEdit(index);
+    openWordEdit({index});
 
     processQueues();
     clearSelection();

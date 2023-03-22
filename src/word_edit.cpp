@@ -36,31 +36,28 @@
 #include <QStatusBar>
 #include <QTextEdit>
 #include <QVBoxLayout>
+#include <algorithm>
+
+QList<WordLine> WordEdit::getWords() const
+{
+    return words;
+}
 
 void WordEdit::accept()
 {
-    word.setOriginal(originalText->text());
-    word.setTranslation(translationText->text());
-    word.setStatus(statusSpinBox->getValue());
-    word.setComment(commentText->toPlainText());
-    word.setTranscription(transcriptionText->text());
+    sourceValues.clear();
+
+    if(!deletedWords.isEmpty()) {
+        std::sort(deletedWords.begin(), deletedWords.end());
+        std::reverse(deletedWords.begin(), deletedWords.end());
+        for(int i = 0; i < deletedWords.size(); ++i) {
+            int pos = deletedWords[i];
+            words.removeAt(pos);
+        }
+        deletedWords.clear();
+    }
 
     QDialog::accept();
-}
-
-WordLine WordEdit::getWord() const
-{
-    return word;
-}
-
-void WordEdit::setWord(const WordLine &pWord)
-{
-    word = pWord;
-}
-
-void WordEdit::showMessage(const QString &msg)
-{
-    statusBar->showMessage(msg, 5000);
 }
 
 void WordEdit::truncateComment()
@@ -72,33 +69,205 @@ void WordEdit::truncateComment()
     }
 }
 
-WordEdit::WordEdit(QWidget *parent, const WordLine &pWord)
-    : QDialog(parent), word(pWord), originalText(new QLineEdit),
-      transcriptionText(new QLineEdit), translationText(new QLineEdit),
-      statusSpinBox(new StatusSpinBox), dateText(new QLineEdit),
-      commentText(new QTextEdit), statusBar(new QStatusBar(this))
+void WordEdit::saveWord()
 {
-    originalText->setMaxLength(WordLine::MaxOriginalLength);
-    transcriptionText->setMaxLength(WordLine::MaxOriginalLength);
-    translationText->setMaxLength(WordLine::MaxTranslationLength);
-    dateText->setMaxLength(WordLine::MaxDateLength);
+    if(getWord() == words[position]) {
+        showMessage(tr("No changes"));
+        return;
+    }
 
+    QString original = originalText->text();
+    if(original.isEmpty()) {
+        showMessage(tr("Enter the original word"));
+        return;
+    }
+
+    if(words[position].getOriginal() != original &&
+                words.contains(WordLine(original))) {
+        showMessage(tr("The word \"%1\" already exists").arg(original));
+        return;
+    }
+
+    // Save the source value.
+    if(sourceValues.find(position) == sourceValues.end()) {
+        sourceValues[position] = words[position];
+    }
+
+    setWord();
+    update();
+    showMessage(tr("Saved"));
+}
+
+void WordEdit::deleteWord()
+{
+    // Save the source value.
+    if(sourceValues.find(position) == sourceValues.end()) {
+        sourceValues[position] = words[position];
+    }
+
+    deletedWords.append(position);
+    update();
+
+    showMessage(tr("Deleted"));
+}
+
+void WordEdit::recoverWord()
+{
+    if(sourceValues.find(position) == sourceValues.end()) {
+        return;
+    }
+
+    WordLine word = sourceValues[position];
+    deletedWords.removeAll(position);
+    fillFields(word);
+    saveWord();
+    update();
+
+    showMessage(tr("Recovered"));
+}
+
+void WordEdit::stepPrev()
+{
+    if(position == positions.first()) {
+        return;
+    }
+
+    position = positions[--posIndex];
+    fillFields(words[position]);
+    update();
+}
+
+void WordEdit::stepNext()
+{
+    if(position == positions.last()) {
+        return;
+    }
+
+    position = positions[++posIndex];
+    fillFields(words[position]);
+    update();
+}
+
+void WordEdit::update()
+{
+    if(deletedWords.contains(position)) {
+        setEditable(false);
+        deleteButton->setEnabled(false);
+    }
+    else {
+        setEditable(true);
+        deleteButton->setEnabled(true);
+    }
+
+    if(sourceValues.find(position) == sourceValues.end()) {
+        recoverButton->setEnabled(false);
+    }
+    else {
+        recoverButton->setEnabled(true);
+    }
+
+    if(position == positions.first()) {
+        prevButton->setEnabled(false);
+    }
+    else {
+        prevButton->setEnabled(true);
+    }
+
+    if(position == positions.last()) {
+        nextButton->setEnabled(false);
+    }
+    else {
+        nextButton->setEnabled(true);
+    }
+}
+
+void WordEdit::setWord()
+{
+    words[position].setOriginal(originalText->text());
+    words[position].setTranslation(translationText->text());
+    words[position].setStatus(statusSpinBox->getValue());
+    words[position].setComment(commentText->toPlainText());
+    words[position].setTranscription(transcriptionText->text());
+}
+
+WordLine WordEdit::getWord() const
+{
+    WordLine word = words[position];
+    word.setOriginal(originalText->text());
+    word.setTranslation(translationText->text());
+    word.setStatus(statusSpinBox->getValue());
+    word.setComment(commentText->toPlainText());
+    word.setTranscription(transcriptionText->text());
+
+    return word;
+}
+
+// For deleted words.
+void WordEdit::setEditable(bool value)
+{
+    originalLabel->setEnabled(value);
+    originalText->setEnabled(value);
+    transcriptionLabel->setEnabled(value);
+    transcriptionText->setEnabled(value);
+    translationLabel->setEnabled(value);
+    translationText->setEnabled(value);
+    statusLabel->setEnabled(value);
+    statusSpinBox->setEnabled(value);
+    dateLabel->setEnabled(value);
+    commentLabel->setEnabled(value);
+    commentText->setEnabled(value);
+}
+
+void WordEdit::showMessage(const QString &msg)
+{
+    statusBar->showMessage(msg, 5000);
+}
+
+void WordEdit::fillFields(const WordLine &word)
+{
     originalText->setText(word.getOriginal());
     transcriptionText->setText(word.getTranscription());
     translationText->setText(word.getTranslation());
     statusSpinBox->setValue(word.getStatus());
     dateText->setText(word.getDate());
-    dateText->setEnabled(false);
     commentText->setText(word.getComment());
+}
+
+WordEdit::WordEdit(const QList<WordLine> &pWords,
+                   const QList<int> &pPositions, QWidget *parent)
+    : QDialog(parent), words(pWords), positions(pPositions),
+      position(positions.first()), posIndex(0),
+      sourceValues(QMap<int, WordLine>()), deletedWords(QList<int>())
+{
+    originalText = new QLineEdit;
+    transcriptionText = new QLineEdit;
+    translationText = new QLineEdit;
+    statusSpinBox = new StatusSpinBox;
+    dateText = new QLineEdit;
+    commentText = new QTextEdit;
+    statusBar = new QStatusBar(this);
+
+    originalText->setMaxLength(WordLine::MaxOriginalLength);
+    transcriptionText->setMaxLength(WordLine::MaxOriginalLength);
+    translationText->setMaxLength(WordLine::MaxTranslationLength);
+    dateText->setMaxLength(WordLine::MaxDateLength);
+
+    originalText->setText(words[position].getOriginal());
+    transcriptionText->setText(words[position].getTranscription());
+    translationText->setText(words[position].getTranslation());
+    statusSpinBox->setValue(words[position].getStatus());
+    dateText->setText(words[position].getDate());
+    dateText->setEnabled(false);
+    commentText->setText(words[position].getComment());
 
     QGridLayout *gridLayout = new QGridLayout;
 
-    QLabel *originalLabel = new QLabel(tr("Original"));
-    QLabel *transcriptionLabel = new QLabel(tr("Transcription"));
-    QLabel *translationLabel = new QLabel(tr("Translation"));
-    QLabel *statusLabel = new QLabel(tr("Status"));
-    QLabel *dateLabel = new QLabel(tr("Date"));
-    QLabel *commentLabel = new QLabel(tr("Comment"));
+    originalLabel = new QLabel(tr("Original"));
+    transcriptionLabel = new QLabel(tr("Transcription"));
+    translationLabel = new QLabel(tr("Translation"));
+    statusLabel = new QLabel(tr("Status"));
+    dateLabel = new QLabel(tr("Date"));
+    commentLabel = new QLabel(tr("Comment"));
 
     gridLayout->addWidget(originalLabel, 0, 0);
     gridLayout->addWidget(originalText, 0, 1);
@@ -113,15 +282,27 @@ WordEdit::WordEdit(QWidget *parent, const WordLine &pWord)
     gridLayout->addWidget(commentLabel, 5, 0, Qt::AlignTop);
     gridLayout->addWidget(commentText, 5, 1);
 
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    QHBoxLayout *topButtonLayout = new QHBoxLayout;
+    saveButton = new QPushButton(tr("&Save"));
+    deleteButton = new QPushButton(tr("&Delete"));
+    recoverButton = new QPushButton(tr("&Recover"));
+    topButtonLayout->addWidget(saveButton);
+    topButtonLayout->addWidget(deleteButton);
+    topButtonLayout->addWidget(recoverButton);
 
-    QPushButton *saveButton = new QPushButton(tr("&Save"));
+    QHBoxLayout *lowButtonLayout = new QHBoxLayout;
+    prevButton = new QPushButton(tr("&Prev"));
+    nextButton = new QPushButton(tr("&Next"));
+    lowButtonLayout->addWidget(prevButton);
+    lowButtonLayout->addWidget(nextButton);
+
+    QPushButton *quitButton = new QPushButton(tr("&Quit"));
     QPushButton *cancelButton = new QPushButton(tr("&Cancel"));
 
-    buttonLayout->addWidget(saveButton);
-    buttonLayout->addWidget(cancelButton);
-
-    gridLayout->addLayout(buttonLayout, 6, 1, Qt::AlignRight);
+    gridLayout->addLayout(topButtonLayout, 6, 1, Qt::AlignRight);
+    gridLayout->addWidget(quitButton, 6, 0, Qt::AlignLeft);
+    gridLayout->addWidget(cancelButton, 7, 0, Qt::AlignLeft);
+    gridLayout->addLayout(lowButtonLayout, 7, 1, Qt::AlignRight);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
 
@@ -130,8 +311,17 @@ WordEdit::WordEdit(QWidget *parent, const WordLine &pWord)
 
     setLayout(mainLayout);
     setWindowTitle(tr("Edit a Word"));
+    update();
 
-    connect(saveButton, &QAbstractButton::clicked, this, &QDialog::accept);
+    connect(saveButton, &QAbstractButton::clicked, this, &WordEdit::saveWord);
+    connect(deleteButton, &QAbstractButton::clicked,
+            this, &WordEdit::deleteWord);
+    connect(recoverButton, &QAbstractButton::clicked,
+            this, &WordEdit::recoverWord);
+
+    connect(prevButton, &QAbstractButton::clicked, this, &WordEdit::stepPrev);
+    connect(nextButton, &QAbstractButton::clicked, this, &WordEdit::stepNext);
+    connect(quitButton, &QAbstractButton::clicked, this, &QDialog::accept);
     connect(cancelButton, &QAbstractButton::clicked, this, &QDialog::reject);
 
     connect(commentText, &QTextEdit::textChanged,

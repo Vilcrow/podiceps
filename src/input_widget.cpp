@@ -143,7 +143,6 @@ InputWidget::InputWidget(QWidget *parent)
 
     addButton = new QPushButton(tr("Add"));
     editButton = new QPushButton(tr("Edit"));
-    editButton->setEnabled(false);
     deleteButton = new QPushButton(tr("Delete"));
     deleteButton->setEnabled(false);
     findButton = new QPushButton(tr("Find"));

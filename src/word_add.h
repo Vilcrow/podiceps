@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  word_edit_test.cpp                                                    */
+/*  word_add.h                                                            */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,22 +25,41 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#include "word_edit_test.h"
+#ifndef WORD_ADD_VIL_H
+#define WORD_ADD_VIL_H
+
 #include "word_line.h"
+#include <QDialog>
 
-void WordEditTest::setAndGetWord()
-{
-    WordEdit wordEdit;
-    QVERIFY(wordEdit.getWord().isEmpty());
+class StatusSpinBox;
+class QLineEdit;
+class QStatusBar;
+class QTextEdit;
 
-    WordLine word("dream", "мечта", "learned", "04-11-2022", "dd-MM-yyyy");
-    word.setTranscription("driːm");
-    word.setComment("Comment.");
-    wordEdit.setWord(word);
-    QCOMPARE(wordEdit.getWord().getOriginal(), "dream");
-    QCOMPARE(wordEdit.getWord().getTranscription(), "driːm");
-    QCOMPARE(wordEdit.getWord().getTranslation(), "мечта");
-    QCOMPARE(wordEdit.getWord().getStatus(), "learned");
-    QCOMPARE(wordEdit.getWord().getDate("dd-MM-yyyy"), "04-11-2022");
-    QCOMPARE(wordEdit.getWord().getComment(), "Comment.");
-}
+class WordAdd : public QDialog {
+    Q_OBJECT
+public:
+    WordLine getWord() const;
+    void setWord(const WordLine &pWord);
+
+    WordAdd(const WordLine &pWord = WordLine(), QWidget *parent = nullptr);
+    virtual ~WordAdd();
+public slots:
+    void accept() override;
+    void showMessage(const QString &msg);
+private slots:
+    void truncateComment();
+private:
+    WordLine word;
+
+    QLineEdit *originalText;
+    QLineEdit *transcriptionText;
+    QLineEdit *translationText;
+    StatusSpinBox *statusSpinBox;
+    QLineEdit *dateText;
+    QTextEdit *commentText;
+
+    QStatusBar *statusBar;
+};
+
+#endif
