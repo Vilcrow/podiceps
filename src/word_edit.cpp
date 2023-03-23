@@ -71,7 +71,7 @@ void WordEdit::truncateComment()
 
 void WordEdit::saveWord()
 {
-    if(getWord() == words[position]) {
+    if(words[position].isSame(getWord())) {
         showMessage(tr("No changes"));
         return;
     }

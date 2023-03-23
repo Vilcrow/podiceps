@@ -337,3 +337,69 @@ void WordLineTest::setDomElement_data()
     fullWord.setDomElement(element);
     QTest::newRow("Full") << element << fullWord;
 }
+
+void WordLineTest::isSame()
+{
+    QFETCH(bool, result);
+    QFETCH(bool, expected);
+
+    QCOMPARE(result, expected);
+}
+
+void WordLineTest::isSame_data()
+{
+    QTest::addColumn<bool>("result");
+    QTest::addColumn<bool>("expected");
+
+    WordLine first;
+    WordLine second;
+    QTest::newRow("empty-words") << first.isSame(second) << true;
+
+    second.setOriginal("list");
+    QTest::newRow("diff-original") << first.isSame(second) << false;
+
+    first.setOriginal("list");
+    QTest::newRow("same-original") << first.isSame(second) << true;
+
+    second.setTranscription("lɪst");
+    QTest::newRow("diff-transcription") << first.isSame(second) << false;
+
+    first.setTranscription("lɪst");
+    QTest::newRow("same-transcription") << first.isSame(second) << true;
+
+    second.setTranslation("список");
+    QTest::newRow("diff-translation") << first.isSame(second) << false;
+
+    first.setTranslation("список");
+    QTest::newRow("same-translation") << first.isSame(second) << true;
+
+    second.setStatus("learned");
+    QTest::newRow("diff-status") << first.isSame(second) << false;
+
+    first.setStatus("learned");
+    QTest::newRow("same-status") << first.isSame(second) << true;
+
+    second.setDate("2022-01-01");
+    QTest::newRow("diff-date") << first.isSame(second) << false;
+
+    first.setDate("2022-01-01");
+    QTest::newRow("same-date") << first.isSame(second) << true;
+
+    second.setDateFormat("dd-MM-yyyy");
+    QTest::newRow("diff-date-format") << first.isSame(second) << false;
+
+    first.setDateFormat("dd-MM-yyyy");
+    QTest::newRow("same-date-format") << first.isSame(second) << true;
+
+    second.setComment("It is very important.");
+    QTest::newRow("diff-comment") << first.isSame(second) << false;
+
+    first.setComment("It is very important.");
+    QTest::newRow("same-comment") << first.isSame(second) << true;
+
+    second.clear();
+    QTest::newRow("one-cleared") << first.isSame(second) << false;
+
+    first.clear();
+    QTest::newRow("both-cleared") << first.isSame(second) << true;
+}

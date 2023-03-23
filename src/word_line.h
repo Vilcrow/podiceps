@@ -60,6 +60,7 @@ public:
 
     bool isEmpty() const;
     bool isDateValid() const;
+    bool isSame(const WordLine &other) const;
 
     void setDomElement(QDomElement &element) const;
 

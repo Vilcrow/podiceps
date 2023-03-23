@@ -83,7 +83,6 @@ bool TableWidget::addEntry(const WordLine &word)
 
         changesSaved = false;
         emit dataChanged();
-        emit actionCompleted(tr("Added"));
 
         return true;
     }
@@ -93,10 +92,8 @@ bool TableWidget::addEntry(const WordLine &word)
 
 void TableWidget::editEntry() {
     QModelIndexList indexes = tableView->selectionModel()->selectedRows();
-
     openWordEdit(indexes);
 
-    processQueues();
     clearSelection();
 }
 
@@ -260,6 +257,7 @@ void TableWidget::addWord(const WordLine &word, bool addToLog)
         else if(addToLog) {
             ActionAdd *act = new ActionAdd(word);
             makeLogEntry(act);
+            emit actionCompleted(tr("Added"));
         }
     }
 }
@@ -411,7 +409,10 @@ void TableWidget::redo()
 
 void TableWidget::rowDoubleClicked(const QModelIndex &index)
 {
-    openWordEdit({index});
+    Q_UNUSED(index);
+
+    QModelIndexList indexes = tableView->selectionModel()->selectedRows();
+    openWordEdit(indexes);
 
     processQueues();
     clearSelection();
@@ -468,15 +469,6 @@ void TableWidget::processQueues()
         emit actionCompleted(tr("Deleted"));
     }
 
-    if(!wordAddQueue.isEmpty()) {
-        for(WordLine w : wordAddQueue) {
-            addEntry(w);
-        }
-        wordAddQueue.clear();
-        changed = true;
-        emit actionCompleted(tr("Edited"));
-    }
-
     if(changed) {
         changesSaved = false;
         emit dataChanged();
@@ -495,7 +487,7 @@ void TableWidget::makeLogEntry(ActionBase *act)
 TableWidget::TableWidget(QWidget *parent)
     : QWidget(parent), settings("Vilcrow", "podiceps"),
       changesSaved(true), visibleColumns(TableModel::ColumnCount-1),
-      wordAddQueue(QList<WordLine>()), wordDeleteQueue(QList<QModelIndex>()),
+      wordDeleteQueue(QList<QModelIndex>()),
       tableModel(new TableModel(this)), tableView(new QTableView),
       proxyModel(new QSortFilterProxyModel(this)), actionLog(new ActionLog())
 {

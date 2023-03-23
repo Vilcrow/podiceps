@@ -160,6 +160,17 @@ bool WordLine::isDateValid() const
     return date.isValid();
 }
 
+bool WordLine::isSame(const WordLine &other) const
+{
+    return original == other.original &&
+           transcription == other.transcription &&
+           translation == other.translation &&
+           status == other.status &&
+           date == other.date &&
+           dateFormat == other.dateFormat &&
+           comment == other.comment;
+}
+
 void WordLine::setDomElement(QDomElement &element) const
 {
     element.setAttribute("original", original);

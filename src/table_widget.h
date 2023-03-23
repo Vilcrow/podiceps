@@ -92,7 +92,6 @@ private:
     bool changesSaved;
     int visibleColumns;
 
-    QList<WordLine> wordAddQueue;
     QList<QModelIndex> wordDeleteQueue;
 
     TableModel *tableModel;

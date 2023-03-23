@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  word_line_test.h                                                      */
+/*  about_widget.h                                                        */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,34 +25,18 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef WORD_LINE_TEST_VIL_H
-#define WORD_LINE_TEST_VIL_H
+#ifndef ABOUT_WIDGET_VIL_H
+#define ABOUT_WIDGET_VIL_H
 
-#include "word_line.h"
-#include <QTest>
+#include <QDialog>
 
-Q_DECLARE_METATYPE(QDomElement);
-Q_DECLARE_METATYPE(WordLine);
-
-class WordLineTest : public QObject {
+class AboutWidget : public QDialog {
     Q_OBJECT
+public:
+    AboutWidget(QWidget *parent = nullptr);
+    virtual ~AboutWidget();
 private slots:
-    void getMethods();
-    void getMethods_data();
-    void setMethods();
-    void setMethods_data();
-    void isEmptyMethod();
-    void isEmptyMethod_data();
-    void clearMethod();
-    void clearMethod_data();
-    void maxLength();
-    void maxLength_data();
-    void operators();
-    void operators_data();
-    void setDomElement();
-    void setDomElement_data();
-    void isSame();
-    void isSame_data();
+    void openLicense();
 };
 
 #endif

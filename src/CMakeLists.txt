@@ -1,6 +1,7 @@
 set(CMAKE_AUTOMOC ON)
 
 set(APP_LIB_SOURCE
+    about_widget.cpp
     action_add.cpp
     action_base.cpp
     action_delete.cpp
