@@ -188,6 +188,40 @@ QList<WordLine> TableModel::getWords() const
     return words;
 }
 
+int TableModel::getWordsCount(WordStatus::Status status) const
+{
+    int newCount = 0;
+    int middleCount = 0;
+    int learnedCount = 0;
+    for(const WordLine& w : words) {
+        if(w.getStatusInt() == WordStatus::New) {
+            ++newCount;
+        }
+        else if(w.getStatusInt() == WordStatus::Middle) {
+            ++middleCount;
+        }
+        else if(w.getStatusInt() == WordStatus::Learned) {
+            ++learnedCount;
+        }
+    }
+
+    int ret = 0;
+
+    switch(status) {
+    case WordStatus::New:
+        ret = newCount;
+        break;
+    case WordStatus::Middle:
+        ret = middleCount;
+        break;
+    case WordStatus::Learned:
+        ret = learnedCount;
+        break;
+    }
+
+    return ret;
+}
+
 TableModel::TableModel(QObject *parent) : QAbstractTableModel(parent)
 {
 

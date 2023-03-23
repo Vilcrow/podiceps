@@ -36,6 +36,7 @@
 #include <QTextStream>
 #include <QVBoxLayout>
 
+//TODO: the dark theme must be embedded to the executable file.
 QMap<int, QString> PreferencesWidget::themePaths = { {LightTheme, ""},
                                                      {DarkTheme, ""},
                                                      {CustomTheme, ""} };

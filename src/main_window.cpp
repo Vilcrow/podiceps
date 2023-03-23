@@ -174,12 +174,6 @@ void MainWindow::showMessage(const QString &msg, int timeout)
     statusBar->showMessage(msg, timeout);
 }
 
-void MainWindow::showStatistics()
-{
-    int count = dictWidget->getRowCount();
-    showMessage(tr("Word count: %1").arg(count));
-}
-
 void MainWindow::openTutorial()
 {
 
@@ -335,7 +329,7 @@ void MainWindow::createToolsMenu()
     showStatisticsAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N);
     toolsMenu->addAction(showStatisticsAct);
     connect(showStatisticsAct, &QAction::triggered,
-            this, &MainWindow::showStatistics);
+            dictWidget, &DictionaryWidget::statisticsRequested);
     clearInputAct = new QAction(tr("&Clear input"), this);
     clearInputAct->setShortcut(Qt::Key_Escape);
     toolsMenu->addAction(clearInputAct);

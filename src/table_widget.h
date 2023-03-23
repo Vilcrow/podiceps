@@ -80,6 +80,7 @@ public slots:
     void openWordAdd(const WordLine &word = WordLine(),
                      const QString &msg = QString());
     void openWordEdit(const QModelIndexList &indexes);
+    void openStatistics();
     void resize(int w, int h);
     void undo();
     void redo();

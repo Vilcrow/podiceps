@@ -66,6 +66,7 @@ signals:
     void deleteWordRequested();
     void undoRequested();
     void redoRequested();
+    void statisticsRequested();
 public slots:
     void addWord(const WordLine& word);
     void editWord();

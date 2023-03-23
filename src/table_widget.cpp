@@ -30,6 +30,7 @@
 #include "action_delete.h"
 #include "action_edit.h"
 #include "header_menu.h"
+#include "statistics_widget.h"
 #include "word_add.h"
 #include "word_edit.h"
 #include <algorithm>
@@ -381,6 +382,18 @@ void TableWidget::openWordEdit(const QModelIndexList &indexes)
         // Need fix.
         fillTable(wordEdit.getWords());
     }
+}
+
+void TableWidget::openStatistics()
+{
+    int totalCount = getRowCount();
+    int newCount = tableModel->getWordsCount(WordStatus::New);
+    int middleCount = tableModel->getWordsCount(WordStatus::Middle);
+    int learnedCount = tableModel->getWordsCount(WordStatus::Learned);
+
+    StatisticsWidget statisticsWidget(this);
+    statisticsWidget.setAll(totalCount, newCount, middleCount, learnedCount);
+    statisticsWidget.exec();
 }
 
 void TableWidget::resize(int w, int h)

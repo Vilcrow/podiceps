@@ -282,6 +282,8 @@ DictionaryWidget::DictionaryWidget(QWidget *parent)
             tableWidget, &TableWidget::undo);
     connect(this, &DictionaryWidget::redoRequested,
             tableWidget, &TableWidget::redo);
+    connect(this, &DictionaryWidget::statisticsRequested,
+            tableWidget, &TableWidget::openStatistics);
 
     connect(findWidget, &FindWidget::setClicked,
             this, &DictionaryWidget::setFilter);

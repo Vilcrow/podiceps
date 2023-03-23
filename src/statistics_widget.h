@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  table_model.h                                                         */
+/*  statistics_widget.h                                                   */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,42 +25,38 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef TABLE_MODEL_VIL_H
-#define TABLE_MODEL_VIL_H
+#ifndef STATISTICS_WIDGET_VIL_H
+#define STATISTICS_WIDGET_VIL_H
 
-#include "word_line.h"
-#include <QAbstractTableModel>
+#include <QDialog>
 
-class QModelIndex;
+class QLabel;
 
-class TableModel : public QAbstractTableModel {
+class StatisticsWidget : public QDialog {
     Q_OBJECT
 public:
-    enum { ColumnCount = 6 };
+    void setTotal(int n);
+    void setNew(int n);
+    void setMiddle(int n);
+    void setLearned(int n);
+    void setAll(int pTotal, int pNew, int pMiddle, int pLearned);
 
-    int rowCount(const QModelIndex &parent) const override;
-    int columnCount(const QModelIndex &parent) const override;
-
-    QVariant data(const QModelIndex &index, int role) const override;
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-
-    bool setData(const QModelIndex &index, const QVariant &value,
-                 int role = Qt::EditRole) override;
-    bool insertRows(int position, int rows,
-                    const QModelIndex &index = QModelIndex()) override;
-    bool removeRows(int position, int rows,
-                    const QModelIndex &index = QModelIndex()) override;
-
-    QList<WordLine> getWords() const;
-    int getWordsCount(WordStatus::Status status) const;
-
-    TableModel(QObject *parent = nullptr);
-    TableModel(QList<WordLine> pWords, QObject *parent = nullptr);
-    virtual ~TableModel();
+    StatisticsWidget(QWidget *parent = nullptr);
+    virtual ~StatisticsWidget();
+public slots:
+    int exec() override;
 private:
-    QList<WordLine> words;
+    int totalCount;
+    int newCount;
+    int middleCount;
+    int learnedCount;
+
+    QLabel *newNum;
+    QLabel *middleNum;
+    QLabel *learnedNum;
+    QLabel *totalNum;
+
+    void updateLabels();
 };
 
 #endif

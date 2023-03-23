@@ -42,6 +42,7 @@ public:
     QString getOriginal() const;
     QString getTranslation() const;
     QString getStatus() const;
+    int getStatusInt() const;
     QString getDate(const QString &format = QString()) const;
     QString getDateFormat() const;
     QString getComment() const;

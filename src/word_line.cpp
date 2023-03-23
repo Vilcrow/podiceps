@@ -44,6 +44,11 @@ QString WordLine::getStatus() const
     return status.getStatus();
 }
 
+int WordLine::getStatusInt() const
+{
+    return status.getStatusInt();
+}
+
 QString WordLine::getDate(const QString &format) const
 {
     QString ret = QString();
