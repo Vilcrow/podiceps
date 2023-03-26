@@ -33,6 +33,8 @@
 #include <QTabWidget>
 
 class QCheckBox;
+class QComboBox;
+class QLabel;
 class QLineEdit;
 class QRadioButton;
 
@@ -43,7 +45,7 @@ public:
 
     static QString getTheme(int theme);
 
-    enum Language { EnglishLang };
+    enum Language { EnglishLang, RussianLang };
 
     PreferencesWidget(QWidget *parent = nullptr);
     virtual ~PreferencesWidget();
@@ -51,7 +53,7 @@ public slots:
     void accept() override;
 private slots:
     void setCustomThemePath();
-    void languageChanged(bool checked);
+    void languageChanged(int index);
     void themeChanged(bool checked);
     void tableSettingsChanged(int state);
 private:
@@ -64,7 +66,8 @@ private:
 
     QTabWidget *tabWidget;
 
-    QRadioButton *engLangButton;
+    QComboBox *languageBox;
+    QLabel *langHintLabel;
 
     QCheckBox *showTranscriptionCheckBox;
     QCheckBox *showStatusCheckBox;
@@ -77,6 +80,8 @@ private:
 
     static QMap<int, QString> themePaths;
     static void setThemePaths();
+
+    static QMap<int, QString> languages;
 
     void readSettings();
     void writeSettings();

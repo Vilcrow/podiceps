@@ -27,11 +27,13 @@
 
 #include "podiceps_application.h"
 #include "preferences_widget.h"
+#include <QDebug>
+#include <QTranslator>
 
 int PodicepsApplication::exec()
 {
-    updateSettings();
     mainWindow->show();
+
     return QApplication::exec();
 }
 
@@ -45,15 +47,39 @@ void PodicepsApplication::setTheme()
     setStyleSheet(theme);
 }
 
+void PodicepsApplication::setLanguage()
+{
+    settings.beginGroup("/Settings/Interface");
+    int appLanguage = settings.value("/app_language", 0).toInt();
+    settings.endGroup();
+
+    QTranslator *translator = new QTranslator;
+    if(appLanguage == PreferencesWidget::RussianLang) {
+        if(!translator->load("podiceps_ru")) {
+            qDebug() << tr("Unable to open the translation file");
+        }
+        else {
+            installTranslator(translator);
+        }
+    }
+    else {
+        installTranslator(translator);
+    }
+}
+
 void PodicepsApplication::updateSettings()
 {
     setTheme();
 }
 
 PodicepsApplication::PodicepsApplication(int &argc, char **argv)
-    : QApplication(argc, argv), settings("Vilcrow", "podiceps"),
-      mainWindow(new MainWindow())
+    : QApplication(argc, argv), settings("Vilcrow", "podiceps")
 {
+    setLanguage();  // Must be before creating the mainWindow.
+    setTheme();
+
+    mainWindow = new MainWindow;
+
     connect(mainWindow, &MainWindow::preferencesChanged,
             this, &PodicepsApplication::updateSettings);
 }

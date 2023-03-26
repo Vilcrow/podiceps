@@ -61,10 +61,10 @@ void WordStatus::setStatus(int pStatus)
 
 void WordStatus::setStatus(const QString str)
 {
-    if(str == QObject::tr("middle")) {
+    if(str == "middle") {
         status = Middle;
     }
-    else if(str == QObject::tr("learned")) {
+    else if(str == "learned") {
         status = Learned;
     }
     else {
@@ -74,17 +74,17 @@ void WordStatus::setStatus(const QString str)
 
 QString WordStatus::getStatus() const
 {
-    QString ret = QObject::tr("new");
+    QString ret = "new";
 
     switch(status) {
     case New:
-        ret = QObject::tr("new");
+        ret = "new";
         break;
     case Middle:
-        ret = QObject::tr("middle");
+        ret = "middle";
         break;
     case Learned:
-        ret = QObject::tr("learned");
+        ret = "learned";
         break;
     }
 

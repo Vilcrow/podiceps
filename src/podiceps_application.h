@@ -36,7 +36,6 @@ class PodicepsApplication : public QApplication {
     Q_OBJECT
 public:
     int exec();
-    void setTheme();
 
     PodicepsApplication(int &argc, char **argv);
     virtual ~PodicepsApplication();
@@ -45,6 +44,9 @@ public slots:
 private:
     QSettings settings;
     MainWindow *mainWindow;
+
+    void setTheme();
+    void setLanguage();
 };
 
 #endif

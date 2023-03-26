@@ -27,26 +27,31 @@
 
 #include "preferences_widget.h"
 #include <QCheckBox>
+#include <QComboBox>
+#include <QDebug>
 #include <QFileDialog>
 #include <QGroupBox>
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QRadioButton>
 #include <QTextStream>
 #include <QVBoxLayout>
 
-//TODO: the dark theme must be embedded to the executable file.
 QMap<int, QString> PreferencesWidget::themePaths = { {LightTheme, ""},
                                                      {DarkTheme, ""},
                                                      {CustomTheme, ""} };
+
+QMap<int, QString> PreferencesWidget::languages = { {EnglishLang, "English"},
+                                                    {RussianLang, "Русский"}};
 
 void PreferencesWidget::setThemePaths()
 {
     // Default theme(Qt).
     themePaths[LightTheme] = "";
 
-    themePaths[DarkTheme] = "../../themes/theme_dark.qss";
+    themePaths[DarkTheme] = "themes/theme_dark.qss";
 
     QSettings settings("Vilcrow", "podiceps");
     settings.beginGroup("/Settings/Interface");
@@ -79,6 +84,9 @@ QString PreferencesWidget::getTheme(int theme)
             QTextStream content(&themeFile);
             ret = content.readAll();
         }
+        else {
+            qDebug() << tr("Unable to open the theme file: %1").arg(path);
+        }
     }
 
     return ret;
@@ -100,14 +108,10 @@ void PreferencesWidget::setCustomThemePath()
     }
 }
 
-void PreferencesWidget::languageChanged(bool checked)
+void PreferencesWidget::languageChanged(int index)
 {
-    if(checked) {
-        QRadioButton *button = static_cast<QRadioButton*>(sender());
-        if(button == engLangButton) {
-            appLanguage = EnglishLang;
-        }
-    }
+    langHintLabel->show();
+    appLanguage = index;
 }
 
 void PreferencesWidget::themeChanged(bool checked)
@@ -193,16 +197,19 @@ void PreferencesWidget::setupInterfaceTab()
     // Language settings.
     QGroupBox *langGroupBox = new QGroupBox(tr("Language"));
     QVBoxLayout *langLayout = new QVBoxLayout;
-    engLangButton = new QRadioButton("&English");
-    langLayout->addWidget(engLangButton);
-    connect(engLangButton, &QRadioButton::toggled,
-            this, &PreferencesWidget::languageChanged);
 
-    switch(appLanguage) {
-    case EnglishLang:
-        engLangButton->setChecked(true);
-        break;
+    languageBox = new QComboBox(this);
+    for(int k : languages.keys()) {
+        languageBox->addItem(languages[k]);
     }
+    languageBox->setCurrentIndex(appLanguage);
+    langLayout->addWidget(languageBox);
+    connect(languageBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(languageChanged(int)));
+
+    langHintLabel = new QLabel(tr("*restart the program to apply the changes"));
+    langHintLabel->hide();
+    langLayout->addWidget(langHintLabel);
 
     langGroupBox->setLayout(langLayout);
     mainLayout->addWidget(langGroupBox);

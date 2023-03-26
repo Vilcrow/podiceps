@@ -239,31 +239,31 @@ void MainWindow::createMenus()
 
 void MainWindow::createFileMenu()
 {
-    fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu = menuBar()->addMenu(tr("File"));
 
-    newAct = new QAction(tr("&New..."), this);
+    newAct = new QAction(tr("New..."), this);
     newAct->setShortcut(Qt::CTRL + Qt::Key_N);
     fileMenu->addAction(newAct);
     connect(newAct, &QAction::triggered, this, &MainWindow::createFile);
     connect(newAct, &QAction::triggered, this, &MainWindow::updateActions);
 
-    openAct = new QAction(tr("&Open..."), this);
+    openAct = new QAction(tr("Open..."), this);
     openAct->setShortcut(Qt::CTRL + Qt::Key_O);
     fileMenu->addAction(openAct);
     connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
 
-    saveAct = new QAction(tr("&Save"), this);
+    saveAct = new QAction(tr("Save"), this);
     saveAct->setShortcut(Qt::CTRL + Qt::Key_S);
     fileMenu->addAction(saveAct);
     connect(saveAct, &QAction::triggered, this, &MainWindow::saveChanges);
 
-    saveAsAct = new QAction(tr("S&ave As..."), this);
+    saveAsAct = new QAction(tr("Save As..."), this);
     saveAsAct->setShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_S);
     fileMenu->addAction(saveAsAct);
     connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveFile);
     fileMenu->addSeparator();
 
-    exitAct = new QAction(tr("E&xit"), this);
+    exitAct = new QAction(tr("Exit"), this);
     exitAct->setShortcut(Qt::CTRL + Qt::Key_W);
     fileMenu->addAction(exitAct);
     connect(exitAct, &QAction::triggered, this, &MainWindow::quitApp);
@@ -271,7 +271,7 @@ void MainWindow::createFileMenu()
 
 void MainWindow::createEditMenu()
 {
-    editMenu = menuBar()->addMenu(tr("&Edit"));
+    editMenu = menuBar()->addMenu(tr("Edit"));
 
     undoAct = new QAction(tr("Undo"), this);
     undoAct->setShortcut(Qt::CTRL + Qt::ALT + Qt::Key_Z);
@@ -287,13 +287,13 @@ void MainWindow::createEditMenu()
 
     editMenu->addSeparator();
 
-    addAct = new QAction(tr("&Add..."), this);
+    addAct = new QAction(tr("Add..."), this);
     addAct->setShortcut(Qt::CTRL + Qt::Key_A);
     editMenu->addAction(addAct);
     connect(addAct, SIGNAL(triggered()),
             dictWidget, SIGNAL(addWordRequested()));
 
-    findAct = new QAction(tr("&Find..."), this);
+    findAct = new QAction(tr("Find..."), this);
     findAct->setShortcut(Qt::CTRL + Qt::Key_F);
     editMenu->addAction(findAct);
     connect(findAct, &QAction::triggered,
@@ -301,13 +301,13 @@ void MainWindow::createEditMenu()
 
     editMenu->addSeparator();
 
-    editAct = new QAction(tr("&Edit"), this);
+    editAct = new QAction(tr("Edit"), this);
     editAct->setShortcut(Qt::CTRL + Qt::Key_E);
     editMenu->addAction(editAct);
     connect(editAct, &QAction::triggered,
             dictWidget, &DictionaryWidget::editWordRequested);
 
-    deleteAct = new QAction(tr("&Delete"), this);
+    deleteAct = new QAction(tr("Delete"), this);
     deleteAct->setShortcut(Qt::Key_Delete);
     editMenu->addAction(deleteAct);
     connect(deleteAct, &QAction::triggered,
@@ -315,7 +315,7 @@ void MainWindow::createEditMenu()
 
     editMenu->addSeparator();
 
-    preferencesAct = new QAction(tr("&Preferences"), this);
+    preferencesAct = new QAction(tr("Preferences"), this);
     preferencesAct->setShortcut(Qt::CTRL + Qt::Key_P);
     editMenu->addAction(preferencesAct);
     connect(preferencesAct, &QAction::triggered,
@@ -324,13 +324,13 @@ void MainWindow::createEditMenu()
 
 void MainWindow::createToolsMenu()
 {
-    toolsMenu = menuBar()->addMenu(tr("&Tools"));
-    showStatisticsAct = new QAction(tr("&Statistics"), this);
+    toolsMenu = menuBar()->addMenu(tr("Tools"));
+    showStatisticsAct = new QAction(tr("Statistics"), this);
     showStatisticsAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_N);
     toolsMenu->addAction(showStatisticsAct);
     connect(showStatisticsAct, &QAction::triggered,
             dictWidget, &DictionaryWidget::statisticsRequested);
-    clearInputAct = new QAction(tr("&Clear input"), this);
+    clearInputAct = new QAction(tr("Clear input"), this);
     clearInputAct->setShortcut(Qt::Key_Escape);
     toolsMenu->addAction(clearInputAct);
     connect(clearInputAct, &QAction::triggered,
@@ -339,13 +339,13 @@ void MainWindow::createToolsMenu()
 
 void MainWindow::createHelpMenu()
 {
-    helpMenu = menuBar()->addMenu(tr("&Help"));
-    openTutorialAct = new QAction(tr("&Tutorial"), this);
+    helpMenu = menuBar()->addMenu(tr("Help"));
+    openTutorialAct = new QAction(tr("Tutorial"), this);
     helpMenu->addAction(openTutorialAct);
     openTutorialAct->setEnabled(false);
     connect(openTutorialAct, &QAction::triggered,
             this, &MainWindow::openTutorial);
-    openAboutAct = new QAction(tr("&About"), this);
+    openAboutAct = new QAction(tr("About"), this);
     helpMenu->addAction(openAboutAct);
     connect(openAboutAct, &QAction::triggered, this, &MainWindow::openAbout);
 }
