@@ -288,7 +288,7 @@ void MainWindow::createEditMenu()
     editMenu->addSeparator();
 
     addAct = new QAction(tr("Add..."), this);
-    addAct->setShortcut(Qt::CTRL + Qt::Key_A);
+    addAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_A);
     editMenu->addAction(addAct);
     connect(addAct, SIGNAL(triggered()),
             dictWidget, SIGNAL(addWordRequested()));

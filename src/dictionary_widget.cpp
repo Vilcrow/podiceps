@@ -188,6 +188,7 @@ void DictionaryWidget::createNewFile()
 {
     tableWidget->clear();
     inputWidget->clearInput();
+    setLastFileName("");
 }
 
 void DictionaryWidget::clearInput()

@@ -87,6 +87,7 @@ FindWidget::FindWidget(QWidget *parent)
     setButton = new QPushButton(tr("Set"));
     clearButton = new QPushButton(tr("Clear"));
     closeButton = new QPushButton(tr("Close"));
+    closeButton->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_F);
 
     QHBoxLayout *filterLayout = new QHBoxLayout;
 

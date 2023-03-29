@@ -55,7 +55,7 @@ void PodicepsApplication::setLanguage()
 
     QTranslator *translator = new QTranslator;
     if(appLanguage == PreferencesWidget::RussianLang) {
-        if(!translator->load("podiceps_ru")) {
+        if(!translator->load("translations/podiceps_ru")) {
             qDebug() << tr("Unable to open the translation file");
         }
         else {
