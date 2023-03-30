@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  main_window.h                                                         */
+/*  file_info_widget.cpp                                                  */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,83 +25,53 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef MAIN_WINDOW_VIL_H
-#define MAIN_WINDOW_VIL_H
+#include "file_info_widget.h"
+#include <QDateTime>
+#include <QGridLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QString>
 
-#include <QMainWindow>
-#include <QSettings>
+FileInfoWidget::FileInfoWidget(const QString &name, QWidget *parent)
+    : QDialog(parent), fileInfo(name)
+{
+    setWindowTitle(tr("File Info"));
 
-class DictionaryWidget;
-class QCloseEvent;
-class QResizeEvent;
-class QStatusBar;
+    QGridLayout *mainLayout = new QGridLayout;
 
-class MainWindow: public QMainWindow {
-    Q_OBJECT
-public:
-    static void appendFormat(QString &name, const QString &format);
+    QLabel *nameLabel = new QLabel(tr("Name:"));
+    QLabel *pathLabel = new QLabel(tr("Path:"));
+    QLabel *dateLabel = new QLabel(tr("Date:"));
+    QLabel *timeLabel = new QLabel(tr("Time:"));
 
-    MainWindow(QWidget *parent = nullptr);
-    virtual ~MainWindow();
-signals:
-    void preferencesChanged();
-    void resized(int w, int h);
-public slots:
-    void updateActions();
-private slots:
-    void openFile();
-    void createFile();
-    bool saveChanges();
-    void saveFile();
-    void openFileInfo();
-    bool trySaveChanges();
-    void showMessage(const QString &msg, int timeout = 5000);
-    void openTutorial();
-    void openAbout();
-    void openPreferences();
-    void quitApp();
-protected:
-    void closeEvent(QCloseEvent *event) override;
-    void resizeEvent(QResizeEvent *event) override;
-private:
-    QSettings mainWindowSettings;
-    bool closeImmediately;
-    DictionaryWidget *dictWidget;
-    QStatusBar *statusBar;
+    mainLayout->addWidget(nameLabel, 0, 0);
+    mainLayout->addWidget(pathLabel, 1, 0);
+    mainLayout->addWidget(dateLabel, 2, 0);
+    mainLayout->addWidget(timeLabel, 3, 0);
 
-    QMenu *fileMenu;
-    QAction *newAct;
-    QAction *openAct;
-    QAction *saveAct;
-    QAction *saveAsAct;
-    QAction *fileInfoAct;
-    QAction *exitAct;
+    QLabel *nameValueLabel = new QLabel(fileInfo.fileName());
+    QLabel *pathValueLabel = new QLabel(fileInfo.filePath());
 
-    QMenu *editMenu;
-    QAction *undoAct;
-    QAction *redoAct;
-    QAction *addAct;
-    QAction *findAct;
-    QAction *editAct;
-    QAction *deleteAct;
-    QAction *preferencesAct;
+    QDateTime lastModifiedTime = fileInfo.lastModified();
+    QString date = lastModifiedTime.toString("yyyy-MM-dd");
+    QString time = lastModifiedTime.toString("HH:mm:ss");
+    QLabel *dateValueLabel = new QLabel(date);
+    QLabel *timeValueLabel = new QLabel(time);
 
-    QMenu *toolsMenu;
-    QAction *showStatisticsAct;
-    QAction *clearInputAct;
+    mainLayout->addWidget(nameValueLabel, 0, 1);
+    mainLayout->addWidget(pathValueLabel, 1, 1);
+    mainLayout->addWidget(dateValueLabel, 2, 1);
+    mainLayout->addWidget(timeValueLabel, 3, 1);
 
-    QMenu *helpMenu;
-    QAction *openTutorialAct;
-    QAction *openAboutAct;
+    QPushButton *closeButton = new QPushButton(tr("Close"));
+    connect(closeButton, &QAbstractButton::clicked, this, &QDialog::accept);
 
-    void createMenus();
-    void createFileMenu();
-    void createEditMenu();
-    void createToolsMenu();
-    void createHelpMenu();
+    mainLayout->addWidget(closeButton, 4, 1);
 
-    void readSettings();
-    void writeSettings();
-};
+    setLayout(mainLayout);
+}
 
-#endif
+FileInfoWidget::~FileInfoWidget()
+{
+
+}

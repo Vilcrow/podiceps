@@ -100,6 +100,8 @@ StatisticsWidget::StatisticsWidget(QWidget *parent)
     middleNum(new QLabel), learnedNum(new QLabel),
     totalNum(new QLabel)
 {
+    setWindowTitle(tr("Statistics"));
+
     QGridLayout *mainLayout = new QGridLayout;
 
     QLabel *newLabel = new QLabel(tr("New"));
@@ -107,20 +109,22 @@ StatisticsWidget::StatisticsWidget(QWidget *parent)
     QLabel *learnedLabel = new QLabel(tr("Learned"));
     QLabel *totalLabel = new QLabel(tr("Total"));
 
-    QPushButton *closeButton = new QPushButton(tr("Close"));
-
     mainLayout->addWidget(newLabel, 0, 0);
-    mainLayout->addWidget(newNum, 0, 1);
     mainLayout->addWidget(middleLabel, 1, 0);
-    mainLayout->addWidget(middleNum, 1, 1);
     mainLayout->addWidget(learnedLabel, 2, 0);
-    mainLayout->addWidget(learnedNum, 2, 1);
     mainLayout->addWidget(totalLabel, 3, 0);
-    mainLayout->addWidget(totalNum, 3, 1);
-    mainLayout->addWidget(closeButton, 4, 1);
-    setLayout(mainLayout);
 
+    mainLayout->addWidget(newNum, 0, 1);
+    mainLayout->addWidget(middleNum, 1, 1);
+    mainLayout->addWidget(learnedNum, 2, 1);
+    mainLayout->addWidget(totalNum, 3, 1);
+
+    QPushButton *closeButton = new QPushButton(tr("Close"));
     connect(closeButton, &QAbstractButton::clicked, this, &QDialog::accept);
+
+    mainLayout->addWidget(closeButton, 4, 1);
+
+    setLayout(mainLayout);
 }
 
 StatisticsWidget::~StatisticsWidget()

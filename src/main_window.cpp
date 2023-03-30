@@ -28,6 +28,7 @@
 #include "main_window.h"
 #include "about_widget.h"
 #include "dictionary_widget.h"
+#include "file_info_widget.h"
 #include "preferences_widget.h"
 #include "save_dialog.h"
 #include <QCloseEvent>
@@ -52,9 +53,11 @@ void MainWindow::appendFormat(QString &name, const QString &format)
 
 void MainWindow::updateActions()
 {
+    bool hasFileName = !dictWidget->getLastFileName().isEmpty();
+
     if(dictWidget->getRowCount() != 0) {
         newAct->setEnabled(true);
-        if(!dictWidget->isSaved() && !dictWidget->getLastFileName().isEmpty()) {
+        if(!dictWidget->isSaved() && hasFileName) {
             saveAct->setEnabled(true);
         }
         else {
@@ -71,7 +74,7 @@ void MainWindow::updateActions()
     }
     else {
         newAct->setEnabled(false);
-        if(!dictWidget->isSaved() && !dictWidget->getLastFileName().isEmpty()) {
+        if(!dictWidget->isSaved() && hasFileName) {
             saveAct->setEnabled(true);
         }
         else {
@@ -81,6 +84,13 @@ void MainWindow::updateActions()
 
         editAct->setEnabled(false);
         deleteAct->setEnabled(false);
+    }
+
+    if(hasFileName) {
+        fileInfoAct->setEnabled(true);
+    }
+    else {
+        fileInfoAct->setEnabled(false);
     }
 }
 
@@ -145,6 +155,13 @@ void MainWindow::saveFile()
         appendFormat(fileName, "xml");
         dictWidget->writeToFile(fileName);
     }
+}
+
+void MainWindow::openFileInfo()
+{
+    QString fileName = dictWidget->getLastFileName();
+    FileInfoWidget infoWidget(fileName, this);
+    infoWidget.exec();
 }
 
 bool MainWindow::trySaveChanges()
@@ -261,6 +278,15 @@ void MainWindow::createFileMenu()
     saveAsAct->setShortcut(Qt::SHIFT + Qt::CTRL + Qt::Key_S);
     fileMenu->addAction(saveAsAct);
     connect(saveAsAct, &QAction::triggered, this, &MainWindow::saveFile);
+    fileMenu->addSeparator();
+
+    fileMenu->addSeparator();
+
+    fileInfoAct = new QAction(tr("Info"), this);
+    fileInfoAct->setShortcut(Qt::CTRL + Qt::Key_I);
+    fileMenu->addAction(fileInfoAct);
+    connect(fileInfoAct, &QAction::triggered, this, &MainWindow::openFileInfo);
+
     fileMenu->addSeparator();
 
     exitAct = new QAction(tr("Exit"), this);

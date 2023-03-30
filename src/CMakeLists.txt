@@ -8,6 +8,7 @@ set(APP_LIB_SOURCE
     action_edit.cpp
     action_log.cpp
     dictionary_widget.cpp
+    file_info_widget.cpp
     find_widget.cpp
     header_menu.cpp
     input_widget.cpp

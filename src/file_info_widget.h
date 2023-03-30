@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  main_window.h                                                         */
+/*  file_info_widget.h                                                    */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,83 +25,19 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef MAIN_WINDOW_VIL_H
-#define MAIN_WINDOW_VIL_H
+#ifndef FILE_INFO_WIDGET_VIL_H
+#define FILE_INFO_WIDGET_VIL_H
 
-#include <QMainWindow>
-#include <QSettings>
+#include <QDialog>
+#include <QFileInfo>
 
-class DictionaryWidget;
-class QCloseEvent;
-class QResizeEvent;
-class QStatusBar;
-
-class MainWindow: public QMainWindow {
+class FileInfoWidget : public QDialog {
     Q_OBJECT
 public:
-    static void appendFormat(QString &name, const QString &format);
-
-    MainWindow(QWidget *parent = nullptr);
-    virtual ~MainWindow();
-signals:
-    void preferencesChanged();
-    void resized(int w, int h);
-public slots:
-    void updateActions();
-private slots:
-    void openFile();
-    void createFile();
-    bool saveChanges();
-    void saveFile();
-    void openFileInfo();
-    bool trySaveChanges();
-    void showMessage(const QString &msg, int timeout = 5000);
-    void openTutorial();
-    void openAbout();
-    void openPreferences();
-    void quitApp();
-protected:
-    void closeEvent(QCloseEvent *event) override;
-    void resizeEvent(QResizeEvent *event) override;
+    FileInfoWidget(const QString &name, QWidget *parent = nullptr);
+    virtual ~FileInfoWidget();
 private:
-    QSettings mainWindowSettings;
-    bool closeImmediately;
-    DictionaryWidget *dictWidget;
-    QStatusBar *statusBar;
-
-    QMenu *fileMenu;
-    QAction *newAct;
-    QAction *openAct;
-    QAction *saveAct;
-    QAction *saveAsAct;
-    QAction *fileInfoAct;
-    QAction *exitAct;
-
-    QMenu *editMenu;
-    QAction *undoAct;
-    QAction *redoAct;
-    QAction *addAct;
-    QAction *findAct;
-    QAction *editAct;
-    QAction *deleteAct;
-    QAction *preferencesAct;
-
-    QMenu *toolsMenu;
-    QAction *showStatisticsAct;
-    QAction *clearInputAct;
-
-    QMenu *helpMenu;
-    QAction *openTutorialAct;
-    QAction *openAboutAct;
-
-    void createMenus();
-    void createFileMenu();
-    void createEditMenu();
-    void createToolsMenu();
-    void createHelpMenu();
-
-    void readSettings();
-    void writeSettings();
+    QFileInfo fileInfo;
 };
 
 #endif

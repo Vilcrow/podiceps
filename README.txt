@@ -28,6 +28,7 @@ You should have received a copy of the GNU General Public License along with thi
     Ctrl + O - open file
     Ctrl + S - save file
     Ctrl + Shift + S - save file as
+    Ctrl + I - show information about the current file
     Ctrl + W - quit the program
     Ctrl + Alt + Z - undo the table action
     Ctrl + Alt + Y - redo the table action
