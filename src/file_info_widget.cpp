@@ -39,10 +39,10 @@ FileInfoWidget::FileInfoWidget(const QString &name, QWidget *parent)
 
     QGridLayout *mainLayout = new QGridLayout;
 
-    QLabel *nameLabel = new QLabel(tr("Name:"));
-    QLabel *pathLabel = new QLabel(tr("Path:"));
-    QLabel *dateLabel = new QLabel(tr("Date:"));
-    QLabel *timeLabel = new QLabel(tr("Time:"));
+    QLabel *nameLabel = new QLabel(tr("Name"));
+    QLabel *pathLabel = new QLabel(tr("Path"));
+    QLabel *dateLabel = new QLabel(tr("Date"));
+    QLabel *timeLabel = new QLabel(tr("Time"));
 
     mainLayout->addWidget(nameLabel, 0, 0);
     mainLayout->addWidget(pathLabel, 1, 0);

@@ -43,8 +43,10 @@ void DictionaryWidget::readFromFile(const QString &fileName)
 
     QFile xmlFile(fileName);
     if(!xmlFile.open(QIODevice::ReadOnly)) {
+        // The last opened file isn't available.
         if(fileName == lastFileName) {
             lastFileName = "";
+            emit stateChanged();
         }
         actionCompleted(tr("Unable to open file: %1").arg(fileName));
         return;
@@ -78,6 +80,7 @@ void DictionaryWidget::readFromFile(const QString &fileName)
         lastFileName = fileName;
         setSaved(true);
         actionCompleted(tr("The file \"%1\" is open").arg(lastFileName));
+        emit stateChanged();
     }
 }
 

@@ -43,6 +43,7 @@ public:
 
     QString getStatus() const;
     int getStatusInt() const;
+    QString getStatusTranslation() const;
 
     const WordStatus& operator=(const WordStatus &other);
     bool operator==(const WordStatus &other) const;
@@ -54,6 +55,7 @@ public:
 
     WordStatus(const QString str = QString());
     WordStatus(int pStatus);
+    WordStatus(const WordStatus &other);
     virtual ~WordStatus();
 private:
     Status status;

@@ -43,6 +43,7 @@ public:
     QString getTranslation() const;
     QString getStatus() const;
     int getStatusInt() const;
+    QString getStatusTranslation() const;
     QString getDate(const QString &format = QString()) const;
     QString getDateFormat() const;
     QString getComment() const;
@@ -79,6 +80,7 @@ public:
              const QString &pDate = QString(),
              const QString &format = DefaultDateFormat
             );
+    WordLine(const WordLine &other);
     WordLine(const QDomElement &element);
     ~WordLine();
 private:

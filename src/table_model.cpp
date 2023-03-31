@@ -64,7 +64,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             return word.getTranslation();
         }
         else if(index.column() == TableWidget::StatusColumn) {
-            return word.getStatus();
+            return word.getStatusTranslation();
         }
         else if(index.column() == TableWidget::DateColumn) {
             return word.getDate();

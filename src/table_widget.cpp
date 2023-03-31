@@ -398,6 +398,8 @@ void TableWidget::openStatistics()
 
 void TableWidget::resize(int w, int h)
 {
+    Q_UNUSED(h);
+
     int widthOne = w / visibleColumns;
 
     tableView->setColumnWidth(OriginalColumn, widthOne);

@@ -34,6 +34,7 @@ You should have received a copy of the GNU General Public License along with thi
     Ctrl + Alt + Y - redo the table action
     Ctrl + Shift + A - open the add widget
     Ctrl + F - open the find widget
+    Alt + F - close the find widget
     Ctrl + Shift + F - close the find widget
     Ctrl + E - open the edit widget
     Delete - delete selected rows

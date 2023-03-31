@@ -96,6 +96,25 @@ int WordStatus::getStatusInt() const
     return status;
 }
 
+QString WordStatus::getStatusTranslation() const
+{
+    QString ret = QObject::tr("new");
+
+    switch(status) {
+    case New:
+        ret = QObject::tr("new");
+        break;
+    case Middle:
+        ret = QObject::tr("middle");
+        break;
+    case Learned:
+        ret = QObject::tr("learned");
+        break;
+    }
+
+    return ret;
+}
+
 const WordStatus& WordStatus::operator=(const WordStatus &other)
 {
     status = other.status;
@@ -142,6 +161,11 @@ WordStatus::WordStatus(int pStatus)
     : status(New)
 {
     setStatus(pStatus);
+}
+
+WordStatus::WordStatus(const WordStatus &other)
+{
+    status = other.status;
 }
 
 WordStatus::~WordStatus()

@@ -69,27 +69,27 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>DictionaryWidget</name>
     <message>
-        <location filename="../src/dictionary_widget.cpp" line="49"/>
+        <location filename="../src/dictionary_widget.cpp" line="51"/>
         <source>Unable to open file: %1</source>
         <translation>Невозможно открыть файл: %1</translation>
     </message>
     <message>
-        <location filename="../src/dictionary_widget.cpp" line="73"/>
+        <location filename="../src/dictionary_widget.cpp" line="75"/>
         <source>The file contains no words or has an invalid format.</source>
         <translation>Файл пустой или имеет недопустимый формат.</translation>
     </message>
     <message>
-        <location filename="../src/dictionary_widget.cpp" line="80"/>
+        <location filename="../src/dictionary_widget.cpp" line="82"/>
         <source>The file &quot;%1&quot; is open</source>
         <translation>Файл &quot;%1&quot; открыт</translation>
     </message>
     <message>
-        <location filename="../src/dictionary_widget.cpp" line="93"/>
+        <location filename="../src/dictionary_widget.cpp" line="96"/>
         <source>The file &quot;%1&quot; saved</source>
         <translation>Файл &quot;%1&quot; сохранен</translation>
     </message>
     <message>
-        <location filename="../src/dictionary_widget.cpp" line="103"/>
+        <location filename="../src/dictionary_widget.cpp" line="106"/>
         <source>Unable to open file</source>
         <translation>Невозможно открыть файл</translation>
     </message>
@@ -103,23 +103,23 @@ You should have received a copy of the GNU General Public License along with thi
     </message>
     <message>
         <location filename="../src/file_info_widget.cpp" line="42"/>
-        <source>Name:</source>
+        <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
         <location filename="../src/file_info_widget.cpp" line="43"/>
-        <source>Path:</source>
+        <source>Path</source>
         <translation>Путь</translation>
     </message>
     <message>
         <location filename="../src/file_info_widget.cpp" line="44"/>
-        <source>Date:</source>
-        <translation>Дата:</translation>
+        <source>Date</source>
+        <translation>Дата</translation>
     </message>
     <message>
         <location filename="../src/file_info_widget.cpp" line="45"/>
-        <source>Time:</source>
-        <translation>Время:</translation>
+        <source>Time</source>
+        <translation>Время</translation>
     </message>
     <message>
         <location filename="../src/file_info_widget.cpp" line="66"/>
@@ -470,6 +470,25 @@ You should have received a copy of the GNU General Public License along with thi
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <location filename="../src/word_status.cpp" line="101"/>
+        <location filename="../src/word_status.cpp" line="105"/>
+        <source>new</source>
+        <translation>новое</translation>
+    </message>
+    <message>
+        <location filename="../src/word_status.cpp" line="108"/>
+        <source>middle</source>
+        <translation>средний</translation>
+    </message>
+    <message>
+        <location filename="../src/word_status.cpp" line="111"/>
+        <source>learned</source>
+        <translation>выучено</translation>
+    </message>
+</context>
+<context>
     <name>SaveDialog</name>
     <message>
         <location filename="../src/save_dialog.cpp" line="61"/>
@@ -583,22 +602,22 @@ You should have received a copy of the GNU General Public License along with thi
         <translation>Добавлено</translation>
     </message>
     <message>
-        <location filename="../src/table_widget.cpp" line="437"/>
+        <location filename="../src/table_widget.cpp" line="439"/>
         <source>&amp;Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../src/table_widget.cpp" line="438"/>
+        <location filename="../src/table_widget.cpp" line="440"/>
         <source>&amp;Edit</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../src/table_widget.cpp" line="439"/>
+        <location filename="../src/table_widget.cpp" line="441"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/table_widget.cpp" line="482"/>
+        <location filename="../src/table_widget.cpp" line="484"/>
         <source>Deleted</source>
         <translation>Удалено</translation>
     </message>

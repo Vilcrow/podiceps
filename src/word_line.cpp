@@ -49,6 +49,11 @@ int WordLine::getStatusInt() const
     return status.getStatusInt();
 }
 
+QString WordLine::getStatusTranslation() const
+{
+    return status.getStatusTranslation();
+}
+
 QString WordLine::getDate(const QString &format) const
 {
     QString ret = QString();
@@ -142,12 +147,12 @@ void WordLine::setTranscription(const QString &pTranscription)
 void WordLine::clear()
 {
     original = QString();
+    transcription = QString();
     translation = QString();
     status = WordStatus(WordStatus::New);
     date = QDate();
     dateFormat = DefaultDateFormat;
     comment = QString();
-    transcription = QString();
 }
 
 bool WordLine::isEmpty() const
@@ -179,23 +184,23 @@ bool WordLine::isSame(const WordLine &other) const
 void WordLine::setDomElement(QDomElement &element) const
 {
     element.setAttribute("original", original);
+    element.setAttribute("transcription", transcription);
     element.setAttribute("translation", translation);
     element.setAttribute("status", status.getStatus());
     element.setAttribute("date", getDate());
     element.setAttribute("dateFormat", dateFormat);
     element.setAttribute("comment", comment);
-    element.setAttribute("transcription", transcription);
 }
 
 const WordLine& WordLine::operator=(const WordLine &other)
 {
     original = other.original;
+    transcription = other.transcription;
     translation = other.translation;
     status = other.status;
     date = other.date;
     dateFormat = other.dateFormat;
     comment = other.comment;
-    transcription = other.transcription;
     return *this;
 }
 
@@ -238,10 +243,10 @@ bool WordLine::operator<=(const WordLine &other) const
 void WordLine::truncate()
 {
     original.truncate(MaxOriginalLength);
+    transcription.truncate(MaxOriginalLength);
     translation.truncate(MaxTranslationLength);
     dateFormat.truncate(MaxDateLength);
     comment.truncate(MaxCommentLength);
-    transcription.truncate(MaxOriginalLength);
 }
 
 WordLine::WordLine(const QString &pOriginal, const QString &pTranslation,
@@ -254,6 +259,17 @@ WordLine::WordLine(const QString &pOriginal, const QString &pTranslation,
     date = QDate::fromString(pDate, dateFormat);
     comment = QString();
     truncate();
+}
+
+WordLine::WordLine(const WordLine &other)
+{
+    original = other.original;
+    transcription = other.transcription;
+    translation = other.translation;
+    status = other.status;
+    date = other.date;
+    dateFormat = other.dateFormat;
+    comment = other.comment;
 }
 
 WordLine::WordLine(const QDomElement &element)

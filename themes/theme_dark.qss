@@ -170,7 +170,7 @@ QLineEdit
     background-color: #525251;
     color: #ffffff;
     border-width: 1px;
-    border-radius: 3px;
+    border-radius: 5px;
     border-color: #051a39;
     padding: 2px;
 }
@@ -180,7 +180,7 @@ QLineEdit::disabled
     background-color: #404040;
     color: #656565;
     border-width: 1px;
-    border-radius: 3px;
+    border-radius: 5px;
     border-color: #051a39;
     padding: 2px;
 }
@@ -193,7 +193,7 @@ QTextEdit
     color: #ffffff;
     border-color: #051a39;
     border-width: 1px;
-    border-radius: 3px;
+    border-radius: 5px;
     border-color: #051a39;
     padding: 2px;
 }
@@ -203,7 +203,7 @@ QTextEdit::disabled
     background-color: #404040;
     color: #656565;
     border-width: 1px;
-    border-radius: 3px;
+    border-radius: 5px;
     border-color: #051a39;
     padding: 2px;
 }
@@ -285,8 +285,8 @@ QRadioButton::indicator::unchecked
 
 QRadioButton::indicator::unchecked:hover
 {
-    border: 2px solid #607cff;
-    border-radius: 5px;
+    border: 3px solid #607cff;
+    border-radius: 6px;
     background-color:  #ffffff;
     width: 9px;
     height: 9px;
@@ -294,8 +294,8 @@ QRadioButton::indicator::unchecked:hover
 
 QRadioButton::indicator::checked
 {
-    border: 2px inset darkgray;
-    border-radius: 5px;
+    border: 3px inset darkgray;
+    border-radius: 6px;
     background-color: #4969ff;
     width: 9px;
     height: 9px;
@@ -310,7 +310,7 @@ QRadioButton::indicator:disabled
 {
     background-color: #656565;
     color: #656565;
-    border: 2px solid #656565;
+    border: 3px solid #656565;
 }
 
 /*    QTableView    */
@@ -341,8 +341,8 @@ QTableView::item:hover
 
 QTableView::item:selected
 {
-    background-color: #191a1a;
-    border: 2px solid #4969ff;
+    background-color: #707575;
+    border: 1px solid #4969ff;
     color: #ffffff;
 }
 
@@ -386,4 +386,15 @@ QStatusBar
     background-color: #424242;
     color: #ffffff;
     border-color: #051a39;
+}
+
+/*    QComboBox    */
+
+QComboBox
+{
+    background-color: #525251;
+    border: 1px solid;
+    border-radius: 3px;
+    padding-left: 6px;
+    height: 20px;
 }

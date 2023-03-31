@@ -32,7 +32,8 @@
 
 QString StatusSpinBox::getValue() const
 {
-    return textFromValue(value());
+    WordStatus status(value());
+    return status.getStatus();
 }
 
 void StatusSpinBox::setValue(const QString &value)
@@ -40,11 +41,11 @@ void StatusSpinBox::setValue(const QString &value)
     QSpinBox::setValue(valueFromText(value));
 }
 
+// Displays the status in the custom language.
 QString StatusSpinBox::textFromValue(int value) const
 {
-    WordStatus status;
-    status.setStatus(value);
-    return status.getStatus();
+    WordStatus status(value);
+    return status.getStatusTranslation();
 }
 
 int StatusSpinBox::valueFromText(const QString &text) const
