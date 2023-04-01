@@ -54,16 +54,23 @@ void PodicepsApplication::setLanguage()
     settings.endGroup();
 
     QTranslator *translator = new QTranslator;
-    if(appLanguage == PreferencesWidget::RussianLang) {
-        if(!translator->load("translations/podiceps_ru")) {
-            qDebug() << tr("Unable to open the translation file");
-        }
-        else {
+    QString path;
+    switch(appLanguage) {
+    case PreferencesWidget::RussianLang:
+        path = ":/podiceps_ru.qm";
+        break;
+    default:
+        path = "";
+        break;
+    }
+
+    if(!path.isEmpty()) {
+        if(translator->load(path)) {
             installTranslator(translator);
         }
-    }
-    else {
-        installTranslator(translator);
+        else {
+            qDebug() << tr("Unable to open the translation file: %1").arg(path);
+        }
     }
 }
 

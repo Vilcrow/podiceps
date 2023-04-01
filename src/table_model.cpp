@@ -74,8 +74,8 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         }
     }
     else if(role == Qt::BackgroundRole) {
-        const WordLine &word = words.at(index.row());
         if(index.column() == TableWidget::StatusColumn) {
+            const WordLine &word = words.at(index.row());
             WordStatus s(word.getStatus());
             return WordStatus::getColor(s.getStatusInt());
         }

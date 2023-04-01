@@ -51,7 +51,7 @@ void PreferencesWidget::setThemePaths()
     // Default theme(Qt).
     themePaths[LightTheme] = "";
 
-    themePaths[DarkTheme] = "themes/theme_dark.qss";
+    themePaths[DarkTheme] = ":/theme_dark.qss";
 
     QSettings settings("Vilcrow", "podiceps");
     settings.beginGroup("/Settings/Interface");

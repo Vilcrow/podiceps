@@ -207,6 +207,7 @@ void DictionaryWidget::clearInput()
 
 void DictionaryWidget::setFilter()
 {
+    // TODO:Maybe must be moved to TableWidget.
     QRegExp::PatternSyntax syntax = QRegExp::PatternSyntax(QRegExp::FixedString);
     QRegExp regExp = QRegExp(findWidget->getFilter(), Qt::CaseInsensitive, syntax);
     int column = findWidget->getChecked(); // Which column will we search for.

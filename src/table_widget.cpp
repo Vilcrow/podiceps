@@ -242,17 +242,18 @@ void TableWidget::clearSelection()
 
 void TableWidget::addWord(const WordLine &word, bool addToLog)
 {
+    QString original = word.getOriginal();
     if(word.isEmpty()) {
         openWordAdd();
     }
-    else if(word.getOriginal().isEmpty()) {
+    else if(original.isEmpty()) {
         openWordAdd(word, tr("Enter the original word"));
     }
     else {
         bool isDuplicate = !addEntry(word);
         if(isDuplicate) {
             QString msg = tr("The word \"%1\" already exists.")
-                             .arg(word.getOriginal());
+                             .arg(original);
             openWordAdd(word, msg);
         }
         else if(addToLog) {

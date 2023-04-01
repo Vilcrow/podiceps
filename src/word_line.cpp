@@ -29,6 +29,11 @@
 
 QString WordLine::DefaultDateFormat = "yyyy-MM-dd";
 
+QString WordLine::getDefualtDateFormat()
+{
+    return DefaultDateFormat;
+}
+
 QString WordLine::getOriginal() const
 {
     return original;

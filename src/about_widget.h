@@ -37,6 +37,11 @@ public:
     virtual ~AboutWidget();
 private slots:
     void openLicense();
+    void openFullText();
+private:
+    static QString getFullLicenseText();
+    static QString getShortLicenseText();
+    static QString getFileContent(const QString &path);
 };
 
 #endif

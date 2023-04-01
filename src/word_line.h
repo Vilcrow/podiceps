@@ -39,6 +39,8 @@ public:
     enum { MaxOriginalLength = 50, MaxTranslationLength = 100,
            MaxDateLength = 20, MaxCommentLength = 500 };
 
+    static QString getDefualtDateFormat();
+
     QString getOriginal() const;
     QString getTranslation() const;
     QString getStatus() const;

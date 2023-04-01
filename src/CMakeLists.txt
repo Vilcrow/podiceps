@@ -1,4 +1,5 @@
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 set(APP_LIB_SOURCE
     about_widget.cpp
@@ -28,7 +29,7 @@ set(APP_LIB_SOURCE
 
 add_library(${APP_LIB_NAME} ${APP_LIB_SOURCE})
 
-add_executable(${APP_NAME} main.cpp)
+add_executable(${APP_NAME} main.cpp ../resources/resources.qrc)
 target_link_libraries(${APP_NAME} ${APP_LIB_NAME})
 
 find_package(Qt5 COMPONENTS Widgets Xml REQUIRED)

@@ -1,0 +1,13 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <!--License-->
+        <file alias="license_gpl_v3.txt">license/license_gpl_v3.txt</file>
+        <file alias="license_short_en.txt">license/license_short_en.txt</file>
+        <file alias="license_short_ru.txt">license/license_short_ru.txt</file>
+        <!--Themes-->
+        <file alias="theme_dark.qss">themes/theme_dark.qss</file>
+        <!--Translations-->
+        <file alias="podiceps_ru.qm">translations/podiceps_ru.qm</file>
+    </qresource>
+</RCC>

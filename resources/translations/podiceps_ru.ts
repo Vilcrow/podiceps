@@ -4,41 +4,40 @@
 <context>
     <name>AboutWidget</name>
     <message>
-        <location filename="../src/about_widget.cpp" line="43"/>
-        <source>This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with this program. If not, see http://www.gnu.org/licenses/.</source>
-        <translation>Эта программа является свободным программным обеспечением: вы можете распространять ее и/или изменять в соответствии с условиями Открытого лицензионного соглашения GNU, опубликованного Фондом свободного программного обеспечения, либо версией 3 Лицензии, либо (по вашему выбору) любой более поздней версией.
-
-Эта программа распространяется в надежде, что она будет полезной, но БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ; даже без подразумеваемых гарантий ТОВАРНОЙ ПРИГОДНОСТИ или ПРИГОДНОСТИ ДЛЯ ОПРЕДЕЛЕННОЙ ЦЕЛИ. Более подробную информацию смотрите в Открытом лицензионном соглашении GNU.
-
-Вы должны были получить копию Открытого лицензионного соглашения GNU вместе с этой программой. Если нет, смотрите http://www.gnu.org/licenses/.</translation>
-    </message>
-    <message>
-        <location filename="../src/about_widget.cpp" line="61"/>
-        <location filename="../src/about_widget.cpp" line="106"/>
+        <location filename="../../src/about_widget.cpp" line="102"/>
+        <location filename="../../src/about_widget.cpp" line="135"/>
+        <location filename="../../src/about_widget.cpp" line="182"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../src/about_widget.cpp" line="84"/>
+        <location filename="../../src/about_widget.cpp" line="160"/>
         <source>A simple program for maintaining a dictionary of foreign words.</source>
         <translation>Простая программа для ведения словаря иностранных слов.</translation>
     </message>
     <message>
-        <location filename="../src/about_widget.cpp" line="90"/>
+        <location filename="../../src/about_widget.cpp" line="166"/>
         <source>Copyright</source>
         <translation>Авторские права</translation>
     </message>
     <message>
-        <location filename="../src/about_widget.cpp" line="102"/>
+        <location filename="../../src/about_widget.cpp" line="111"/>
+        <location filename="../../src/about_widget.cpp" line="178"/>
         <source>License</source>
         <translation>Лицензия</translation>
     </message>
     <message>
-        <location filename="../src/about_widget.cpp" line="113"/>
+        <location filename="../../src/about_widget.cpp" line="70"/>
+        <source>Passed empty argument</source>
+        <translation>Передан пустой аргумент</translation>
+    </message>
+    <message>
+        <location filename="../../src/about_widget.cpp" line="80"/>
+        <source>Unable to open the license file: %1</source>
+        <translation>Не удается открыть файл лицензии: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/about_widget.cpp" line="189"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
@@ -46,22 +45,22 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>ActionLog</name>
     <message>
-        <location filename="../src/action_log.cpp" line="38"/>
+        <location filename="../../src/action_log.cpp" line="38"/>
         <source>The actions log is full. Save the changes to resume the log</source>
         <translation>Журнал действий заполнен. Сохраните изменения, чтобы возобновить введение журнала</translation>
     </message>
     <message>
-        <location filename="../src/action_log.cpp" line="42"/>
+        <location filename="../../src/action_log.cpp" line="42"/>
         <source>The action isn&apos;t logged</source>
         <translation>Действие не записано</translation>
     </message>
     <message>
-        <location filename="../src/action_log.cpp" line="88"/>
+        <location filename="../../src/action_log.cpp" line="88"/>
         <source>Already at oldest change</source>
         <translation>Нет действия для отмены</translation>
     </message>
     <message>
-        <location filename="../src/action_log.cpp" line="99"/>
+        <location filename="../../src/action_log.cpp" line="99"/>
         <source>Already at newest change</source>
         <translation>Нет действия для повтора</translation>
     </message>
@@ -69,27 +68,27 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>DictionaryWidget</name>
     <message>
-        <location filename="../src/dictionary_widget.cpp" line="51"/>
+        <location filename="../../src/dictionary_widget.cpp" line="51"/>
         <source>Unable to open file: %1</source>
-        <translation>Невозможно открыть файл: %1</translation>
+        <translation>Не удается открыть файл: %1</translation>
     </message>
     <message>
-        <location filename="../src/dictionary_widget.cpp" line="75"/>
+        <location filename="../../src/dictionary_widget.cpp" line="75"/>
         <source>The file contains no words or has an invalid format.</source>
         <translation>Файл пустой или имеет недопустимый формат.</translation>
     </message>
     <message>
-        <location filename="../src/dictionary_widget.cpp" line="82"/>
+        <location filename="../../src/dictionary_widget.cpp" line="82"/>
         <source>The file &quot;%1&quot; is open</source>
         <translation>Файл &quot;%1&quot; открыт</translation>
     </message>
     <message>
-        <location filename="../src/dictionary_widget.cpp" line="96"/>
+        <location filename="../../src/dictionary_widget.cpp" line="96"/>
         <source>The file &quot;%1&quot; saved</source>
         <translation>Файл &quot;%1&quot; сохранен</translation>
     </message>
     <message>
-        <location filename="../src/dictionary_widget.cpp" line="106"/>
+        <location filename="../../src/dictionary_widget.cpp" line="106"/>
         <source>Unable to open file</source>
         <translation>Невозможно открыть файл</translation>
     </message>
@@ -97,32 +96,32 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>FileInfoWidget</name>
     <message>
-        <location filename="../src/file_info_widget.cpp" line="38"/>
+        <location filename="../../src/file_info_widget.cpp" line="38"/>
         <source>File Info</source>
         <translation>Информация о файле</translation>
     </message>
     <message>
-        <location filename="../src/file_info_widget.cpp" line="42"/>
+        <location filename="../../src/file_info_widget.cpp" line="42"/>
         <source>Name</source>
         <translation>Имя</translation>
     </message>
     <message>
-        <location filename="../src/file_info_widget.cpp" line="43"/>
+        <location filename="../../src/file_info_widget.cpp" line="43"/>
         <source>Path</source>
         <translation>Путь</translation>
     </message>
     <message>
-        <location filename="../src/file_info_widget.cpp" line="44"/>
+        <location filename="../../src/file_info_widget.cpp" line="44"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../src/file_info_widget.cpp" line="45"/>
+        <location filename="../../src/file_info_widget.cpp" line="45"/>
         <source>Time</source>
         <translation>Время</translation>
     </message>
     <message>
-        <location filename="../src/file_info_widget.cpp" line="66"/>
+        <location filename="../../src/file_info_widget.cpp" line="66"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -130,52 +129,52 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>FindWidget</name>
     <message>
-        <location filename="../src/find_widget.cpp" line="84"/>
+        <location filename="../../src/find_widget.cpp" line="84"/>
         <source>Enter a filter to search for...</source>
         <translation>Введите фильтр для поиска...</translation>
     </message>
     <message>
-        <location filename="../src/find_widget.cpp" line="87"/>
+        <location filename="../../src/find_widget.cpp" line="87"/>
         <source>Set</source>
         <translation>Ввести</translation>
     </message>
     <message>
-        <location filename="../src/find_widget.cpp" line="88"/>
+        <location filename="../../src/find_widget.cpp" line="88"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../src/find_widget.cpp" line="89"/>
+        <location filename="../../src/find_widget.cpp" line="89"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../src/find_widget.cpp" line="106"/>
+        <location filename="../../src/find_widget.cpp" line="106"/>
         <source>&amp;original</source>
         <translation>оригинал</translation>
     </message>
     <message>
-        <location filename="../src/find_widget.cpp" line="109"/>
+        <location filename="../../src/find_widget.cpp" line="109"/>
         <source>t&amp;ranscription</source>
         <translation>транскрипция</translation>
     </message>
     <message>
-        <location filename="../src/find_widget.cpp" line="110"/>
+        <location filename="../../src/find_widget.cpp" line="110"/>
         <source>&amp;translation</source>
         <translation>перевод</translation>
     </message>
     <message>
-        <location filename="../src/find_widget.cpp" line="111"/>
+        <location filename="../../src/find_widget.cpp" line="111"/>
         <source>&amp;status</source>
         <translation>статус</translation>
     </message>
     <message>
-        <location filename="../src/find_widget.cpp" line="112"/>
+        <location filename="../../src/find_widget.cpp" line="112"/>
         <source>&amp;date</source>
         <translation>дата</translation>
     </message>
     <message>
-        <location filename="../src/find_widget.cpp" line="113"/>
+        <location filename="../../src/find_widget.cpp" line="113"/>
         <source>&amp;comment</source>
         <translation>комментарий</translation>
     </message>
@@ -183,22 +182,22 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>HeaderMenu</name>
     <message>
-        <location filename="../src/header_menu.cpp" line="70"/>
+        <location filename="../../src/header_menu.cpp" line="70"/>
         <source>Transcription</source>
         <translation>Транскрипция</translation>
     </message>
     <message>
-        <location filename="../src/header_menu.cpp" line="75"/>
+        <location filename="../../src/header_menu.cpp" line="75"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../src/header_menu.cpp" line="80"/>
+        <location filename="../../src/header_menu.cpp" line="80"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../src/header_menu.cpp" line="87"/>
+        <location filename="../../src/header_menu.cpp" line="87"/>
         <source>Align</source>
         <translation>Выровнять</translation>
     </message>
@@ -206,37 +205,37 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>InputWidget</name>
     <message>
-        <location filename="../src/input_widget.cpp" line="128"/>
+        <location filename="../../src/input_widget.cpp" line="128"/>
         <source>Original...</source>
         <translation>Оригинал...</translation>
     </message>
     <message>
-        <location filename="../src/input_widget.cpp" line="131"/>
+        <location filename="../../src/input_widget.cpp" line="131"/>
         <source>Transcription...</source>
         <translation>Транскрипция...</translation>
     </message>
     <message>
-        <location filename="../src/input_widget.cpp" line="134"/>
+        <location filename="../../src/input_widget.cpp" line="134"/>
         <source>Translation...</source>
         <translation>Перевод...</translation>
     </message>
     <message>
-        <location filename="../src/input_widget.cpp" line="144"/>
+        <location filename="../../src/input_widget.cpp" line="144"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../src/input_widget.cpp" line="145"/>
+        <location filename="../../src/input_widget.cpp" line="145"/>
         <source>Edit</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../src/input_widget.cpp" line="146"/>
+        <location filename="../../src/input_widget.cpp" line="146"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/input_widget.cpp" line="148"/>
+        <location filename="../../src/input_widget.cpp" line="148"/>
         <source>Find</source>
         <translation>Найти</translation>
     </message>
@@ -244,121 +243,121 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/main_window.cpp" line="105"/>
+        <location filename="../../src/main_window.cpp" line="105"/>
         <source>Open File</source>
         <translation>Открыть Файл</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="106"/>
-        <location filename="../src/main_window.cpp" line="133"/>
-        <location filename="../src/main_window.cpp" line="153"/>
+        <location filename="../../src/main_window.cpp" line="106"/>
+        <location filename="../../src/main_window.cpp" line="133"/>
+        <location filename="../../src/main_window.cpp" line="153"/>
         <source>XML Files (*.xml)</source>
         <translation>XML Файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="132"/>
-        <location filename="../src/main_window.cpp" line="152"/>
+        <location filename="../../src/main_window.cpp" line="132"/>
+        <location filename="../../src/main_window.cpp" line="152"/>
         <source>Save File</source>
         <translation>Сохранить Файл</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="259"/>
+        <location filename="../../src/main_window.cpp" line="259"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="261"/>
+        <location filename="../../src/main_window.cpp" line="261"/>
         <source>New...</source>
         <translation>Новый...</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="267"/>
+        <location filename="../../src/main_window.cpp" line="267"/>
         <source>Open...</source>
         <translation>Открыть...</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="272"/>
+        <location filename="../../src/main_window.cpp" line="272"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="277"/>
+        <location filename="../../src/main_window.cpp" line="277"/>
         <source>Save As...</source>
         <translation>Сохранить как...</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="285"/>
+        <location filename="../../src/main_window.cpp" line="285"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="292"/>
+        <location filename="../../src/main_window.cpp" line="292"/>
         <source>Exit</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="300"/>
-        <location filename="../src/main_window.cpp" line="330"/>
+        <location filename="../../src/main_window.cpp" line="300"/>
+        <location filename="../../src/main_window.cpp" line="330"/>
         <source>Edit</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="302"/>
+        <location filename="../../src/main_window.cpp" line="302"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="308"/>
+        <location filename="../../src/main_window.cpp" line="308"/>
         <source>Redo</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="316"/>
+        <location filename="../../src/main_window.cpp" line="316"/>
         <source>Add...</source>
         <translation>Добавить...</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="322"/>
+        <location filename="../../src/main_window.cpp" line="322"/>
         <source>Find...</source>
         <translation>Найти...</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="336"/>
+        <location filename="../../src/main_window.cpp" line="336"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="344"/>
+        <location filename="../../src/main_window.cpp" line="344"/>
         <source>Preferences</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="353"/>
+        <location filename="../../src/main_window.cpp" line="353"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="354"/>
+        <location filename="../../src/main_window.cpp" line="354"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="359"/>
+        <location filename="../../src/main_window.cpp" line="359"/>
         <source>Clear input</source>
         <translation>Очистить ввод</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="368"/>
+        <location filename="../../src/main_window.cpp" line="368"/>
         <source>Help</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="369"/>
+        <location filename="../../src/main_window.cpp" line="369"/>
         <source>Tutorial</source>
         <translation>Руководство</translation>
     </message>
     <message>
-        <location filename="../src/main_window.cpp" line="374"/>
+        <location filename="../../src/main_window.cpp" line="374"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
@@ -366,105 +365,105 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>PodicepsApplication</name>
     <message>
-        <location filename="../src/podiceps_application.cpp" line="59"/>
-        <source>Unable to open the translation file</source>
-        <translation>Не удалось открыть файл перевода</translation>
+        <location filename="../../src/podiceps_application.cpp" line="72"/>
+        <source>Unable to open the translation file: %1</source>
+        <translation>Не удается открыть файл перевода: %1</translation>
     </message>
 </context>
 <context>
     <name>PreferencesWidget</name>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="88"/>
+        <location filename="../../src/preferences_widget.cpp" line="88"/>
         <source>Unable to open the theme file: %1</source>
         <translation>Не удалось открыть файл темы: %1</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="103"/>
+        <location filename="../../src/preferences_widget.cpp" line="103"/>
         <source>Open File</source>
         <translation>Открыть Файл</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="104"/>
+        <location filename="../../src/preferences_widget.cpp" line="104"/>
         <source>QSS files (*.qss)</source>
         <translation>QSS файлы (*.qss)</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="195"/>
+        <location filename="../../src/preferences_widget.cpp" line="195"/>
         <source>&amp;Interface</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="198"/>
+        <location filename="../../src/preferences_widget.cpp" line="198"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="210"/>
+        <location filename="../../src/preferences_widget.cpp" line="210"/>
         <source>*restart the program to apply the changes</source>
         <translation>*перезапустите программу для применения изменений</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="218"/>
+        <location filename="../../src/preferences_widget.cpp" line="218"/>
         <source>Theme</source>
         <translation>Тема</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="221"/>
+        <location filename="../../src/preferences_widget.cpp" line="221"/>
         <source>&amp;Light</source>
         <translation>Светлая</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="226"/>
+        <location filename="../../src/preferences_widget.cpp" line="226"/>
         <source>&amp;Dark</source>
         <translation>Тёмная</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="232"/>
+        <location filename="../../src/preferences_widget.cpp" line="232"/>
         <source>C&amp;ustom</source>
         <translation>Пользовательская</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="238"/>
+        <location filename="../../src/preferences_widget.cpp" line="238"/>
         <source>Ch&amp;oose...</source>
         <translation>Выбрать...</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="269"/>
+        <location filename="../../src/preferences_widget.cpp" line="269"/>
         <source>&amp;Table</source>
         <translation>Таблица</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="271"/>
+        <location filename="../../src/preferences_widget.cpp" line="271"/>
         <source>Table Content</source>
         <translation>Содержимое Таблицы</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="274"/>
+        <location filename="../../src/preferences_widget.cpp" line="274"/>
         <source>T&amp;ranscription</source>
         <translation>Транскрипция</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="280"/>
+        <location filename="../../src/preferences_widget.cpp" line="280"/>
         <source>Stat&amp;us</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="286"/>
+        <location filename="../../src/preferences_widget.cpp" line="286"/>
         <source>&amp;Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="304"/>
+        <location filename="../../src/preferences_widget.cpp" line="304"/>
         <source>Preferences</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="308"/>
+        <location filename="../../src/preferences_widget.cpp" line="308"/>
         <source>&amp;Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../src/preferences_widget.cpp" line="309"/>
+        <location filename="../../src/preferences_widget.cpp" line="309"/>
         <source>&amp;Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -472,18 +471,18 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/word_status.cpp" line="101"/>
-        <location filename="../src/word_status.cpp" line="105"/>
+        <location filename="../../src/word_status.cpp" line="101"/>
+        <location filename="../../src/word_status.cpp" line="105"/>
         <source>new</source>
         <translation>новое</translation>
     </message>
     <message>
-        <location filename="../src/word_status.cpp" line="108"/>
+        <location filename="../../src/word_status.cpp" line="108"/>
         <source>middle</source>
         <translation>средний</translation>
     </message>
     <message>
-        <location filename="../src/word_status.cpp" line="111"/>
+        <location filename="../../src/word_status.cpp" line="111"/>
         <source>learned</source>
         <translation>выучено</translation>
     </message>
@@ -491,27 +490,27 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>SaveDialog</name>
     <message>
-        <location filename="../src/save_dialog.cpp" line="61"/>
+        <location filename="../../src/save_dialog.cpp" line="61"/>
         <source>Save changes</source>
         <translation>Сохранить изменения</translation>
     </message>
     <message>
-        <location filename="../src/save_dialog.cpp" line="62"/>
+        <location filename="../../src/save_dialog.cpp" line="62"/>
         <source>Save changes to the current file?</source>
         <translation>Сохранить изменения в текущий файл?</translation>
     </message>
     <message>
-        <location filename="../src/save_dialog.cpp" line="63"/>
+        <location filename="../../src/save_dialog.cpp" line="63"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../src/save_dialog.cpp" line="64"/>
+        <location filename="../../src/save_dialog.cpp" line="64"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/save_dialog.cpp" line="65"/>
+        <location filename="../../src/save_dialog.cpp" line="65"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -519,32 +518,32 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>StatisticsWidget</name>
     <message>
-        <location filename="../src/statistics_widget.cpp" line="103"/>
+        <location filename="../../src/statistics_widget.cpp" line="103"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
     <message>
-        <location filename="../src/statistics_widget.cpp" line="107"/>
+        <location filename="../../src/statistics_widget.cpp" line="107"/>
         <source>New</source>
         <translation>Новые</translation>
     </message>
     <message>
-        <location filename="../src/statistics_widget.cpp" line="108"/>
+        <location filename="../../src/statistics_widget.cpp" line="108"/>
         <source>Middle</source>
         <translation>Средний</translation>
     </message>
     <message>
-        <location filename="../src/statistics_widget.cpp" line="109"/>
+        <location filename="../../src/statistics_widget.cpp" line="109"/>
         <source>Learned</source>
         <translation>Выучено</translation>
     </message>
     <message>
-        <location filename="../src/statistics_widget.cpp" line="110"/>
+        <location filename="../../src/statistics_widget.cpp" line="110"/>
         <source>Total</source>
         <translation>Итого</translation>
     </message>
     <message>
-        <location filename="../src/statistics_widget.cpp" line="122"/>
+        <location filename="../../src/statistics_widget.cpp" line="122"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
@@ -552,27 +551,27 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>TableModel</name>
     <message>
-        <location filename="../src/table_model.cpp" line="97"/>
+        <location filename="../../src/table_model.cpp" line="97"/>
         <source>Original</source>
         <translation>Оригинал</translation>
     </message>
     <message>
-        <location filename="../src/table_model.cpp" line="99"/>
+        <location filename="../../src/table_model.cpp" line="99"/>
         <source>Transcription</source>
         <translation>Транскрипция</translation>
     </message>
     <message>
-        <location filename="../src/table_model.cpp" line="101"/>
+        <location filename="../../src/table_model.cpp" line="101"/>
         <source>Translation</source>
         <translation>Перевод</translation>
     </message>
     <message>
-        <location filename="../src/table_model.cpp" line="103"/>
+        <location filename="../../src/table_model.cpp" line="103"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../src/table_model.cpp" line="105"/>
+        <location filename="../../src/table_model.cpp" line="105"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
@@ -580,44 +579,44 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>TableWidget</name>
     <message>
-        <location filename="../src/table_widget.cpp" line="141"/>
+        <location filename="../../src/table_widget.cpp" line="141"/>
         <source>The duplicate words were ignored.</source>
         <translation>Повторяющиеся слова будут пропущены.</translation>
     </message>
     <message>
-        <location filename="../src/table_widget.cpp" line="249"/>
-        <location filename="../src/table_widget.cpp" line="354"/>
+        <location filename="../../src/table_widget.cpp" line="250"/>
+        <location filename="../../src/table_widget.cpp" line="355"/>
         <source>Enter the original word</source>
         <translation>Введите оригинальное слово</translation>
     </message>
     <message>
-        <location filename="../src/table_widget.cpp" line="254"/>
-        <location filename="../src/table_widget.cpp" line="346"/>
+        <location filename="../../src/table_widget.cpp" line="255"/>
+        <location filename="../../src/table_widget.cpp" line="347"/>
         <source>The word &quot;%1&quot; already exists.</source>
         <translation>Слово &quot;%1&quot; уже существует.</translation>
     </message>
     <message>
-        <location filename="../src/table_widget.cpp" line="261"/>
+        <location filename="../../src/table_widget.cpp" line="262"/>
         <source>Added</source>
         <translation>Добавлено</translation>
     </message>
     <message>
-        <location filename="../src/table_widget.cpp" line="439"/>
+        <location filename="../../src/table_widget.cpp" line="440"/>
         <source>&amp;Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../src/table_widget.cpp" line="440"/>
+        <location filename="../../src/table_widget.cpp" line="441"/>
         <source>&amp;Edit</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../src/table_widget.cpp" line="441"/>
+        <location filename="../../src/table_widget.cpp" line="442"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/table_widget.cpp" line="484"/>
+        <location filename="../../src/table_widget.cpp" line="485"/>
         <source>Deleted</source>
         <translation>Удалено</translation>
     </message>
@@ -625,47 +624,47 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>WordAdd</name>
     <message>
-        <location filename="../src/word_add.cpp" line="96"/>
+        <location filename="../../src/word_add.cpp" line="96"/>
         <source>Original</source>
         <translation>Оригинал</translation>
     </message>
     <message>
-        <location filename="../src/word_add.cpp" line="97"/>
+        <location filename="../../src/word_add.cpp" line="97"/>
         <source>Transcription</source>
         <translation>Транскрипция</translation>
     </message>
     <message>
-        <location filename="../src/word_add.cpp" line="98"/>
+        <location filename="../../src/word_add.cpp" line="98"/>
         <source>Translation</source>
         <translation>Перевод</translation>
     </message>
     <message>
-        <location filename="../src/word_add.cpp" line="99"/>
+        <location filename="../../src/word_add.cpp" line="99"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../src/word_add.cpp" line="100"/>
+        <location filename="../../src/word_add.cpp" line="100"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../src/word_add.cpp" line="101"/>
+        <location filename="../../src/word_add.cpp" line="101"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="../src/word_add.cpp" line="117"/>
+        <location filename="../../src/word_add.cpp" line="117"/>
         <source>&amp;Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../src/word_add.cpp" line="118"/>
+        <location filename="../../src/word_add.cpp" line="118"/>
         <source>&amp;Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../src/word_add.cpp" line="130"/>
+        <location filename="../../src/word_add.cpp" line="130"/>
         <source>Add a Word</source>
         <translation>Добавить Слово</translation>
     </message>
@@ -673,102 +672,102 @@ You should have received a copy of the GNU General Public License along with thi
 <context>
     <name>WordEdit</name>
     <message>
-        <location filename="../src/word_edit.cpp" line="75"/>
+        <location filename="../../src/word_edit.cpp" line="75"/>
         <source>No changes</source>
         <translation>Без изменений</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="81"/>
+        <location filename="../../src/word_edit.cpp" line="81"/>
         <source>Enter the original word</source>
         <translation>Введите оригинальное слово</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="87"/>
+        <location filename="../../src/word_edit.cpp" line="87"/>
         <source>The word &quot;%1&quot; already exists</source>
         <translation>Слово &quot;%1&quot; уже существует</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="98"/>
+        <location filename="../../src/word_edit.cpp" line="98"/>
         <source>Saved</source>
         <translation>Сохранено</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="111"/>
+        <location filename="../../src/word_edit.cpp" line="111"/>
         <source>Deleted</source>
         <translation>Удалено</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="126"/>
+        <location filename="../../src/word_edit.cpp" line="126"/>
         <source>Recovered</source>
         <translation>Восстановлено</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="265"/>
+        <location filename="../../src/word_edit.cpp" line="265"/>
         <source>Original</source>
         <translation>Оригинал</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="266"/>
+        <location filename="../../src/word_edit.cpp" line="266"/>
         <source>Transcription</source>
         <translation>Транскрипция</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="267"/>
+        <location filename="../../src/word_edit.cpp" line="267"/>
         <source>Translation</source>
         <translation>Перевод</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="268"/>
+        <location filename="../../src/word_edit.cpp" line="268"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="269"/>
+        <location filename="../../src/word_edit.cpp" line="269"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="270"/>
+        <location filename="../../src/word_edit.cpp" line="270"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="286"/>
+        <location filename="../../src/word_edit.cpp" line="286"/>
         <source>&amp;Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="287"/>
+        <location filename="../../src/word_edit.cpp" line="287"/>
         <source>&amp;Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="288"/>
+        <location filename="../../src/word_edit.cpp" line="288"/>
         <source>&amp;Recover</source>
         <translation>Восстановить</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="294"/>
+        <location filename="../../src/word_edit.cpp" line="294"/>
         <source>&amp;Prev</source>
         <translation>Пред.</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="295"/>
+        <location filename="../../src/word_edit.cpp" line="295"/>
         <source>&amp;Next</source>
         <translation>След.</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="299"/>
+        <location filename="../../src/word_edit.cpp" line="299"/>
         <source>&amp;Quit</source>
         <translation>Завершить</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="300"/>
+        <location filename="../../src/word_edit.cpp" line="300"/>
         <source>&amp;Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../src/word_edit.cpp" line="313"/>
+        <location filename="../../src/word_edit.cpp" line="313"/>
         <source>Edit a Word</source>
         <translation>Редактировать Слово</translation>
     </message>

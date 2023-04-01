@@ -11,7 +11,11 @@ else()
 endif(DEBUGGING)
 
 set(APP_NAME podiceps)
+add_compile_definitions(PODICEPS_VERSION="")
 set(APP_LIB_NAME podiceps_lib)
+
+#Directory with resources
+#add_subdirectory(resources)
 
 #Directory with source code
 add_subdirectory(src)
