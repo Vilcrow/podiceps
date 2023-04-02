@@ -82,7 +82,7 @@ void StatusSpinBox::setColor(int status)
     WordStatus s(status);
     QColor color = WordStatus::getColor(s.getStatusInt());
     QString name = color.name();
-    this->setStyleSheet("background-color: " + name);
+    setStyleSheet("background-color: " + name);
 }
 
 StatusSpinBox::StatusSpinBox(QWidget *parent)

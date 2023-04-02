@@ -283,9 +283,9 @@ WordEdit::WordEdit(const QList<WordLine> &pWords,
     gridLayout->addWidget(commentText, 5, 1);
 
     QHBoxLayout *topButtonLayout = new QHBoxLayout;
-    saveButton = new QPushButton(tr("&Save"));
+    saveButton = new QPushButton(tr("Save"));
     deleteButton = new QPushButton(tr("&Delete"));
-    recoverButton = new QPushButton(tr("&Recover"));
+    recoverButton = new QPushButton(tr("Re&cover"));
     topButtonLayout->addWidget(saveButton);
     topButtonLayout->addWidget(deleteButton);
     topButtonLayout->addWidget(recoverButton);
@@ -296,11 +296,11 @@ WordEdit::WordEdit(const QList<WordLine> &pWords,
     lowButtonLayout->addWidget(prevButton);
     lowButtonLayout->addWidget(nextButton);
 
-    QPushButton *quitButton = new QPushButton(tr("&Quit"));
-    QPushButton *cancelButton = new QPushButton(tr("&Cancel"));
+    QPushButton *recordButton = new QPushButton(tr("&Record"));
+    QPushButton *cancelButton = new QPushButton(tr("Cancel"));
 
     gridLayout->addLayout(topButtonLayout, 6, 1, Qt::AlignRight);
-    gridLayout->addWidget(quitButton, 6, 0, Qt::AlignLeft);
+    gridLayout->addWidget(recordButton, 6, 0, Qt::AlignLeft);
     gridLayout->addWidget(cancelButton, 7, 0, Qt::AlignLeft);
     gridLayout->addLayout(lowButtonLayout, 7, 1, Qt::AlignRight);
 
@@ -321,7 +321,7 @@ WordEdit::WordEdit(const QList<WordLine> &pWords,
 
     connect(prevButton, &QAbstractButton::clicked, this, &WordEdit::stepPrev);
     connect(nextButton, &QAbstractButton::clicked, this, &WordEdit::stepNext);
-    connect(quitButton, &QAbstractButton::clicked, this, &QDialog::accept);
+    connect(recordButton, &QAbstractButton::clicked, this, &QDialog::accept);
     connect(cancelButton, &QAbstractButton::clicked, this, &QDialog::reject);
 
     connect(commentText, &QTextEdit::textChanged,

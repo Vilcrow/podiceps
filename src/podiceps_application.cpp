@@ -69,7 +69,8 @@ void PodicepsApplication::setLanguage()
             installTranslator(translator);
         }
         else {
-            qDebug() << tr("Unable to open the translation file: %1").arg(path);
+            qDebug() << QString("Unable to open the translation file: %1")
+                                                                .arg(path);
         }
     }
 }

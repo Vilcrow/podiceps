@@ -36,7 +36,7 @@ You should have received a copy of the GNU General Public License along with thi
     Ctrl + F - open the find widget
     Alt + F - close the find widget
     Ctrl + Shift + F - close the find widget
-    Ctrl + E - open the edit widget
+    Ctrl + Shift + E - open the words edit window
     Delete - delete selected rows
     Ctrl + P - open the preferences
     Ctrl + Shift + N - show the statistics
@@ -48,3 +48,11 @@ You should have received a copy of the GNU General Public License along with thi
     Ctrl + X - cut
     Ctrl + C - copy
     Ctrl + V - paste
+4.3 Word Edit Window
+    Alt + R - record changes to the table and close the window
+    Esc - don't record changes to the table and close the window
+    Enter - save changes
+    Alt + D - delete a word
+    Alt + C - recover a word
+    Alt + P - go to previous word
+    Alt + N - go to next word

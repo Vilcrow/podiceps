@@ -67,7 +67,7 @@ QString AboutWidget::getFileContent(const QString &path)
     QString ret;
 
     if(path.isEmpty()) {
-        qDebug() << tr("Passed empty argument");
+        qDebug() << "Passed an empty argument";
         return ret;
     }
 
@@ -77,7 +77,7 @@ QString AboutWidget::getFileContent(const QString &path)
         ret = content.readAll();
     }
     else {
-        qDebug() << tr("Unable to open the license file: %1").arg(path);
+        qDebug() << QString("Unable to open the license file: %1").arg(path);
     }
 
     return ret;
@@ -95,6 +95,7 @@ void AboutWidget::openLicense()
     QTextEdit *textEdit = new QTextEdit(licenseDialog);
     textEdit->setText(licenseText);
     textEdit->setReadOnly(true);
+    textEdit->setWordWrapMode(QTextOption::NoWrap);
     mainLayout->addWidget(textEdit);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
@@ -130,6 +131,7 @@ void AboutWidget::openFullText()
     QTextEdit *textEdit = new QTextEdit(licenseDialog);
     textEdit->setText(licenseText);
     textEdit->setReadOnly(true);
+    textEdit->setWordWrapMode(QTextOption::NoWrap);
     mainLayout->addWidget(textEdit);
 
     QPushButton *closeButton = new QPushButton(tr("Close"));

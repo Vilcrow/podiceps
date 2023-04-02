@@ -37,6 +37,7 @@
 #include <QDebug>
 #include <QHeaderView>
 #include <QMenu>
+#include <QMessageBox>
 #include <QRect>
 #include <QSortFilterProxyModel>
 
@@ -48,7 +49,9 @@ bool TableWidget::isSaved() const
 void TableWidget::setSaved(bool value)
 {
     changesSaved = value;
-    actionLog->clear();
+    if(!actionLog->isEmpty()) {
+        actionLog->clear();
+    }
 }
 
 void TableWidget::sortByColumn(int column, Qt::SortOrder order)
@@ -103,6 +106,7 @@ void TableWidget::deleteEntry()
     QModelIndexList indexes = tableView->selectionModel()->selectedRows();
 
     if(indexes.isEmpty()) {
+        qDebug() << "No rows selected";
         return;
     }
 
@@ -125,20 +129,24 @@ void TableWidget::deleteRow(const QModelIndex &index)
 void TableWidget::fillTable(const QList<WordLine> words)
 {
     if(words.isEmpty()) {
+        qDebug() << "Passed an empty argument";
         return;
     }
 
     clear();
 
-    bool duplicate = false;
+    int duplicates = 0;
     for(const WordLine &word: qAsConst(words)) {
         if(!addEntry(word)) {
-            duplicate = true;
+            ++duplicates;
         }
     }
 
-    if(duplicate) {
-        qDebug() << tr("The duplicate words were ignored.");
+    if(duplicates != 0) {
+        QString msg = tr("Duplicate words were found in the file(%1). "
+                         "When you save the file, they will be lost.")
+                                                      .arg(duplicates);
+        QMessageBox::information(this, tr("Duplicate words"), msg);
     }
 }
 
@@ -146,11 +154,16 @@ void TableWidget::clear()
 {
     tableModel->removeRows(0, tableModel->rowCount(QModelIndex()),
                            QModelIndex());
-    actionLog->clear();
+    if(!actionLog->isEmpty()) {
+        actionLog->clear();
+    }
 }
 
-void TableWidget::setFilter(int col, const QRegExp &exp)
+void TableWidget::setFilter(int col, const QString &filter)
 {
+    QRegExp::PatternSyntax syn = QRegExp::PatternSyntax(QRegExp::FixedString);
+    QRegExp exp = QRegExp(filter, Qt::CaseInsensitive, syn);
+
     proxyModel->setFilterRegExp(exp);
     proxyModel->setFilterKeyColumn(col);
 }
@@ -188,6 +201,7 @@ WordLine TableWidget::getWord(const QModelIndex &index) const
     int row = proxyModel->mapToSource(index).row();
 
     if(row == -1) {
+        qDebug() << "Passed an invalid argument";
         return ret;
     }
 
@@ -374,14 +388,18 @@ void TableWidget::openWordEdit(const QModelIndexList &indexes)
     }
 
     if(rows.isEmpty()) {
+        qDebug() << "The file is empty";
         return;
     }
 
     QList<WordLine> words = tableModel->getWords();
     WordEdit wordEdit(words, rows, this);
     if(wordEdit.exec() == QDialog::Accepted) {
-        // Need fix.
         fillTable(wordEdit.getWords());
+        emit actionCompleted(tr("Changes are fixed"));
+    }
+    else {
+        emit actionCompleted(tr("Changes canceled"));
     }
 }
 

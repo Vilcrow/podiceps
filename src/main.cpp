@@ -29,6 +29,9 @@
 
 int main(int argc, char **argv)
 {
+    // Debugging messages format.
+    qSetMessagePattern("%{message} : %{file} : %{line}");
+
     PodicepsApplication app(argc, argv);
     return app.exec();
 }

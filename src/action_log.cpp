@@ -26,6 +26,7 @@
 /**************************************************************************/
 
 #include "action_log.h"
+#include <QDebug>
 
 bool ActionLog::addAction(ActionBase *act)
 {
@@ -51,6 +52,9 @@ bool ActionLog::addAction(ActionBase *act)
 
         return true;
     }
+    else {
+        qDebug() << "Passed a null pointer";
+    }
 
     return false;
 }
@@ -58,6 +62,7 @@ bool ActionLog::addAction(ActionBase *act)
 void ActionLog::erase(int begin, int end)
 {
     if(begin < 0 || begin >= log.size() || begin > end || end >= log.size()) {
+        qDebug() << "Passed an invalid argument";
         return;
     }
 
@@ -74,12 +79,18 @@ void ActionLog::erase(int begin, int end)
 
 void ActionLog::clear()
 {
-    if(log.size() == 0) {
+    if(isEmpty()) {
+        qDebug() << "The log is already empty";
         return;
     }
 
     erase(0, log.size()-1);
     pos = -1;
+}
+
+bool ActionLog::isEmpty() const
+{
+    return log.size() == 0;
 }
 
 void ActionLog::undo()

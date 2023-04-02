@@ -85,7 +85,7 @@ QString PreferencesWidget::getTheme(int theme)
             ret = content.readAll();
         }
         else {
-            qDebug() << tr("Unable to open the theme file: %1").arg(path);
+            qDebug() << QString("Unable to open the theme file: %1").arg(path);
         }
     }
 
@@ -186,6 +186,7 @@ void PreferencesWidget::writeSettings()
 void PreferencesWidget::setupInterfaceTab()
 {
     if(!tabWidget) {
+        qDebug() << "Passed a null pointer";
         return;
     }
 
@@ -260,6 +261,7 @@ void PreferencesWidget::setupInterfaceTab()
 void PreferencesWidget::setupTableTab()
 {
     if(!tabWidget) {
+        qDebug() << "Passed a null pointer";
         return;
     }
 
@@ -306,7 +308,7 @@ PreferencesWidget::PreferencesWidget(QWidget *parent)
     vLayout->addWidget(tabWidget);
 
     QPushButton *saveButton = new QPushButton(tr("&Save"));
-    QPushButton *cancelButton = new QPushButton(tr("&Cancel"));
+    QPushButton *cancelButton = new QPushButton(tr("Cancel"));
     QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addWidget(saveButton);
     hLayout->addWidget(cancelButton);

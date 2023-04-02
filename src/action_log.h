@@ -42,6 +42,8 @@ public:
     void erase(int begin, int end);
     void clear();
 
+    bool isEmpty() const;
+
     void undo();
     void redo();
 

@@ -27,6 +27,7 @@
 
 #include "table_model.h"
 #include "table_widget.h"
+#include <QDebug>
 #include <QModelIndex>
 #include <QColor>
 
@@ -45,10 +46,12 @@ int TableModel::columnCount(const QModelIndex &parent) const
 QVariant TableModel::data(const QModelIndex &index, int role) const
 {
     if(!index.isValid()) {
+        qDebug() << "Passed an invalid argument";
         return QVariant();
     }
 
     if(index.row() >= words.size() || index.row() < 0) {
+        qDebug() << "Passed an invalid argument";
         return QVariant();
     }
 
@@ -114,6 +117,7 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation,
 Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 {
     if(!index.isValid()) {
+        qDebug() << "Passed an invalid argument";
         return Qt::ItemIsEnabled;
     }
 

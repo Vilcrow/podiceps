@@ -32,6 +32,7 @@
 #include "preferences_widget.h"
 #include "save_dialog.h"
 #include <QCloseEvent>
+#include <QDebug>
 #include <QFileDialog>
 #include <QLabel>
 #include <QMenuBar>
@@ -43,6 +44,7 @@
 void MainWindow::appendFormat(QString &name, const QString &format)
 {
     if(format.isEmpty()) {
+        qDebug() << "Passed an empty argument";
         return;
     }
 
@@ -328,7 +330,7 @@ void MainWindow::createEditMenu()
     editMenu->addSeparator();
 
     editAct = new QAction(tr("Edit"), this);
-    editAct->setShortcut(Qt::CTRL + Qt::Key_E);
+    editAct->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_E);
     editMenu->addAction(editAct);
     connect(editAct, &QAction::triggered,
             dictWidget, &DictionaryWidget::editWordRequested);

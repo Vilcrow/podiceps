@@ -54,7 +54,7 @@ public:
     void fillTable(const QList<WordLine> words);
     void clear();
 
-    void setFilter(int col = -1, const QRegExp &exp = QRegExp());
+    void setFilter(int col = -1, const QString &filter = QString());
     int getRowCount() const;
     QString getColumnName(int col) const;
 

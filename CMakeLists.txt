@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(podiceps LANGUAGES CXX)
+project(podiceps LANGUAGES CXX VERSION 0.1)
 
 #Enable debugging flags
 option(DEBUGGING "Debugging options" ON)
@@ -11,7 +11,9 @@ else()
 endif(DEBUGGING)
 
 set(APP_NAME podiceps)
-add_compile_definitions(PODICEPS_VERSION="")
+add_compile_definitions(QT_MESSAGELOGCONTEXT
+                        PODICEPS_VERSION="${CMAKE_PROJECT_VERSION}"
+)
 set(APP_LIB_NAME podiceps_lib)
 
 #Directory with resources

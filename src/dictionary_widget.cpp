@@ -30,6 +30,7 @@
 #include "input_widget.h"
 #include "table_widget.h"
 #include "word_line.h"
+#include <QDebug>
 #include <QFile>
 #include <QMessageBox>
 #include <QTextStream>
@@ -38,6 +39,7 @@
 void DictionaryWidget::readFromFile(const QString &fileName)
 {
     if(fileName.isEmpty()) {
+        qDebug() << "Passed an empty argument";
         return;
     }
 
@@ -87,6 +89,7 @@ void DictionaryWidget::readFromFile(const QString &fileName)
 void DictionaryWidget::writeToFile(const QString &fileName)
 {
     if(fileName.isEmpty()) {
+        qDebug() << "Passed an empty argument";
         return;
     }
 
@@ -207,11 +210,9 @@ void DictionaryWidget::clearInput()
 
 void DictionaryWidget::setFilter()
 {
-    // TODO:Maybe must be moved to TableWidget.
-    QRegExp::PatternSyntax syntax = QRegExp::PatternSyntax(QRegExp::FixedString);
-    QRegExp regExp = QRegExp(findWidget->getFilter(), Qt::CaseInsensitive, syntax);
     int column = findWidget->getChecked(); // Which column will we search for.
-    tableWidget->setFilter(column, regExp);
+    QString filter = findWidget->getFilter();
+    tableWidget->setFilter(column, filter);
 }
 
 void DictionaryWidget::clearFilter()
