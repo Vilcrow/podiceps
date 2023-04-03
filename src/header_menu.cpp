@@ -26,6 +26,7 @@
 /**************************************************************************/
 
 #include "header_menu.h"
+#include "settings.h"
 
 void HeaderMenu::updateSettings(bool checked)
 {
@@ -45,25 +46,20 @@ void HeaderMenu::updateSettings(bool checked)
 
 void HeaderMenu::readSettings()
 {
-    settings.beginGroup("/Settings/Interface");
-    showTranscription = settings.value("/table/show_transcription", true)
-                                       .toBool();
-    showStatus = settings.value("/table/show_status", true).toBool();
-    showDate = settings.value("/table/show_date", true).toBool();
-    settings.endGroup();
+    showTranscription = Settings::isTranscriptionVisible();
+    showStatus = Settings::isStatusVisible();
+    showDate = Settings::isDateVisible();
 }
 
 void HeaderMenu::writeSettings()
 {
-    settings.beginGroup("/Settings/Interface");
-    settings.setValue("/table/show_transcription", showTranscription);
-    settings.setValue("/table/show_status", showStatus);
-    settings.setValue("/table/show_date", showDate);
-    settings.endGroup();
+    Settings::setTranscriptionVisible(showTranscription);
+    Settings::setStatusVisible(showStatus);
+    Settings::setDateVisible(showDate);
 }
 
 HeaderMenu::HeaderMenu(const QPoint &position, QWidget *parent)
-    : QMenu(parent), settings("Vilcrow", "podiceps")
+    : QMenu(parent)
 {
     readSettings();
 

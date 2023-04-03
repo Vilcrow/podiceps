@@ -39,59 +39,6 @@
 #include <QTextStream>
 #include <QVBoxLayout>
 
-QMap<int, QString> PreferencesWidget::themePaths = { {LightTheme, ""},
-                                                     {DarkTheme, ""},
-                                                     {CustomTheme, ""} };
-
-QMap<int, QString> PreferencesWidget::languages = { {EnglishLang, "English"},
-                                                    {RussianLang, "Русский"}};
-
-void PreferencesWidget::setThemePaths()
-{
-    // Default theme(Qt).
-    themePaths[LightTheme] = "";
-
-    themePaths[DarkTheme] = ":/theme_dark.qss";
-
-    QSettings settings("Vilcrow", "podiceps");
-    settings.beginGroup("/Settings/Interface");
-    themePaths[CustomTheme] = settings.value("/custom_theme_path", "").toString();
-    settings.endGroup();
-}
-
-QString PreferencesWidget::getTheme(int theme)
-{
-    setThemePaths();
-
-    QString ret = "";
-    QString path = "";
-
-    switch(theme) {
-    case LightTheme:
-        path = themePaths[LightTheme];
-        break;
-    case DarkTheme:
-        path = themePaths[DarkTheme];
-        break;
-    case CustomTheme:
-        path = themePaths[CustomTheme];
-        break;
-    }
-
-    if(!path.isEmpty()) {
-        QFile themeFile(path);
-        if(themeFile.open(QIODevice::ReadOnly)) {
-            QTextStream content(&themeFile);
-            ret = content.readAll();
-        }
-        else {
-            qDebug() << QString("Unable to open the theme file: %1").arg(path);
-        }
-    }
-
-    return ret;
-}
-
 void PreferencesWidget::accept()
 {
     writeSettings();
@@ -103,7 +50,7 @@ void PreferencesWidget::setCustomThemePath()
     QString path = QFileDialog::getOpenFileName(this, tr("Open File"),
                                          "", tr("QSS files (*.qss)"));
     if(!path.isEmpty()) {
-        themePaths[CustomTheme] = path;
+        customThemePath = path;
         customLineEdit->setText(path);
     }
 }
@@ -111,7 +58,18 @@ void PreferencesWidget::setCustomThemePath()
 void PreferencesWidget::languageChanged(int index)
 {
     langHintLabel->show();
-    appLanguage = index;
+
+    switch(index) {
+    case Settings::EnglishLang:
+        appLanguage = Settings::EnglishLang;
+        break;
+    case Settings::RussianLang:
+        appLanguage = Settings::RussianLang;
+        break;
+    default:
+        appLanguage = Settings::EnglishLang;
+        break;
+    }
 }
 
 void PreferencesWidget::themeChanged(bool checked)
@@ -119,13 +77,13 @@ void PreferencesWidget::themeChanged(bool checked)
     if(checked) {
         QRadioButton *button = static_cast<QRadioButton*>(sender());
         if(button == lightThemeButton) {
-            appTheme = LightTheme;
+            appTheme = Settings::LightTheme;
         }
         else if(button == darkThemeButton) {
-            appTheme = DarkTheme;
+            appTheme = Settings::DarkTheme;
         }
         else {
-            appTheme = CustomTheme;
+            appTheme = Settings::CustomTheme;
         }
     }
 }
@@ -161,26 +119,22 @@ void PreferencesWidget::tableSettingsChanged(int state)
 
 void PreferencesWidget::readSettings()
 {
-    settings.beginGroup("/Settings/Interface");
-    appLanguage = settings.value("/app_language", 0).toInt();
-    appTheme = settings.value("/app_theme", 0).toInt();
-    themePaths[CustomTheme] = settings.value("/custom_theme_path", "").toString();
-    showTranscription = settings.value("/table/show_transcription", true).toBool();
-    showStatus = settings.value("/table/show_status", true).toBool();
-    showDate = settings.value("/table/show_date", true).toBool();
-    settings.endGroup();
+    appLanguage = Settings::getLanguage();
+    appTheme = Settings::getTheme();
+    customThemePath = Settings::getCustomThemePath();
+    showTranscription = Settings::isTranscriptionVisible();
+    showStatus = Settings::isStatusVisible();
+    showDate = Settings::isDateVisible();
 }
 
 void PreferencesWidget::writeSettings()
 {
-    settings.beginGroup("/Settings/Interface");
-    settings.setValue("/app_language", appLanguage);
-    settings.setValue("/app_theme", appTheme);
-    settings.setValue("/custom_theme_path", customLineEdit->text());
-    settings.setValue("/table/show_transcription", showTranscription);
-    settings.setValue("/table/show_status", showStatus);
-    settings.setValue("/table/show_date", showDate);
-    settings.endGroup();
+    Settings::setLanguage(appLanguage);
+    Settings::setTheme(appTheme);
+    Settings::setCustomThemePath(customLineEdit->text());
+    Settings::setTranscriptionVisible(showTranscription);
+    Settings::setStatusVisible(showStatus);
+    Settings::setDateVisible(showDate);
 }
 
 void PreferencesWidget::setupInterfaceTab()
@@ -200,9 +154,8 @@ void PreferencesWidget::setupInterfaceTab()
     QVBoxLayout *langLayout = new QVBoxLayout;
 
     languageBox = new QComboBox(this);
-    for(int k : languages.keys()) {
-        languageBox->addItem(languages[k]);
-    }
+    languageBox->addItem(Settings::getLanguageName(Settings::EnglishLang));
+    languageBox->addItem(Settings::getLanguageName(Settings::RussianLang));
     languageBox->setCurrentIndex(appLanguage);
     langLayout->addWidget(languageBox);
     connect(languageBox, SIGNAL(currentIndexChanged(int)),
@@ -234,7 +187,8 @@ void PreferencesWidget::setupInterfaceTab()
     customLayout->addWidget(customThemeButton);
     connect(customThemeButton, &QRadioButton::toggled,
             this, &PreferencesWidget::themeChanged);
-    customLineEdit = new QLineEdit(themePaths[CustomTheme]);
+    customLineEdit = new QLineEdit(customThemePath);
+    customLineEdit->setReadOnly(true);
     customLayout->addWidget(customLineEdit);
     QPushButton *customChooseButton = new QPushButton(tr("Ch&oose..."));
     customLayout->addWidget(customChooseButton);
@@ -242,13 +196,13 @@ void PreferencesWidget::setupInterfaceTab()
             this, &PreferencesWidget::setCustomThemePath);
 
     switch(appTheme) {
-    case LightTheme:
+    case Settings::LightTheme:
         lightThemeButton->setChecked(true);
         break;
-    case DarkTheme:
+    case Settings::DarkTheme:
         darkThemeButton->setChecked(true);
         break;
-    case CustomTheme:
+    case Settings::CustomTheme:
         customThemeButton->setChecked(true);
         break;
     }
@@ -270,7 +224,7 @@ void PreferencesWidget::setupTableTab()
     tableTab->setLayout(mainLayout);
     tabWidget->addTab(tableTab, tr("&Table"));
 
-    QGroupBox *tableGroupBox = new QGroupBox(tr("Table Content"));
+    QGroupBox *tableGroupBox = new QGroupBox(tr("Table View"));
     QVBoxLayout *tableLayout = new QVBoxLayout;
 
     showTranscriptionCheckBox = new QCheckBox(tr("T&ranscription"), tableTab);
@@ -296,10 +250,9 @@ void PreferencesWidget::setupTableTab()
 }
 
 PreferencesWidget::PreferencesWidget(QWidget *parent)
-    : QDialog(parent), settings("Vilcrow", "podiceps")
+    : QDialog(parent), tabWidget(new QTabWidget(this))
 {
     readSettings();
-    tabWidget = new QTabWidget(this);
     setupInterfaceTab();
     setupTableTab();
 

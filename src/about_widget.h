@@ -41,7 +41,6 @@ private slots:
 private:
     static QString getFullLicenseText();
     static QString getShortLicenseText();
-    static QString getFileContent(const QString &path);
 };
 
 #endif

@@ -14,13 +14,16 @@ set(APP_LIB_SOURCE
     header_menu.cpp
     input_widget.cpp
     main_window.cpp
+    manual_widget.cpp
     podiceps_application.cpp
     preferences_widget.cpp
     save_dialog.cpp
+    settings.cpp
     statistics_widget.cpp
     status_spin_box.cpp
     table_model.cpp
     table_widget.cpp
+    text_file.cpp
     word_add.cpp
     word_edit.cpp
     word_line.cpp

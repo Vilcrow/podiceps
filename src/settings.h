@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  dictionary_widget.h                                                   */
+/*  settings.h                                                            */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,67 +25,46 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef DICTIONARY_WIDGET_VIL_H
-#define DICTIONARY_WIDGET_VIL_H
+#ifndef SETTINGS_VIL_H
+#define SETTINGS_VIL_H
 
-#include "word_line.h"
-#include <QWidget>
+#include <QSettings>
 
-class FindWidget;
-class InputWidget;
-class TableWidget;
-
-class DictionaryWidget : public QWidget {
-    Q_OBJECT
+class Settings {
 public:
-    void readFromFile(const QString &fileName);
-    void writeToFile (const QString &fileName);
-    bool writeToXmlFile(const QString &fileName);
-    void setLastFileName(const QString &newLast);
+    enum Theme { LightTheme, DarkTheme, CustomTheme };
+    enum Language { EnglishLang, RussianLang };
 
-    bool isSaved() const;
-    void setSaved(bool value);
+    static Theme getTheme();
+    static QString getThemeText();
+    static QString getCustomThemePath();
+    static Language getLanguage();
+    static QString getLanguageName(Language lang);
 
-    QString getLastFileName() const;
-    int getRowCount() const;
+    static bool isTranscriptionVisible();
+    static bool isStatusVisible();
+    static bool isDateVisible();
 
-    bool hasSelectedWords() const;
+    static QString getLastFileName();
 
-    void readSettings();
-    void writeSettings();
+    static void setTheme(const Theme theme);
+    static void setCustomThemePath(const QString &path);
+    static void setLanguage(const Language lang);
 
-    DictionaryWidget(QWidget *parent = nullptr);
-    virtual ~DictionaryWidget();
-signals:
-    void actionCompleted(const QString &msg);
-    void stateChanged();
+    static void setTranscriptionVisible(bool visible);
+    static void setStatusVisible(bool visible);
+    static void setDateVisible(bool visible);
 
-    void addWordRequested(const WordLine& word = WordLine());
-    void editWordRequested();
-    void deleteWordRequested();
-    void undoRequested();
-    void redoRequested();
-    void statisticsRequested();
-public slots:
-    void addWord(const WordLine& word);
-    void editWord();
-    void deleteWord();
-
-    void createNewFile();
-    void clearInput();
-    void setFilter();
-    void clearFilter();
-    void openFindWidget();
-    void closeFindWidget();
-    void updateInput();
-    void updateSettings();
-    void resize(int w, int h);
+    static void setLastFileName(const QString &name);
 private:
-    QString lastFileName;
+    Settings();
+    ~Settings();
 
-    TableWidget *tableWidget;
-    FindWidget *findWidget;
-    InputWidget *inputWidget;
+    static QSettings settings;
+    static QMap<int, QString> themePaths;
+    static QMap<int, QString> languages;
+
+    static void setThemePaths();
 };
 
 #endif

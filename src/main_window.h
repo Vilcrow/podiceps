@@ -29,7 +29,6 @@
 #define MAIN_WINDOW_VIL_H
 
 #include <QMainWindow>
-#include <QSettings>
 
 class DictionaryWidget;
 class QCloseEvent;
@@ -39,8 +38,6 @@ class QStatusBar;
 class MainWindow: public QMainWindow {
     Q_OBJECT
 public:
-    static void appendFormat(QString &name, const QString &format);
-
     MainWindow(QWidget *parent = nullptr);
     virtual ~MainWindow();
 signals:
@@ -56,7 +53,7 @@ private slots:
     void openFileInfo();
     bool trySaveChanges();
     void showMessage(const QString &msg, int timeout = 5000);
-    void openTutorial();
+    void openUserManual();
     void openAbout();
     void openPreferences();
     void quitApp();
@@ -64,7 +61,6 @@ protected:
     void closeEvent(QCloseEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
 private:
-    QSettings mainWindowSettings;
     bool closeImmediately;
     DictionaryWidget *dictWidget;
     QStatusBar *statusBar;
@@ -91,7 +87,7 @@ private:
     QAction *clearInputAct;
 
     QMenu *helpMenu;
-    QAction *openTutorialAct;
+    QAction *openManualAct;
     QAction *openAboutAct;
 
     void createMenus();

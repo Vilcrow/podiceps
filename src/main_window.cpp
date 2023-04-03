@@ -29,8 +29,11 @@
 #include "about_widget.h"
 #include "dictionary_widget.h"
 #include "file_info_widget.h"
+#include "manual_widget.h"
+#include "settings.h"
 #include "preferences_widget.h"
 #include "save_dialog.h"
+#include "text_file.h"
 #include <QCloseEvent>
 #include <QDebug>
 #include <QFileDialog>
@@ -40,18 +43,6 @@
 #include <QResizeEvent>
 #include <QStatusBar>
 #include <QVBoxLayout>
-
-void MainWindow::appendFormat(QString &name, const QString &format)
-{
-    if(format.isEmpty()) {
-        qDebug() << "Passed an empty argument";
-        return;
-    }
-
-    if(!name.endsWith(format, Qt::CaseInsensitive)) {
-        name.append("." + format);
-    }
-}
 
 void MainWindow::updateActions()
 {
@@ -107,7 +98,7 @@ void MainWindow::openFile()
         QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
                                                  "", tr("XML Files (*.xml)"));
         if(!fileName.isEmpty()) {
-            appendFormat(fileName, "xml");
+            TextFile::appendFormat(fileName, "xml");
             dictWidget->readFromFile(fileName);
         }
     }
@@ -136,7 +127,7 @@ bool MainWindow::saveChanges()
     }
 
     if(!fileName.isEmpty()) {
-        appendFormat(fileName, "xml");
+        TextFile::appendFormat(fileName, "xml");
         dictWidget->writeToFile(fileName);
         dictWidget->setSaved(true);
         updateActions();
@@ -154,7 +145,7 @@ void MainWindow::saveFile()
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
                                              "", tr("XML Files (*.xml)"));
     if(!fileName.isEmpty()) {
-        appendFormat(fileName, "xml");
+        TextFile::appendFormat(fileName, "xml");
         dictWidget->writeToFile(fileName);
     }
 }
@@ -193,9 +184,10 @@ void MainWindow::showMessage(const QString &msg, int timeout)
     statusBar->showMessage(msg, timeout);
 }
 
-void MainWindow::openTutorial()
+void MainWindow::openUserManual()
 {
-
+    ManualWidget manual(this);
+    manual.exec();
 }
 
 void MainWindow::openAbout()
@@ -368,11 +360,10 @@ void MainWindow::createToolsMenu()
 void MainWindow::createHelpMenu()
 {
     helpMenu = menuBar()->addMenu(tr("Help"));
-    openTutorialAct = new QAction(tr("Tutorial"), this);
-    helpMenu->addAction(openTutorialAct);
-    openTutorialAct->setEnabled(false);
-    connect(openTutorialAct, &QAction::triggered,
-            this, &MainWindow::openTutorial);
+    openManualAct = new QAction(tr("User Manual"), this);
+    helpMenu->addAction(openManualAct);
+    connect(openManualAct, &QAction::triggered,
+            this, &MainWindow::openUserManual);
     openAboutAct = new QAction(tr("About"), this);
     helpMenu->addAction(openAboutAct);
     connect(openAboutAct, &QAction::triggered, this, &MainWindow::openAbout);
@@ -389,8 +380,7 @@ void MainWindow::writeSettings()
 }
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), mainWindowSettings("Vilcrow", "podiceps"),
-      closeImmediately(false)
+    : QMainWindow(parent), closeImmediately(false)
 {
     readSettings();
 

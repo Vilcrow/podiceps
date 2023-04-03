@@ -22,37 +22,3 @@ You should have received a copy of the GNU General Public License along with thi
         3) cmake ../
         4) cmake --build .
 
-4. Keyboard shortcuts
-4.1 Main Window
-    Ctrl + N - create a new file
-    Ctrl + O - open file
-    Ctrl + S - save file
-    Ctrl + Shift + S - save file as
-    Ctrl + I - show information about the current file
-    Ctrl + W - quit the program
-    Ctrl + Alt + Z - undo the table action
-    Ctrl + Alt + Y - redo the table action
-    Ctrl + Shift + A - open the add widget
-    Ctrl + F - open the find widget
-    Alt + F - close the find widget
-    Ctrl + Shift + F - close the find widget
-    Ctrl + Shift + E - open the words edit window
-    Delete - delete selected rows
-    Ctrl + P - open the preferences
-    Ctrl + Shift + N - show the statistics
-    Esc - deselect the table rows and clear input
-4.2 Input Widget
-    Enter - add a word
-    Ctrl + Z - undo
-    Ctrl + Shift + Z - redo
-    Ctrl + X - cut
-    Ctrl + C - copy
-    Ctrl + V - paste
-4.3 Word Edit Window
-    Alt + R - record changes to the table and close the window
-    Esc - don't record changes to the table and close the window
-    Enter - save changes
-    Alt + D - delete a word
-    Alt + C - recover a word
-    Alt + P - go to previous word
-    Alt + N - go to next word

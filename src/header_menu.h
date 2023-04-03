@@ -29,7 +29,6 @@
 #define HEADER_MENU_VIL_H
 
 #include <QMenu>
-#include <QSettings>
 
 class HeaderMenu : public QMenu {
     Q_OBJECT
@@ -39,7 +38,6 @@ public:
 private slots:
     void updateSettings(bool checked);
 private:
-    QSettings settings;
     QAction *transcriptionAct;
     QAction *statusAct;
     QAction *dateAct;

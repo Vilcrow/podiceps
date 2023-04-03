@@ -28,8 +28,8 @@
 #ifndef PREFERENCES_WIDGET_VIL_H
 #define PREFERENCES_WIDGET_VIL_H
 
+#include "settings.h"
 #include <QDialog>
-#include <QSettings>
 #include <QTabWidget>
 
 class QCheckBox;
@@ -41,12 +41,6 @@ class QRadioButton;
 class PreferencesWidget : public QDialog {
     Q_OBJECT
 public:
-    enum Theme { LightTheme, DarkTheme, CustomTheme };
-
-    static QString getTheme(int theme);
-
-    enum Language { EnglishLang, RussianLang };
-
     PreferencesWidget(QWidget *parent = nullptr);
     virtual ~PreferencesWidget();
 public slots:
@@ -57,14 +51,14 @@ private slots:
     void themeChanged(bool checked);
     void tableSettingsChanged(int state);
 private:
-    QSettings settings;
-    int appLanguage;
-    int appTheme;
+    QTabWidget *tabWidget;
+
+    Settings::Language appLanguage;
+    Settings::Theme appTheme;
+    QString customThemePath;
     bool showTranscription;
     bool showStatus;
     bool showDate;
-
-    QTabWidget *tabWidget;
 
     QComboBox *languageBox;
     QLabel *langHintLabel;
@@ -77,11 +71,6 @@ private:
     QRadioButton *darkThemeButton;
     QRadioButton *customThemeButton;
     QLineEdit *customLineEdit;
-
-    static QMap<int, QString> themePaths;
-    static void setThemePaths();
-
-    static QMap<int, QString> languages;
 
     void readSettings();
     void writeSettings();

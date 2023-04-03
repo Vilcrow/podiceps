@@ -26,12 +26,12 @@
 /**************************************************************************/
 
 #include "about_widget.h"
-#include "preferences_widget.h"
+#include "settings.h"
+#include "text_file.h"
 #include <QDebug>
 #include <QFile>
 #include <QLabel>
 #include <QPushButton>
-#include <QSettings>
 #include <QString>
 #include <QTextEdit>
 #include <QHBoxLayout>
@@ -39,19 +39,17 @@
 
 QString AboutWidget::getFullLicenseText()
 {
-    return getFileContent(":/license_gpl_v3.txt");
+    return TextFile::getFileContent(":/license_gpl_v3.txt");
 }
 
 QString AboutWidget::getShortLicenseText()
 {
-    QSettings settings("Vilcrow", "podiceps");
-    settings.beginGroup("/Settings/Interface");
-    int appLanguage = settings.value("/app_language", 0).toInt();
-    settings.endGroup();
-
     QString path;
-    switch(appLanguage) {
-    case PreferencesWidget::RussianLang:
+
+    Settings::Language lang = Settings::getLanguage();
+
+    switch(lang) {
+    case Settings::RussianLang:
         path = ":/license_short_ru.txt";
         break;
     default:  // Default English language.
@@ -59,28 +57,7 @@ QString AboutWidget::getShortLicenseText()
         break;
     }
 
-    return getFileContent(path);
-}
-
-QString AboutWidget::getFileContent(const QString &path)
-{
-    QString ret;
-
-    if(path.isEmpty()) {
-        qDebug() << "Passed an empty argument";
-        return ret;
-    }
-
-    QFile file(path);
-    if(file.open(QIODevice::ReadOnly)) {
-        QTextStream content(&file);
-        ret = content.readAll();
-    }
-    else {
-        qDebug() << QString("Unable to open the license file: %1").arg(path);
-    }
-
-    return ret;
+    return TextFile::getFileContent(path);
 }
 
 void AboutWidget::openLicense()
@@ -95,7 +72,6 @@ void AboutWidget::openLicense()
     QTextEdit *textEdit = new QTextEdit(licenseDialog);
     textEdit->setText(licenseText);
     textEdit->setReadOnly(true);
-    textEdit->setWordWrapMode(QTextOption::NoWrap);
     mainLayout->addWidget(textEdit);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
@@ -124,14 +100,13 @@ void AboutWidget::openFullText()
     QVBoxLayout *mainLayout = new QVBoxLayout;
 
     QDialog *licenseDialog = new QDialog(this);
-    licenseDialog->setMinimumSize(500, 300);
+    licenseDialog->setMinimumSize(600, 300);
 
     QString licenseText = getFullLicenseText();
 
     QTextEdit *textEdit = new QTextEdit(licenseDialog);
     textEdit->setText(licenseText);
     textEdit->setReadOnly(true);
-    textEdit->setWordWrapMode(QTextOption::NoWrap);
     mainLayout->addWidget(textEdit);
 
     QPushButton *closeButton = new QPushButton(tr("Close"));

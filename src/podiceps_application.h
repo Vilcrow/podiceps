@@ -30,7 +30,6 @@
 
 #include "main_window.h"
 #include <QApplication>
-#include <QSettings>
 
 class PodicepsApplication : public QApplication {
     Q_OBJECT
@@ -42,7 +41,6 @@ public:
 public slots:
     void updateSettings();
 private:
-    QSettings settings;
     MainWindow *mainWindow;
 
     void setTheme();

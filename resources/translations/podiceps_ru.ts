@@ -4,30 +4,30 @@
 <context>
     <name>AboutWidget</name>
     <message>
-        <location filename="../../src/about_widget.cpp" line="103"/>
-        <location filename="../../src/about_widget.cpp" line="137"/>
-        <location filename="../../src/about_widget.cpp" line="184"/>
+        <location filename="../../src/about_widget.cpp" line="79"/>
+        <location filename="../../src/about_widget.cpp" line="112"/>
+        <location filename="../../src/about_widget.cpp" line="159"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../src/about_widget.cpp" line="162"/>
+        <location filename="../../src/about_widget.cpp" line="137"/>
         <source>A simple program for maintaining a dictionary of foreign words.</source>
         <translation>Простая программа для ведения словаря иностранных слов.</translation>
     </message>
     <message>
-        <location filename="../../src/about_widget.cpp" line="168"/>
+        <location filename="../../src/about_widget.cpp" line="143"/>
         <source>Copyright</source>
         <translation>Авторские права</translation>
     </message>
     <message>
-        <location filename="../../src/about_widget.cpp" line="112"/>
-        <location filename="../../src/about_widget.cpp" line="180"/>
+        <location filename="../../src/about_widget.cpp" line="88"/>
+        <location filename="../../src/about_widget.cpp" line="155"/>
         <source>License</source>
         <translation>Лицензия</translation>
     </message>
     <message>
-        <location filename="../../src/about_widget.cpp" line="191"/>
+        <location filename="../../src/about_widget.cpp" line="166"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
@@ -58,27 +58,27 @@
 <context>
     <name>DictionaryWidget</name>
     <message>
-        <location filename="../../src/dictionary_widget.cpp" line="53"/>
+        <location filename="../../src/dictionary_widget.cpp" line="54"/>
         <source>Unable to open file: %1</source>
         <translation>Не удается открыть файл: %1</translation>
     </message>
     <message>
-        <location filename="../../src/dictionary_widget.cpp" line="77"/>
+        <location filename="../../src/dictionary_widget.cpp" line="78"/>
         <source>The file contains no words or has an invalid format.</source>
         <translation>Файл пустой или имеет недопустимый формат.</translation>
     </message>
     <message>
-        <location filename="../../src/dictionary_widget.cpp" line="84"/>
+        <location filename="../../src/dictionary_widget.cpp" line="85"/>
         <source>The file &quot;%1&quot; is open</source>
         <translation>Файл &quot;%1&quot; открыт</translation>
     </message>
     <message>
-        <location filename="../../src/dictionary_widget.cpp" line="99"/>
+        <location filename="../../src/dictionary_widget.cpp" line="100"/>
         <source>The file &quot;%1&quot; saved</source>
         <translation>Файл &quot;%1&quot; сохранен</translation>
     </message>
     <message>
-        <location filename="../../src/dictionary_widget.cpp" line="109"/>
+        <location filename="../../src/dictionary_widget.cpp" line="110"/>
         <source>Unable to open file</source>
         <translation>Невозможно открыть файл</translation>
     </message>
@@ -172,22 +172,22 @@
 <context>
     <name>HeaderMenu</name>
     <message>
-        <location filename="../../src/header_menu.cpp" line="70"/>
+        <location filename="../../src/header_menu.cpp" line="66"/>
         <source>Transcription</source>
         <translation>Транскрипция</translation>
     </message>
     <message>
-        <location filename="../../src/header_menu.cpp" line="75"/>
+        <location filename="../../src/header_menu.cpp" line="71"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../../src/header_menu.cpp" line="80"/>
+        <location filename="../../src/header_menu.cpp" line="76"/>
         <source>Date</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="../../src/header_menu.cpp" line="87"/>
+        <location filename="../../src/header_menu.cpp" line="83"/>
         <source>Align</source>
         <translation>Выровнять</translation>
     </message>
@@ -233,214 +233,247 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../src/main_window.cpp" line="107"/>
+        <location filename="../../src/main_window.cpp" line="98"/>
         <source>Open File</source>
         <translation>Открыть Файл</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="108"/>
-        <location filename="../../src/main_window.cpp" line="135"/>
-        <location filename="../../src/main_window.cpp" line="155"/>
+        <location filename="../../src/main_window.cpp" line="99"/>
+        <location filename="../../src/main_window.cpp" line="126"/>
+        <location filename="../../src/main_window.cpp" line="146"/>
         <source>XML Files (*.xml)</source>
         <translation>XML Файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="134"/>
-        <location filename="../../src/main_window.cpp" line="154"/>
+        <location filename="../../src/main_window.cpp" line="125"/>
+        <location filename="../../src/main_window.cpp" line="145"/>
         <source>Save File</source>
         <translation>Сохранить Файл</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="261"/>
+        <location filename="../../src/main_window.cpp" line="253"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="263"/>
+        <location filename="../../src/main_window.cpp" line="255"/>
         <source>New...</source>
         <translation>Новый...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="269"/>
+        <location filename="../../src/main_window.cpp" line="261"/>
         <source>Open...</source>
         <translation>Открыть...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="274"/>
+        <location filename="../../src/main_window.cpp" line="266"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="279"/>
+        <location filename="../../src/main_window.cpp" line="271"/>
         <source>Save As...</source>
         <translation>Сохранить как...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="287"/>
+        <location filename="../../src/main_window.cpp" line="279"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="294"/>
+        <location filename="../../src/main_window.cpp" line="286"/>
         <source>Exit</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="302"/>
-        <location filename="../../src/main_window.cpp" line="332"/>
+        <location filename="../../src/main_window.cpp" line="294"/>
+        <location filename="../../src/main_window.cpp" line="324"/>
         <source>Edit</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="304"/>
+        <location filename="../../src/main_window.cpp" line="296"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="310"/>
+        <location filename="../../src/main_window.cpp" line="302"/>
         <source>Redo</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="318"/>
+        <location filename="../../src/main_window.cpp" line="310"/>
         <source>Add...</source>
         <translation>Добавить...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="324"/>
+        <location filename="../../src/main_window.cpp" line="316"/>
         <source>Find...</source>
         <translation>Найти...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="338"/>
+        <location filename="../../src/main_window.cpp" line="330"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="346"/>
+        <location filename="../../src/main_window.cpp" line="338"/>
         <source>Preferences</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="355"/>
+        <location filename="../../src/main_window.cpp" line="347"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="356"/>
+        <location filename="../../src/main_window.cpp" line="348"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="361"/>
+        <location filename="../../src/main_window.cpp" line="353"/>
         <source>Clear input</source>
         <translation>Очистить ввод</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="370"/>
+        <location filename="../../src/main_window.cpp" line="362"/>
         <source>Help</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="371"/>
-        <source>Tutorial</source>
-        <translation>Руководство</translation>
+        <location filename="../../src/main_window.cpp" line="363"/>
+        <source>User Manual</source>
+        <translation>Руководство пользователя</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="376"/>
+        <location filename="../../src/main_window.cpp" line="367"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
 </context>
 <context>
-    <name>PreferencesWidget</name>
+    <name>ManualWidget</name>
     <message>
-        <location filename="../../src/preferences_widget.cpp" line="103"/>
-        <source>Open File</source>
-        <translation>Открыть Файл</translation>
+        <location filename="../../src/manual_widget.cpp" line="71"/>
+        <source>General</source>
+        <translation>Общее</translation>
     </message>
     <message>
-        <location filename="../../src/preferences_widget.cpp" line="104"/>
-        <source>QSS files (*.qss)</source>
-        <translation>QSS файлы (*.qss)</translation>
+        <location filename="../../src/manual_widget.cpp" line="72"/>
+        <source>Dictionary</source>
+        <translation>Словарь</translation>
     </message>
     <message>
-        <location filename="../../src/preferences_widget.cpp" line="196"/>
-        <source>&amp;Interface</source>
-        <translation>Интерфейс</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences_widget.cpp" line="199"/>
-        <source>Language</source>
-        <translation>Язык</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences_widget.cpp" line="211"/>
-        <source>*restart the program to apply the changes</source>
-        <translation>*перезапустите программу для применения изменений</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences_widget.cpp" line="219"/>
-        <source>Theme</source>
-        <translation>Тема</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences_widget.cpp" line="222"/>
-        <source>&amp;Light</source>
-        <translation>Светлая</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences_widget.cpp" line="227"/>
-        <source>&amp;Dark</source>
-        <translation>Тёмная</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences_widget.cpp" line="233"/>
-        <source>C&amp;ustom</source>
-        <translation>Пользовательская</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences_widget.cpp" line="239"/>
-        <source>Ch&amp;oose...</source>
-        <translation>Выбрать...</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences_widget.cpp" line="271"/>
-        <source>&amp;Table</source>
-        <translation>Таблица</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences_widget.cpp" line="273"/>
-        <source>Table Content</source>
-        <translation>Содержимое Таблицы</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences_widget.cpp" line="276"/>
-        <source>T&amp;ranscription</source>
-        <translation>Транскрипция</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences_widget.cpp" line="282"/>
-        <source>Stat&amp;us</source>
-        <translation>Статус</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences_widget.cpp" line="288"/>
-        <source>&amp;Date</source>
-        <translation>Дата</translation>
-    </message>
-    <message>
-        <location filename="../../src/preferences_widget.cpp" line="306"/>
+        <location filename="../../src/manual_widget.cpp" line="73"/>
         <source>Preferences</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../src/preferences_widget.cpp" line="310"/>
+        <location filename="../../src/manual_widget.cpp" line="74"/>
+        <source>Shortcuts</source>
+        <translation>Сочетания клавиш</translation>
+    </message>
+    <message>
+        <location filename="../../src/manual_widget.cpp" line="86"/>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <location filename="../../src/manual_widget.cpp" line="94"/>
+        <source>User Manual</source>
+        <translation>Руководство пользователя</translation>
+    </message>
+</context>
+<context>
+    <name>PreferencesWidget</name>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="50"/>
+        <source>Open File</source>
+        <translation>Открыть Файл</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="51"/>
+        <source>QSS files (*.qss)</source>
+        <translation>QSS файлы (*.qss)</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="150"/>
+        <source>&amp;Interface</source>
+        <translation>Интерфейс</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="153"/>
+        <source>Language</source>
+        <translation>Язык</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="164"/>
+        <source>*restart the program to apply the changes</source>
+        <translation>*перезапустите программу для применения изменений</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="172"/>
+        <source>Theme</source>
+        <translation>Тема</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="175"/>
+        <source>&amp;Light</source>
+        <translation>Светлая</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="180"/>
+        <source>&amp;Dark</source>
+        <translation>Тёмная</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="186"/>
+        <source>C&amp;ustom</source>
+        <translation>Пользовательская</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="193"/>
+        <source>Ch&amp;oose...</source>
+        <translation>Выбрать...</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="225"/>
+        <source>&amp;Table</source>
+        <translation>Таблица</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="227"/>
+        <source>Table View</source>
+        <translation>Вид таблицы</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="230"/>
+        <source>T&amp;ranscription</source>
+        <translation>Транскрипция</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="236"/>
+        <source>Stat&amp;us</source>
+        <translation>Статус</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="242"/>
+        <source>&amp;Date</source>
+        <translation>Дата</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="259"/>
+        <source>Preferences</source>
+        <translation>Настройки</translation>
+    </message>
+    <message>
+        <location filename="../../src/preferences_widget.cpp" line="263"/>
         <source>&amp;Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../../src/preferences_widget.cpp" line="311"/>
+        <location filename="../../src/preferences_widget.cpp" line="264"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -556,59 +589,59 @@
 <context>
     <name>TableWidget</name>
     <message>
-        <location filename="../../src/table_widget.cpp" line="146"/>
+        <location filename="../../src/table_widget.cpp" line="147"/>
         <source>Duplicate words were found in the file(%1). When you save the file, they will be lost.</source>
         <translation>В файле были найдены повторяющиеся слова(%1). При сохранении файла они будут потеряны.</translation>
     </message>
     <message>
-        <location filename="../../src/table_widget.cpp" line="149"/>
+        <location filename="../../src/table_widget.cpp" line="150"/>
         <source>Duplicate words</source>
         <translation>Повторяющиеся слова</translation>
     </message>
     <message>
-        <location filename="../../src/table_widget.cpp" line="264"/>
-        <location filename="../../src/table_widget.cpp" line="369"/>
+        <location filename="../../src/table_widget.cpp" line="265"/>
+        <location filename="../../src/table_widget.cpp" line="368"/>
         <source>Enter the original word</source>
         <translation>Введите оригинальное слово</translation>
     </message>
     <message>
-        <location filename="../../src/table_widget.cpp" line="269"/>
-        <location filename="../../src/table_widget.cpp" line="361"/>
+        <location filename="../../src/table_widget.cpp" line="270"/>
+        <location filename="../../src/table_widget.cpp" line="360"/>
         <source>The word &quot;%1&quot; already exists.</source>
         <translation>Слово &quot;%1&quot; уже существует.</translation>
     </message>
     <message>
-        <location filename="../../src/table_widget.cpp" line="276"/>
+        <location filename="../../src/table_widget.cpp" line="277"/>
         <source>Added</source>
         <translation>Добавлено</translation>
     </message>
     <message>
-        <location filename="../../src/table_widget.cpp" line="399"/>
+        <location filename="../../src/table_widget.cpp" line="398"/>
         <source>Changes are fixed</source>
         <translation>Правки учтены</translation>
     </message>
     <message>
-        <location filename="../../src/table_widget.cpp" line="402"/>
+        <location filename="../../src/table_widget.cpp" line="401"/>
         <source>Changes canceled</source>
         <translation>Правки отменены</translation>
     </message>
     <message>
-        <location filename="../../src/table_widget.cpp" line="458"/>
+        <location filename="../../src/table_widget.cpp" line="457"/>
         <source>&amp;Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../../src/table_widget.cpp" line="459"/>
+        <location filename="../../src/table_widget.cpp" line="458"/>
         <source>&amp;Edit</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../../src/table_widget.cpp" line="460"/>
+        <location filename="../../src/table_widget.cpp" line="459"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../src/table_widget.cpp" line="503"/>
+        <location filename="../../src/table_widget.cpp" line="502"/>
         <source>Deleted</source>
         <translation>Удалено</translation>
     </message>
@@ -658,7 +691,7 @@
     <message>
         <location filename="../../src/word_add.cpp" line="130"/>
         <source>Add a Word</source>
-        <translation>Добавить Слово</translation>
+        <translation>Добавить слово</translation>
     </message>
 </context>
 <context>
@@ -761,7 +794,7 @@
     <message>
         <location filename="../../src/word_edit.cpp" line="313"/>
         <source>Edit a Word</source>
-        <translation>Редактировать Слово</translation>
+        <translation>Редактировать слово</translation>
     </message>
 </context>
 </TS>

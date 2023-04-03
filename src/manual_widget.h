@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  dictionary_widget.h                                                   */
+/*  manual_widget.h                                                       */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,67 +25,32 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef DICTIONARY_WIDGET_VIL_H
-#define DICTIONARY_WIDGET_VIL_H
+#ifndef MANUAL_WIDGET_VIL_H
+#define MANUAL_WIDGET_VIL_H
 
-#include "word_line.h"
-#include <QWidget>
+#include <QDialog>
+#include <QMap>
+#include <QTabWidget>
+#include <QVector>
 
-class FindWidget;
-class InputWidget;
-class TableWidget;
+class QTextEdit;
 
-class DictionaryWidget : public QWidget {
+class ManualWidget : public QDialog {
     Q_OBJECT
 public:
-    void readFromFile(const QString &fileName);
-    void writeToFile (const QString &fileName);
-    bool writeToXmlFile(const QString &fileName);
-    void setLastFileName(const QString &newLast);
-
-    bool isSaved() const;
-    void setSaved(bool value);
-
-    QString getLastFileName() const;
-    int getRowCount() const;
-
-    bool hasSelectedWords() const;
-
-    void readSettings();
-    void writeSettings();
-
-    DictionaryWidget(QWidget *parent = nullptr);
-    virtual ~DictionaryWidget();
-signals:
-    void actionCompleted(const QString &msg);
-    void stateChanged();
-
-    void addWordRequested(const WordLine& word = WordLine());
-    void editWordRequested();
-    void deleteWordRequested();
-    void undoRequested();
-    void redoRequested();
-    void statisticsRequested();
-public slots:
-    void addWord(const WordLine& word);
-    void editWord();
-    void deleteWord();
-
-    void createNewFile();
-    void clearInput();
-    void setFilter();
-    void clearFilter();
-    void openFindWidget();
-    void closeFindWidget();
-    void updateInput();
-    void updateSettings();
-    void resize(int w, int h);
+    ManualWidget(QWidget *parent = nullptr);
+    virtual ~ManualWidget();
 private:
-    QString lastFileName;
+    enum Tabs { General, Dictionary, Preferences, Shortcuts };
 
-    TableWidget *tableWidget;
-    FindWidget *findWidget;
-    InputWidget *inputWidget;
+    QTabWidget *tabWidget;
+    QVector<Tabs> tabs;
+    QMap<Tabs, QString> tabNames;
+    QMap<Tabs, QString> tabContentPaths;
+
+    void setupTabs();
+
+    void setupTextEdit(QWidget *widget, const QString &path);
 };
 
 #endif

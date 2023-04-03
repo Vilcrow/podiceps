@@ -30,6 +30,7 @@
 #include "action_delete.h"
 #include "action_edit.h"
 #include "header_menu.h"
+#include "settings.h"
 #include "statistics_widget.h"
 #include "word_add.h"
 #include "word_edit.h"
@@ -299,11 +300,9 @@ void TableWidget::deleteWord(const WordLine &word, bool addToLog)
 
 void TableWidget::updateSettings()
 {
-    settings.beginGroup("/Settings/Interface");
-    bool hideTranscription = !settings.value("/table/show_transcription", true).toBool();
-    bool hideStatus = !settings.value("/table/show_status", true).toBool();
-    bool hideDate = !settings.value("/table/show_date", true).toBool();
-    settings.endGroup();
+    bool hideTranscription = !Settings::isTranscriptionVisible();
+    bool hideStatus = !Settings::isStatusVisible();
+    bool hideDate = !Settings::isDateVisible();
 
     visibleColumns = TableModel::ColumnCount - 1;
 
@@ -519,8 +518,8 @@ void TableWidget::makeLogEntry(ActionBase *act)
 }
 
 TableWidget::TableWidget(QWidget *parent)
-    : QWidget(parent), settings("Vilcrow", "podiceps"),
-      changesSaved(true), visibleColumns(TableModel::ColumnCount-1),
+    : QWidget(parent), changesSaved(true),
+      visibleColumns(TableModel::ColumnCount-1),
       wordDeleteQueue(QList<QModelIndex>()),
       tableModel(new TableModel(this)), tableView(new QTableView),
       proxyModel(new QSortFilterProxyModel(this)), actionLog(new ActionLog())

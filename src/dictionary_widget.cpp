@@ -28,6 +28,7 @@
 #include "dictionary_widget.h"
 #include "find_widget.h"
 #include "input_widget.h"
+#include "settings.h"
 #include "table_widget.h"
 #include "word_line.h"
 #include <QDebug>
@@ -163,16 +164,12 @@ bool DictionaryWidget::hasSelectedWords() const
 
 void DictionaryWidget::readSettings()
 {
-    settings.beginGroup("/Settings");
-    lastFileName = settings.value("/last_file_name", "").toString();
-    settings.endGroup();
+    lastFileName = Settings::getLastFileName();
 }
 
 void DictionaryWidget::writeSettings()
 {
-    settings.beginGroup("/Settings");
-    settings.setValue("last_file_name", lastFileName);
-    settings.endGroup();
+    Settings::setLastFileName(lastFileName);
 }
 
 void DictionaryWidget::addWord(const WordLine& word)
@@ -256,7 +253,7 @@ void DictionaryWidget::resize(int w, int h)
 }
 
 DictionaryWidget::DictionaryWidget(QWidget *parent)
-    : QWidget(parent), settings("Vilcrow", "podiceps")
+    : QWidget(parent)
 {
     readSettings();
 

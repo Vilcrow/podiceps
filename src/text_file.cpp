@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  dictionary_widget.h                                                   */
+/*  text_file.cpp                                                         */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,67 +25,50 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef DICTIONARY_WIDGET_VIL_H
-#define DICTIONARY_WIDGET_VIL_H
+#include "text_file.h"
+#include <QDebug>
+#include <QFile>
+#include <QString>
 
-#include "word_line.h"
-#include <QWidget>
+QString TextFile::getFileContent(const QString &path)
+{
+    QString ret;
 
-class FindWidget;
-class InputWidget;
-class TableWidget;
+    if(path.isEmpty()) {
+        qDebug() << "Passed an empty argument";
+        return ret;
+    }
 
-class DictionaryWidget : public QWidget {
-    Q_OBJECT
-public:
-    void readFromFile(const QString &fileName);
-    void writeToFile (const QString &fileName);
-    bool writeToXmlFile(const QString &fileName);
-    void setLastFileName(const QString &newLast);
+    QFile file(path);
+    if(file.open(QIODevice::ReadOnly)) {
+        QTextStream content(&file);
+        ret = content.readAll();
+    }
+    else {
+        qDebug() << QString("Unable to open the file: %1").arg(path);
+    }
 
-    bool isSaved() const;
-    void setSaved(bool value);
+    return ret;
+}
 
-    QString getLastFileName() const;
-    int getRowCount() const;
+void TextFile::appendFormat(QString &name, const QString &format)
+{
+    if(format.isEmpty()) {
+        qDebug() << "Passed an empty argument";
+        return;
+    }
 
-    bool hasSelectedWords() const;
+    if(!name.endsWith(format, Qt::CaseInsensitive)) {
+        name.append("." + format);
+    }
+}
 
-    void readSettings();
-    void writeSettings();
+TextFile::TextFile()
+{
 
-    DictionaryWidget(QWidget *parent = nullptr);
-    virtual ~DictionaryWidget();
-signals:
-    void actionCompleted(const QString &msg);
-    void stateChanged();
+}
 
-    void addWordRequested(const WordLine& word = WordLine());
-    void editWordRequested();
-    void deleteWordRequested();
-    void undoRequested();
-    void redoRequested();
-    void statisticsRequested();
-public slots:
-    void addWord(const WordLine& word);
-    void editWord();
-    void deleteWord();
+TextFile::~TextFile()
+{
 
-    void createNewFile();
-    void clearInput();
-    void setFilter();
-    void clearFilter();
-    void openFindWidget();
-    void closeFindWidget();
-    void updateInput();
-    void updateSettings();
-    void resize(int w, int h);
-private:
-    QString lastFileName;
-
-    TableWidget *tableWidget;
-    FindWidget *findWidget;
-    InputWidget *inputWidget;
-};
-
-#endif
+}

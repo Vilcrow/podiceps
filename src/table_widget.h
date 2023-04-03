@@ -30,7 +30,6 @@
 
 #include "action_log.h"
 #include "table_model.h"
-#include <QSettings>
 #include <QTableView>
 #include <QWidget>
 
@@ -89,7 +88,6 @@ private slots:
     void openContextMenu(const QPoint &pos);
     void openHeaderContextMenu(const QPoint &pos);
 private:
-    QSettings settings;
     bool changesSaved;
     int visibleColumns;
 
