@@ -233,121 +233,121 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../src/main_window.cpp" line="98"/>
+        <location filename="../../src/main_window.cpp" line="99"/>
         <source>Open File</source>
         <translation>Открыть Файл</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="99"/>
-        <location filename="../../src/main_window.cpp" line="126"/>
-        <location filename="../../src/main_window.cpp" line="146"/>
+        <location filename="../../src/main_window.cpp" line="100"/>
+        <location filename="../../src/main_window.cpp" line="127"/>
+        <location filename="../../src/main_window.cpp" line="147"/>
         <source>XML Files (*.xml)</source>
         <translation>XML Файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="125"/>
-        <location filename="../../src/main_window.cpp" line="145"/>
+        <location filename="../../src/main_window.cpp" line="126"/>
+        <location filename="../../src/main_window.cpp" line="146"/>
         <source>Save File</source>
         <translation>Сохранить Файл</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="253"/>
+        <location filename="../../src/main_window.cpp" line="254"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="255"/>
+        <location filename="../../src/main_window.cpp" line="256"/>
         <source>New...</source>
         <translation>Новый...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="261"/>
+        <location filename="../../src/main_window.cpp" line="262"/>
         <source>Open...</source>
         <translation>Открыть...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="266"/>
+        <location filename="../../src/main_window.cpp" line="267"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="271"/>
+        <location filename="../../src/main_window.cpp" line="272"/>
         <source>Save As...</source>
         <translation>Сохранить как...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="279"/>
+        <location filename="../../src/main_window.cpp" line="280"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="286"/>
+        <location filename="../../src/main_window.cpp" line="287"/>
         <source>Exit</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="294"/>
-        <location filename="../../src/main_window.cpp" line="324"/>
+        <location filename="../../src/main_window.cpp" line="295"/>
+        <location filename="../../src/main_window.cpp" line="325"/>
         <source>Edit</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="296"/>
+        <location filename="../../src/main_window.cpp" line="297"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="302"/>
+        <location filename="../../src/main_window.cpp" line="303"/>
         <source>Redo</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="310"/>
+        <location filename="../../src/main_window.cpp" line="311"/>
         <source>Add...</source>
         <translation>Добавить...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="316"/>
+        <location filename="../../src/main_window.cpp" line="317"/>
         <source>Find...</source>
         <translation>Найти...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="330"/>
+        <location filename="../../src/main_window.cpp" line="331"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="338"/>
+        <location filename="../../src/main_window.cpp" line="339"/>
         <source>Preferences</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="347"/>
+        <location filename="../../src/main_window.cpp" line="348"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="348"/>
+        <location filename="../../src/main_window.cpp" line="349"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="353"/>
+        <location filename="../../src/main_window.cpp" line="354"/>
         <source>Clear input</source>
         <translation>Очистить ввод</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="362"/>
+        <location filename="../../src/main_window.cpp" line="363"/>
         <source>Help</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="363"/>
+        <location filename="../../src/main_window.cpp" line="364"/>
         <source>User Manual</source>
         <translation>Руководство пользователя</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="367"/>
+        <location filename="../../src/main_window.cpp" line="368"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
@@ -355,32 +355,32 @@
 <context>
     <name>ManualWidget</name>
     <message>
-        <location filename="../../src/manual_widget.cpp" line="71"/>
+        <location filename="../../src/manual_widget.cpp" line="75"/>
         <source>General</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="../../src/manual_widget.cpp" line="72"/>
+        <location filename="../../src/manual_widget.cpp" line="76"/>
         <source>Dictionary</source>
         <translation>Словарь</translation>
     </message>
     <message>
-        <location filename="../../src/manual_widget.cpp" line="73"/>
+        <location filename="../../src/manual_widget.cpp" line="77"/>
         <source>Preferences</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../src/manual_widget.cpp" line="74"/>
+        <location filename="../../src/manual_widget.cpp" line="78"/>
         <source>Shortcuts</source>
         <translation>Сочетания клавиш</translation>
     </message>
     <message>
-        <location filename="../../src/manual_widget.cpp" line="86"/>
+        <location filename="../../src/manual_widget.cpp" line="90"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../src/manual_widget.cpp" line="94"/>
+        <location filename="../../src/manual_widget.cpp" line="98"/>
         <source>User Manual</source>
         <translation>Руководство пользователя</translation>
     </message>

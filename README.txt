@@ -21,4 +21,3 @@ You should have received a copy of the GNU General Public License along with thi
         2) mkdir build/ && cd build/
         3) cmake ../
         4) cmake --build .
-

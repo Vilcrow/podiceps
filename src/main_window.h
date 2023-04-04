@@ -31,6 +31,7 @@
 #include <QMainWindow>
 
 class DictionaryWidget;
+class ManualWidget;
 class QCloseEvent;
 class QResizeEvent;
 class QStatusBar;
@@ -54,6 +55,7 @@ private slots:
     bool trySaveChanges();
     void showMessage(const QString &msg, int timeout = 5000);
     void openUserManual();
+    void closeUserManual();
     void openAbout();
     void openPreferences();
     void quitApp();
@@ -89,6 +91,7 @@ private:
     QMenu *helpMenu;
     QAction *openManualAct;
     QAction *openAboutAct;
+    ManualWidget *manualWidget;
 
     void createMenus();
     void createFileMenu();

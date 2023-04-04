@@ -28,28 +28,33 @@
 #ifndef MANUAL_WIDGET_VIL_H
 #define MANUAL_WIDGET_VIL_H
 
-#include <QDialog>
 #include <QMap>
+#include <QMainWindow>
 #include <QTabWidget>
 #include <QVector>
 
+class QCloseEvent;
 class QTextEdit;
 
-class ManualWidget : public QDialog {
+class ManualWidget : public QMainWindow {
     Q_OBJECT
 public:
     ManualWidget(QWidget *parent = nullptr);
     virtual ~ManualWidget();
+signals:
+    void windowClosed();
+protected:
+    void closeEvent(QCloseEvent *event);
 private:
     enum Tabs { General, Dictionary, Preferences, Shortcuts };
 
     QTabWidget *tabWidget;
     QVector<Tabs> tabs;
     QMap<Tabs, QString> tabNames;
-    QMap<Tabs, QString> tabContentPaths;
+    QMap<Tabs, QString> tabContentFiles;
 
+    void setupTabWidget();
     void setupTabs();
-
     void setupTextEdit(QWidget *widget, const QString &path);
 };
 

@@ -3,6 +3,68 @@
     <style type="text/css" media="all"> @import ":/style.css"; </style>
 <body>
     <h1>Dictionary</h1>
-    <p></p>
+    <p>The dictionary stores all the words you entered. It cannot contain words with duplicate <b>originals</b>.</p>
+    <p>The dictionary is saved in <b>xml</b> format.</p>
+    <h2>GUI</h2>
+    <p><img src=":/main_window.png" alt="Main Window" width="800" height="700"></img></p>
+    <p>GUI of the dictionary consists of the following parts:</p>
+    <ul>
+        <li><b>Table Widget</b></li>
+        <li><b>Input Widget</b></li>
+        <li><b>Find Widget</b></li>
+        <li><b>Add Widget</b></li>
+        <li><b>Edit Widget</b></li>
+        <li><b>Statistics Widget</b></li>
+    </ul>
+    <h2>Table Widget</h2>
+    <p><img src=":/table_widget.png" alt="Table Widget"></img></p>
+    <p><code> Main Window </code></p>
+    <p>The <b>Table Widget</b> displays the contents of the dictionary.</p>
+    <p>The table consists of the following columns:</p>
+    <dl>
+        <dt><b>Original</b></dt>
+        <dd>A word in the source language. Max length: 50.</dd>
+
+        <dt><b>Transcription</b></dt>
+        <dd>Transcription of the word. Max length: 50.</dd>
+
+        <dt><b>Translation</b></dt>
+        <dd>Translation of the word. Max length: 100.</dd>
+
+        <dt><b>Status</b></dt>
+        <dd>The status of word learning.</dd>
+
+        <dt><b>Date</b></dt>
+        <dd>Date the word was added.</dd>
+
+    </ul>
+    <h2>Input Widget</h2>
+    <p><img src=":/input_widget.png" alt="Input Widget"></img></p>
+    <p><code> Main Window </code></p>
+    <p>With the <b>Input Widget</b>, you can quickly add a new word. Enough to specify the <b>original</b> of the word and click on the <code>Add</code> button.</p>
+    <p>You can also specify a <b>transcription</b>, <b>translation</b> and <b>status</b> for the word.</p>
+    <h2>Find Widget</h2>
+    <p><img src=":/find_widget.png" alt="Find Widget"></img></p>
+    <p><code>Menu → Edit → Find...</code></p>
+    <p><code>Input Widget → Find</code></p>
+    <p>With the <b>Find Widget</b>, you can set a filter for the <b>Table Widget</b>.</p>
+    <p>Enter a filter in the input line and click on the <code>Set</code> button. To reset the filter, clear the input and click on the <code>Set</code> button.</p>
+    <h2>Add Widget</h2>
+    <p><img src=":/add_widget.png" alt="Add Widget"></img></p>
+    <p><code> Menu → Edit → Add... </code></p>
+    <p><code> Table Widget → Right Click →  Add... </code></p>
+    <p>The <b>Add Widget</b> is a window where you can specify a <b>original</b>, <b>transcription</b>, <b>translation</b>, <b>status</b> and <b>comment</b> for the word and add it to the dictionary.</p>
+    <h2>Edit Widget</h2>
+    <p><img src=":/edit_widget.png" alt="Edit Widget"></img></p>
+    <p><code> Menu → Edit → Edit... </code></p>
+    <p><code> Table Widget → Right Click → Edit... </code></p>
+    <p>Using the <b>Edit Widget</b> you can edit a group of words.</p>
+    <p>Select the necessary rows in the table and call the <b>Edit Widget</b>. If you don't select the rows then all rows will be selected.</p>
+    <p>In the window that appears, you can edit or delete a word. If necessary, you can recover the source value.</p>
+    <p>To save the change, click the <code>Save</code> button. To make all changes to the table, click the <code>Record</code> button. To undo all changes click the <code>Cancel</code> button.</p>
+    <h2>Statistics Widget</h2>
+    <p><img src=":/statistics_widget.png" alt="Statistics Widget"></img></p>
+    <p><code> Menu → Tools → Statistics</code></p>
+    <p>The <b>Statistics Widget</b> shows statistics on  your dictionary.</p>
 </body>
 </html>

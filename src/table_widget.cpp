@@ -454,8 +454,8 @@ void TableWidget::rowDoubleClicked(const QModelIndex &index)
 void TableWidget::openContextMenu(const QPoint &pos)
 {
     QMenu *menu = new QMenu(this);
-    QAction *addAction = new QAction(tr("&Add"), this);
-    QAction *editAction = new QAction(tr("&Edit"), this);
+    QAction *addAction = new QAction(tr("&Add..."), this);
+    QAction *editAction = new QAction(tr("&Edit..."), this);
     QAction *deleteAction = new QAction(tr("Delete"), this);
 
     QModelIndex index = tableView->indexAt(pos);

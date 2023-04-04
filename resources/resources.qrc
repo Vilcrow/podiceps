@@ -5,17 +5,39 @@
         <file alias="license_gpl_v3.txt">license/license_gpl_v3.txt</file>
         <file alias="license_short_en.txt">license/license_short_en.txt</file>
         <file alias="license_short_ru.txt">license/license_short_ru.txt</file>
+
         <!--Themes-->
         <file alias="theme_dark.qss">themes/theme_dark.qss</file>
         <!--Translations-->
         <file alias="podiceps_ru.qm">translations/podiceps_ru.qm</file>
-        <!--Tutorial-->
+
+        <!--User Manual-->
         <file alias="style.css">manual/style.css</file>
         <file alias="general.html">manual/general.html</file>
         <file alias="dictionary.html">manual/dictionary.html</file>
         <file alias="preferences.html">manual/preferences.html</file>
         <file alias="shortcuts.html">manual/shortcuts.html</file>
-        <!--Tutorial. Russian language-->
-        <file alias="general_ru.html">manual/ru/general_ru.html</file>
+
+        <file alias="main_window.png">manual/images/main_window.png</file>
+        <file alias="table_widget.png">manual/images/table_widget.png</file>
+        <file alias="input_widget.png">manual/images/input_widget.png</file>
+        <file alias="find_widget.png">manual/images/find_widget.png</file>
+        <file alias="add_widget.png">manual/images/add_widget.png</file>
+        <file alias="edit_widget.png">manual/images/edit_widget.png</file>
+        <file alias="statistics_widget.png">manual/images/statistics_widget.png</file>
+
+        <!--User Manual. Russian language-->
+        <file alias="ru/general.html">manual/ru/general.html</file>
+        <file alias="ru/dictionary.html">manual/ru/dictionary.html</file>
+        <file alias="ru/preferences.html">manual/ru/preferences.html</file>
+        <file alias="ru/shortcuts.html">manual/ru/shortcuts.html</file>
+
+        <file alias="ru/main_window.png">manual/ru/images/main_window.png</file>
+        <file alias="ru/table_widget.png">manual/ru/images/table_widget.png</file>
+        <file alias="ru/input_widget.png">manual/ru/images/input_widget.png</file>
+        <file alias="ru/find_widget.png">manual/ru/images/find_widget.png</file>
+        <file alias="ru/add_widget.png">manual/ru/images/add_widget.png</file>
+        <file alias="ru/edit_widget.png">manual/ru/images/edit_widget.png</file>
+        <file alias="ru/statistics_widget.png">manual/ru/images/statistics_widget.png</file>
     </qresource>
 </RCC>

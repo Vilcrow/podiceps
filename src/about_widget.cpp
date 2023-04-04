@@ -150,6 +150,11 @@ AboutWidget::AboutWidget(QWidget *parent)
     authorLabel->setAlignment(Qt::AlignHCenter);
     mainLayout->addWidget(authorLabel);
 
+    QLabel *emailLabel = new QLabel(tr("Email: "
+                                       "podiceps-feedback@vilcrow.net"));
+    emailLabel->setAlignment(Qt::AlignHCenter);
+    mainLayout->addWidget(emailLabel);
+
     QHBoxLayout *buttonLayout = new QHBoxLayout;
 
     QPushButton *licenseButton = new QPushButton(tr("License"));

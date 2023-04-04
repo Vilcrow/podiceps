@@ -40,6 +40,7 @@ public:
     static QString getCustomThemePath();
     static Language getLanguage();
     static QString getLanguageName(Language lang);
+    static QString getLanguagePrefix(Language lang);
 
     static bool isTranscriptionVisible();
     static bool isStatusVisible();
@@ -63,6 +64,7 @@ private:
     static QSettings settings;
     static QMap<int, QString> themePaths;
     static QMap<int, QString> languages;
+    static QMap<int, QString> langPrefixes;
 
     static void setThemePaths();
 };

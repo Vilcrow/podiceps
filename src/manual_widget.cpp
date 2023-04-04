@@ -26,12 +26,36 @@
 /**************************************************************************/
 
 #include "manual_widget.h"
+#include "settings.h"
 #include "text_file.h"
+#include <QCloseEvent>
 #include <QDebug>
-#include <QPushButton>
 #include <QTabWidget>
 #include <QTextEdit>
 #include <QVBoxLayout>
+
+void ManualWidget::closeEvent(QCloseEvent *event)
+{
+    emit windowClosed();
+    event->accept();
+}
+
+void ManualWidget::setupTabWidget()
+{
+    tabs = {General, Dictionary, Preferences, Shortcuts};
+
+    tabNames = {{General, tr("General")},
+                {Dictionary, tr("Dictionary")},
+                {Preferences, tr("Preferences")},
+                {Shortcuts, tr("Shortcuts")}};
+
+    tabContentFiles = {{General, "general.html"},
+                       {Dictionary, "dictionary.html"},
+                       {Preferences, "preferences.html"},
+                       {Shortcuts, "shortcuts.html"}};
+
+    setupTabs();
+}
 
 void ManualWidget::setupTabs()
 {
@@ -40,9 +64,12 @@ void ManualWidget::setupTabs()
         return;
     }
 
+    Settings::Language lang = Settings::getLanguage();
+    QString prefix = Settings::getLanguagePrefix(lang);
+
     for(Tabs t : tabs) {
         QWidget *tab = new QWidget(tabWidget);
-        setupTextEdit(tab, tabContentPaths[t]);
+        setupTextEdit(tab, prefix + tabContentFiles[t]);
         tabWidget->addTab(tab, tabNames[t]);
     }
 }
@@ -64,35 +91,12 @@ void ManualWidget::setupTextEdit(QWidget *widget, const QString &path)
 }
 
 ManualWidget::ManualWidget(QWidget *parent)
-    : QDialog(parent), tabWidget(new QTabWidget(this))
+    : QMainWindow(parent), tabWidget(new QTabWidget(this))
 {
-    tabs = {General, Dictionary, Preferences, Shortcuts};
-
-    tabNames = {{General, tr("General")},
-                {Dictionary, tr("Dictionary")},
-                {Preferences, tr("Preferences")},
-                {Shortcuts, tr("Shortcuts")}};
-
-    tabContentPaths = {{General, ":/general.html"},    
-                       {Dictionary, ":/dictionary.html"},
-                       {Preferences, ":/preferences.html"},
-                       {Shortcuts, ":/shortcuts.html"}};
-
-    setupTabs();
-
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-    mainLayout->addWidget(tabWidget);
-
-    QPushButton *closeButton = new QPushButton(tr("Close"));
-    closeButton->setFixedWidth(100);
-    connect(closeButton, &QAbstractButton::clicked, this, &QDialog::accept);
-
-    mainLayout->addWidget(closeButton);
-
-    setLayout(mainLayout);
-
+    setupTabWidget();
+    setCentralWidget(tabWidget);
     setWindowTitle(tr("User Manual"));
-    setMinimumSize(600, 500);
+    setMinimumSize(1050, 800);
 }
 
 ManualWidget::~ManualWidget()

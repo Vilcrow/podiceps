@@ -10,3 +10,10 @@ tr {
     width: 100%;
     white-space: nowrap;
 }
+
+code {
+    color: #000000;
+    font-size: 18px;
+    background-color: #669900;
+    padding: 10px;
+}

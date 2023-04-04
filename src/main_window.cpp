@@ -44,6 +44,7 @@
 #include <QStatusBar>
 #include <QVBoxLayout>
 
+#include <QWindow>
 void MainWindow::updateActions()
 {
     bool hasFileName = !dictWidget->getLastFileName().isEmpty();
@@ -186,8 +187,20 @@ void MainWindow::showMessage(const QString &msg, int timeout)
 
 void MainWindow::openUserManual()
 {
-    ManualWidget manual(this);
-    manual.exec();
+    if(!manualWidget) {
+        manualWidget = new ManualWidget(this);
+        connect(manualWidget, &ManualWidget::windowClosed,
+                this, &MainWindow::closeUserManual);
+        manualWidget->show();
+    }
+    else {
+        showMessage(tr("The user manual is already open"));
+    }
+}
+
+void MainWindow::closeUserManual()
+{
+    manualWidget = nullptr;
 }
 
 void MainWindow::openAbout()
@@ -364,6 +377,9 @@ void MainWindow::createHelpMenu()
     helpMenu->addAction(openManualAct);
     connect(openManualAct, &QAction::triggered,
             this, &MainWindow::openUserManual);
+
+    helpMenu->addSeparator();
+
     openAboutAct = new QAction(tr("About"), this);
     helpMenu->addAction(openAboutAct);
     connect(openAboutAct, &QAction::triggered, this, &MainWindow::openAbout);
@@ -385,6 +401,7 @@ MainWindow::MainWindow(QWidget *parent)
     readSettings();
 
     setWindowTitle("podiceps");
+    setMinimumSize(1050, 800);
 
     dictWidget = new DictionaryWidget(this);
     setCentralWidget(dictWidget);
@@ -393,6 +410,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     statusBar = new QStatusBar;
     setStatusBar(statusBar);
+
+    manualWidget = nullptr;
 
     updateActions();
 

@@ -37,6 +37,9 @@ QMap<int, QString> Settings::themePaths = { {LightTheme, ""},
 QMap<int, QString> Settings::languages = { {EnglishLang, "English"},
                                            {RussianLang, "Русский"}};
 
+QMap<int, QString> Settings::langPrefixes = { {EnglishLang, ":/"},
+                                              {RussianLang, ":/ru/"}};
+
 Settings::Language Settings::getLanguage()
 {
     settings.beginGroup("/Settings/Interface");
@@ -61,6 +64,11 @@ Settings::Language Settings::getLanguage()
 QString Settings::getLanguageName(Language lang)
 {
     return languages[lang];
+}
+
+QString Settings::getLanguagePrefix(Language lang)
+{
+    return langPrefixes[lang];
 }
 
 Settings::Theme Settings::getTheme()
