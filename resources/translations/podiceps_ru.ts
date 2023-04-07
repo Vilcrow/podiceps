@@ -4,30 +4,41 @@
 <context>
     <name>AboutWidget</name>
     <message>
-        <location filename="../../src/about_widget.cpp" line="79"/>
-        <location filename="../../src/about_widget.cpp" line="112"/>
-        <location filename="../../src/about_widget.cpp" line="159"/>
+        <location filename="../../src/about_widget.cpp" line="85"/>
+        <location filename="../../src/about_widget.cpp" line="118"/>
+        <location filename="../../src/about_widget.cpp" line="174"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../src/about_widget.cpp" line="137"/>
+        <location filename="../../src/about_widget.cpp" line="143"/>
         <source>A simple program for maintaining a dictionary of foreign words.</source>
         <translation>Простая программа для ведения словаря иностранных слов.</translation>
     </message>
     <message>
-        <location filename="../../src/about_widget.cpp" line="143"/>
+        <location filename="../../src/about_widget.cpp" line="149"/>
         <source>Copyright</source>
         <translation>Авторские права</translation>
     </message>
     <message>
-        <location filename="../../src/about_widget.cpp" line="88"/>
-        <location filename="../../src/about_widget.cpp" line="155"/>
+        <location filename="../../src/about_widget.cpp" line="94"/>
+        <location filename="../../src/about_widget.cpp" line="170"/>
         <source>License</source>
         <translation>Лицензия</translation>
     </message>
     <message>
+        <location filename="../../src/about_widget.cpp" line="66"/>
         <location filename="../../src/about_widget.cpp" line="166"/>
+        <source>About Qt</source>
+        <translation>О Qt</translation>
+    </message>
+    <message>
+        <location filename="../../src/about_widget.cpp" line="159"/>
+        <source>Email: podiceps-feedback@vilcrow.net</source>
+        <translation>Почта: podiceps-feedback@vilcrow.net</translation>
+    </message>
+    <message>
+        <location filename="../../src/about_widget.cpp" line="181"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
@@ -251,103 +262,108 @@
         <translation>Сохранить Файл</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="254"/>
+        <location filename="../../src/main_window.cpp" line="198"/>
+        <source>The user manual is already open</source>
+        <translation>Руководство пользователя уже открыто</translation>
+    </message>
+    <message>
+        <location filename="../../src/main_window.cpp" line="267"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="256"/>
+        <location filename="../../src/main_window.cpp" line="269"/>
         <source>New...</source>
         <translation>Новый...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="262"/>
+        <location filename="../../src/main_window.cpp" line="275"/>
         <source>Open...</source>
         <translation>Открыть...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="267"/>
+        <location filename="../../src/main_window.cpp" line="280"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="272"/>
+        <location filename="../../src/main_window.cpp" line="285"/>
         <source>Save As...</source>
         <translation>Сохранить как...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="280"/>
+        <location filename="../../src/main_window.cpp" line="293"/>
         <source>Info</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="287"/>
+        <location filename="../../src/main_window.cpp" line="300"/>
         <source>Exit</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="295"/>
-        <location filename="../../src/main_window.cpp" line="325"/>
+        <location filename="../../src/main_window.cpp" line="308"/>
+        <location filename="../../src/main_window.cpp" line="338"/>
         <source>Edit</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="297"/>
+        <location filename="../../src/main_window.cpp" line="310"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="303"/>
+        <location filename="../../src/main_window.cpp" line="316"/>
         <source>Redo</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="311"/>
+        <location filename="../../src/main_window.cpp" line="324"/>
         <source>Add...</source>
         <translation>Добавить...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="317"/>
+        <location filename="../../src/main_window.cpp" line="330"/>
         <source>Find...</source>
         <translation>Найти...</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="331"/>
+        <location filename="../../src/main_window.cpp" line="344"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="339"/>
+        <location filename="../../src/main_window.cpp" line="352"/>
         <source>Preferences</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="348"/>
+        <location filename="../../src/main_window.cpp" line="361"/>
         <source>Tools</source>
         <translation>Инструменты</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="349"/>
+        <location filename="../../src/main_window.cpp" line="362"/>
         <source>Statistics</source>
         <translation>Статистика</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="354"/>
+        <location filename="../../src/main_window.cpp" line="367"/>
         <source>Clear input</source>
         <translation>Очистить ввод</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="363"/>
+        <location filename="../../src/main_window.cpp" line="376"/>
         <source>Help</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="364"/>
+        <location filename="../../src/main_window.cpp" line="377"/>
         <source>User Manual</source>
         <translation>Руководство пользователя</translation>
     </message>
     <message>
-        <location filename="../../src/main_window.cpp" line="368"/>
+        <location filename="../../src/main_window.cpp" line="384"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
@@ -355,34 +371,440 @@
 <context>
     <name>ManualWidget</name>
     <message>
-        <location filename="../../src/manual_widget.cpp" line="75"/>
+        <location filename="../../src/manual_widget.cpp" line="47"/>
         <source>General</source>
         <translation>Общее</translation>
     </message>
     <message>
-        <location filename="../../src/manual_widget.cpp" line="76"/>
+        <location filename="../../src/manual_widget.cpp" line="48"/>
         <source>Dictionary</source>
         <translation>Словарь</translation>
     </message>
     <message>
-        <location filename="../../src/manual_widget.cpp" line="77"/>
+        <location filename="../../src/manual_widget.cpp" line="49"/>
         <source>Preferences</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../../src/manual_widget.cpp" line="78"/>
+        <location filename="../../src/manual_widget.cpp" line="50"/>
         <source>Shortcuts</source>
         <translation>Сочетания клавиш</translation>
-    </message>
-    <message>
-        <location filename="../../src/manual_widget.cpp" line="90"/>
-        <source>Close</source>
-        <translation>Закрыть</translation>
     </message>
     <message>
         <location filename="../../src/manual_widget.cpp" line="98"/>
         <source>User Manual</source>
         <translation>Руководство пользователя</translation>
+    </message>
+</context>
+<context>
+    <name>PodicepsCommandLine</name>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="73"/>
+        <source>Run without options to launch the GUI</source>
+        <translation>Запустите без опций для вызова графического интерфейса пользователя</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="75"/>
+        <source>Add a new word</source>
+        <translation>Добавить новое слово</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="76"/>
+        <source>Delete a word</source>
+        <translation>Удалить слово</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="76"/>
+        <location filename="../../src/podiceps_command_line.cpp" line="77"/>
+        <location filename="../../src/podiceps_command_line.cpp" line="86"/>
+        <source>original</source>
+        <translation>оригинал</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="77"/>
+        <source>Edit a word</source>
+        <translation>Редактировать слово</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="78"/>
+        <source>Print a words</source>
+        <translation>Вывод слов</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="79"/>
+        <source>Set the output format</source>
+        <translation>Задать формат вывода</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="79"/>
+        <location filename="../../src/podiceps_command_line.cpp" line="93"/>
+        <source>format</source>
+        <translation>формат</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="80"/>
+        <source>Number of output lines</source>
+        <translation>Количество выводимых строк</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="80"/>
+        <source>number</source>
+        <translation>количество</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="81"/>
+        <source>Set the reverse order</source>
+        <translation>Установить обратный порядок</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="82"/>
+        <source>Show the statistics</source>
+        <translation>Показать статистику</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="83"/>
+        <source>Specify the dictionary file</source>
+        <translation>Указать файл словаря</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="84"/>
+        <source>path-to-file</source>
+        <translation>путь</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="85"/>
+        <source>Info about the dictionary file</source>
+        <translation>Информация о файлу словаря</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="86"/>
+        <source>Original of the word</source>
+        <translation>Оригинал слова</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="87"/>
+        <source>Transcription of the word</source>
+        <translation>Транскрипция слова</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="88"/>
+        <source>transcription</source>
+        <translation>транскрипция</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="89"/>
+        <source>Translation of the word</source>
+        <translation>Перевод слова</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="89"/>
+        <source>translation</source>
+        <translation>перевод</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="90"/>
+        <source>Status of the word (new, middle, learned)</source>
+        <translation>Статус слова (новое, средний, выучено)</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="91"/>
+        <source>status</source>
+        <translation>статус</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="92"/>
+        <source>Date of the word</source>
+        <translation>Дата добавления слова</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="93"/>
+        <source>Date format</source>
+        <translation>Формат даты</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="94"/>
+        <source>Comment for the word</source>
+        <translation>Комментарий к слову</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="94"/>
+        <source>comment</source>
+        <translation>комментарий</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="95"/>
+        <source>Set a language of the program</source>
+        <translation>Задать язык для программы</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="96"/>
+        <source>language</source>
+        <translation>язык</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="97"/>
+        <source>Info about the program</source>
+        <translation>Информация о программе</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="98"/>
+        <source>Display help</source>
+        <translation>Вывести справку</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="99"/>
+        <source>Display usage help</source>
+        <translation>Вывести справку по использованию</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="100"/>
+        <source>Display version information</source>
+        <translation>Вывести информацию о версии</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="139"/>
+        <source>Specified invalid output format</source>
+        <translation>Задан неверный формат вывода</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="157"/>
+        <location filename="../../src/podiceps_command_line.cpp" line="174"/>
+        <source>The dictionary file isn&apos;t specified.</source>
+        <translation>Файл словаря не указан</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="162"/>
+        <source>The specified file doesn&apos;t exist: %1</source>
+        <translation>Указанный файл не существует</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="271"/>
+        <source>Invalid language. Available:
+</source>
+        <translation>Недопустимый язык. Доступны:
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="287"/>
+        <source>Copyright</source>
+        <translation>Авторские права</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="290"/>
+        <source>Email: podiceps-feedback@vilcrow.net
+</source>
+        <translation>Почта: podiceps-feedback@vilcrow.net
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="291"/>
+        <source>License: GPLv3. See: http://www.gnu.org/licenses/
+</source>
+        <translation>Лицензия: GPLv3. Смотрите: http://www.gnu.org/licenses/
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="292"/>
+        <source>A simple program for maintaining a dictionary of foreign words.
+</source>
+        <translation>Простая программа для ведения словаря иностранных слов.
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="304"/>
+        <source>Add a new word:
+</source>
+        <translation>Добавить новое слово:
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="305"/>
+        <source>podiceps -a -o &lt;original&gt; -t &lt;translation&gt; ...
+</source>
+        <translation>podiceps -a -o &lt;оригинал&gt; -t &lt;перевод&gt; ...
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="306"/>
+        <source>(the &lt;original&gt; is required)
+
+</source>
+        <translation>(&lt;оригинал&gt; обязателен)
+
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="308"/>
+        <source>Delete a word:
+</source>
+        <translation>Удалить слово:
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="309"/>
+        <source>podiceps -d &lt;original&gt;
+
+</source>
+        <translation>podiceps -d &lt;оригинал&gt;
+
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="311"/>
+        <source>Edit a word:
+</source>
+        <translation>Редактировать слово:
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="312"/>
+        <source>podiceps -e &lt;original&gt; -t &lt;translation&gt; ...
+</source>
+        <translation>podiceps -e &lt;оригинал&gt; -t &lt;перевод&gt; ...
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="313"/>
+        <source>(this is a change of the &lt;translation&gt;)
+
+</source>
+        <translation>(это редактирование &lt;перевода&gt;)
+
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="315"/>
+        <source>Print a words:
+</source>
+        <translation>Вывод слов:
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="316"/>
+        <source>podiceps -p -o &lt;original&gt; ... -n 4 -f otD
+</source>
+        <translation>podiceps -p -o &lt;оригинал&gt; ... -n 4 -f otD
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="317"/>
+        <source>(find words matching the filter &lt;original&gt; and print the original, translation and date for 4 of them)
+
+</source>
+        <translation>(поиск слов соответствующих фильтру &lt;оригинал&gt; и печать оригинала, перевода и даты для четырех из них)
+
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="320"/>
+        <source>Set columns for output:
+</source>
+        <translation>Указать выводимые столбцы:
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="321"/>
+        <source>podiceps -p ... -f &lt;format&gt;
+</source>
+        <translation>podiceps -p ... -f &lt;формат&gt;
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="322"/>
+        <source>(available chars: o, T, t, S, D. Example: otD)
+
+</source>
+        <translation>(допустимые символы: o, T, t, S, D. Например: otD)
+
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="338"/>
+        <source>Name:</source>
+        <translation>Имя:</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="340"/>
+        <source>Path:</source>
+        <translation>Путь:</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="342"/>
+        <source>Date:</source>
+        <translation>Дата:</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="344"/>
+        <source>Time:</source>
+        <translation>Время:</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="360"/>
+        <source>New:</source>
+        <translation>Новые:</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="362"/>
+        <source>Middle:</source>
+        <translation>Средний:</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="364"/>
+        <source>Learned:</source>
+        <translation>Выучено:</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="366"/>
+        <source>Total:</source>
+        <translation>Итого:</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="373"/>
+        <source>Unable to open file: %1</source>
+        <translation>Не удается открыть файл: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="396"/>
+        <source>The file contains no words or has an invalid format.</source>
+        <translation>Файл пустой или имеет недопустимый формат.</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="469"/>
+        <source>Unable to open file %1</source>
+        <translation>Не удается открыть файл: %1</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="496"/>
+        <location filename="../../src/podiceps_command_line.cpp" line="527"/>
+        <location filename="../../src/podiceps_command_line.cpp" line="551"/>
+        <location filename="../../src/podiceps_command_line.cpp" line="577"/>
+        <source>The original word isn&apos;t specified.</source>
+        <translation>Оригинал слова не указан.</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="509"/>
+        <source>The word already exists</source>
+        <translation>Слово уже существует</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="540"/>
+        <source>The word doesn&apos;t exist</source>
+        <translation>Слово отсутствует</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="564"/>
+        <source>The word &quot;%1&quot; doesn&apos;t exist</source>
+        <translation>Слово &quot;%1&quot; отсутствует</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="585"/>
+        <source>The word &quot;%1&quot; already exists</source>
+        <translation>Слово &quot;%1&quot; уже существует</translation>
+    </message>
+    <message>
+        <location filename="../../src/podiceps_command_line.cpp" line="623"/>
+        <source>No words matching the specified filters were found</source>
+        <translation>Соотвествующих фильтру слов не найдено</translation>
     </message>
 </context>
 <context>
@@ -481,18 +903,18 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/word_status.cpp" line="101"/>
-        <location filename="../../src/word_status.cpp" line="105"/>
+        <location filename="../../src/word_status.cpp" line="114"/>
+        <location filename="../../src/word_status.cpp" line="118"/>
         <source>new</source>
         <translation>новое</translation>
     </message>
     <message>
-        <location filename="../../src/word_status.cpp" line="108"/>
+        <location filename="../../src/word_status.cpp" line="121"/>
         <source>middle</source>
         <translation>средний</translation>
     </message>
     <message>
-        <location filename="../../src/word_status.cpp" line="111"/>
+        <location filename="../../src/word_status.cpp" line="124"/>
         <source>learned</source>
         <translation>выучено</translation>
     </message>
@@ -627,13 +1049,13 @@
     </message>
     <message>
         <location filename="../../src/table_widget.cpp" line="457"/>
-        <source>&amp;Add</source>
-        <translation>Добавить</translation>
+        <source>&amp;Add...</source>
+        <translation>Добавить...</translation>
     </message>
     <message>
         <location filename="../../src/table_widget.cpp" line="458"/>
-        <source>&amp;Edit</source>
-        <translation>Изменить</translation>
+        <source>&amp;Edit...</source>
+        <translation>Изменить...</translation>
     </message>
     <message>
         <location filename="../../src/table_widget.cpp" line="459"/>
@@ -795,6 +1217,19 @@
         <location filename="../../src/word_edit.cpp" line="313"/>
         <source>Edit a Word</source>
         <translation>Редактировать слово</translation>
+    </message>
+</context>
+<context>
+    <name>WordStatus</name>
+    <message>
+        <location filename="../../src/word_status.cpp" line="77"/>
+        <source>middle</source>
+        <translation>средний</translation>
+    </message>
+    <message>
+        <location filename="../../src/word_status.cpp" line="80"/>
+        <source>learned</source>
+        <translation>выучено</translation>
     </message>
 </context>
 </TS>

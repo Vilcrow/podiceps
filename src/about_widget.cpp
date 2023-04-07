@@ -31,6 +31,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QLabel>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QString>
 #include <QTextEdit>
@@ -58,6 +59,11 @@ QString AboutWidget::getShortLicenseText()
     }
 
     return TextFile::getFileContent(path);
+}
+
+void AboutWidget::openAboutQt()
+{
+    QMessageBox::aboutQt(this, tr("About Qt"));
 }
 
 void AboutWidget::openLicense()
@@ -157,6 +163,10 @@ AboutWidget::AboutWidget(QWidget *parent)
 
     QHBoxLayout *buttonLayout = new QHBoxLayout;
 
+    QPushButton *aboutQtButton = new QPushButton(tr("About Qt"));
+    aboutQtButton->setFixedWidth(100);
+    buttonLayout->addWidget(aboutQtButton);
+
     QPushButton *licenseButton = new QPushButton(tr("License"));
     licenseButton->setFixedWidth(100);
     buttonLayout->addWidget(licenseButton);
@@ -170,6 +180,8 @@ AboutWidget::AboutWidget(QWidget *parent)
 
     setWindowTitle(tr("About"));
 
+    connect(aboutQtButton, &QAbstractButton::clicked,
+            this, &AboutWidget::openAboutQt);
     connect(licenseButton, &QAbstractButton::clicked,
             this, &AboutWidget::openLicense);
     connect(closeButton, &QAbstractButton::clicked,

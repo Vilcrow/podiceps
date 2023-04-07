@@ -77,6 +77,8 @@ void PodicepsApplication::updateSettings()
 PodicepsApplication::PodicepsApplication(int &argc, char **argv)
     : QApplication(argc, argv)
 {
+    setApplicationName("podiceps");
+    setApplicationVersion(PODICEPS_VERSION);
     setLanguage();  // Must be before creating the mainWindow.
     setTheme();
 

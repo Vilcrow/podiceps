@@ -71,6 +71,11 @@ QString Settings::getLanguagePrefix(Language lang)
     return langPrefixes[lang];
 }
 
+QMap<int, QString> Settings::getAvailableLangs()
+{
+    return languages;
+}
+
 Settings::Theme Settings::getTheme()
 {
     Theme ret = LightTheme;

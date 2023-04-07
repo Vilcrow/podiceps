@@ -41,6 +41,7 @@ public:
     static Language getLanguage();
     static QString getLanguageName(Language lang);
     static QString getLanguagePrefix(Language lang);
+    static QMap<int, QString> getAvailableLangs();
 
     static bool isTranscriptionVisible();
     static bool isStatusVisible();

@@ -16,6 +16,7 @@ set(APP_LIB_SOURCE
     main_window.cpp
     manual_widget.cpp
     podiceps_application.cpp
+    podiceps_command_line.cpp
     preferences_widget.cpp
     save_dialog.cpp
     settings.cpp

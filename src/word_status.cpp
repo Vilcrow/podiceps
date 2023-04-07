@@ -72,6 +72,19 @@ void WordStatus::setStatus(const QString str)
     }
 }
 
+void WordStatus::setStatusByTranslation(const QString str)
+{
+    if(str == QObject::tr("middle")) {
+        status = Middle;
+    }
+    else if(str == QObject::tr("learned")) {
+        status = Learned;
+    }
+    else {
+        status = New;
+    }
+}
+
 QString WordStatus::getStatus() const
 {
     QString ret = "new";

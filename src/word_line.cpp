@@ -26,6 +26,7 @@
 /**************************************************************************/
 
 #include "word_line.h"
+#include <QDebug>
 
 QString WordLine::DefaultDateFormat = "yyyy-MM-dd";
 
@@ -107,6 +108,12 @@ void WordLine::setStatus(const QString &pStatus)
     status = WordStatus(pStatus);
 }
 
+void WordLine::setStatusByTranslation(const QString &pStatus)
+{
+    WordStatus s;
+    s.setStatusByTranslation(pStatus);
+    status = s;
+}
 void WordLine::setDate(const QString &pDate, const QString &format)
 {
     QDate d;
@@ -122,7 +129,7 @@ void WordLine::setDate(const QString &pDate, const QString &format)
         date = d;
     }
     else {
-        // Set the warning message.
+        qDebug() << "Invalid date";
     }
 }
 

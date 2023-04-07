@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  word_status.h                                                         */
+/*  podiceps_command_line.h                                               */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,43 +25,90 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef WORD_STATUS_VIL_H
-#define WORD_STATUS_VIL_H
+#ifndef PODICEPS_COMMAND_LINE_VIL_H
+#define PODICEPS_COMMAND_LINE_VIL_H
 
-#include <QColor>
-#include <QMap>
-#include <QString>
+#include "word_line.h"
+#include <QCoreApplication>
+#include <QCommandLineOption>
+#include <QFileInfo>
+#include <QList>
 
-class WordStatus {
+struct Arguments {
+    QString oldOriginal;
+    QString original;
+    QString transcription;
+    QString translation;
+    QString status;
+    QString date;
+    QString dateFormat;
+    QString comment;
+
+    int lineNumber;
+    QString printFormat;
+
+    QString fileName;
+
+    bool reverse;
+};
+
+struct MaxLength {
+    int original;
+    int transcription;
+    int translation;
+    int status;
+    int date;
+    int comment;
+};
+
+class QCommandLineParser;
+
+class PodicepsCommandLine : public QCoreApplication {
+    Q_OBJECT
 public:
-    enum Status { New, Middle, Learned };
+    int run();
 
-    static QColor getColor(int status);
-
-    void setStatus(int pStatus);
-    void setStatus(const QString str);
-    void setStatusByTranslation(const QString str);
-
-    QString getStatus() const;
-    int getStatusInt() const;
-    QString getStatusTranslation() const;
-
-    const WordStatus& operator=(const WordStatus &other);
-    bool operator==(const WordStatus &other) const;
-    bool operator!=(const WordStatus &other) const;
-    bool operator>(const WordStatus &other) const;
-    bool operator<(const WordStatus &other) const;
-    bool operator>=(const WordStatus &other) const;
-    bool operator<=(const WordStatus &other) const;
-
-    WordStatus(const QString str = QString());
-    WordStatus(int pStatus);
-    WordStatus(const WordStatus &other);
-    virtual ~WordStatus();
+    PodicepsCommandLine(int &argc, char **argv);
+    virtual ~PodicepsCommandLine();
 private:
-    Status status;
+    enum ParseResult { Error, VersionRequested, HelpRequested, Ok };
 
-    static QMap<int, QColor> map;
+    QCommandLineParser *parser;
+    QString errorMessage;
+    Arguments args;
+
+    QList<WordLine> words;
+
+    void setupParser();
+    ParseResult parse();
+
+    void setLanguage();
+    bool setLanguage(const QString &lang);
+
+    void printAbout() const;
+    void printUsage() const;
+    void printInfo(const QFileInfo &fileInfo) const;
+    void printStatistics() const;
+
+    bool setWords();
+    void setArguments();
+    void setArgumentsDefault();
+
+    bool writeToFile();
+
+    void addWord(bool *ok);
+    void deleteWord(bool *ok);
+    void editWord(bool *ok);
+    void printWords(bool *ok);
+
+    void setPrintableWords(QList<WordLine> &rWords) const;
+    void setMaxLength(const QList<WordLine> &pWords, MaxLength &len) const;
+    void setPrintStrings(const QList<WordLine> &pWords,
+                         QList<QString> &rStrings,
+                         const MaxLength &len) const;
+    bool isValidFormat(const QString &format) const;
+
+    static QString defaultOutputFormat;
 };
 
 #endif

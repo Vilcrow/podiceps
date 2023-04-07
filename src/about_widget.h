@@ -36,6 +36,7 @@ public:
     AboutWidget(QWidget *parent = nullptr);
     virtual ~AboutWidget();
 private slots:
+    void openAboutQt();
     void openLicense();
     void openFullText();
 private:

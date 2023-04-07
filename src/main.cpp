@@ -26,12 +26,19 @@
 /**************************************************************************/
 
 #include "podiceps_application.h"
+#include "podiceps_command_line.h"
 
 int main(int argc, char **argv)
 {
     // Debugging messages format.
     qSetMessagePattern("%{message} : %{file} : %{line}");
 
-    PodicepsApplication app(argc, argv);
-    return app.exec();
+    if(argc == 1) {
+        PodicepsApplication app(argc, argv);
+        return app.exec();
+    }
+    else {
+        PodicepsCommandLine app(argc, argv);
+        return app.run();
+    }
 }

@@ -54,6 +54,7 @@ public:
     void setOriginal(const QString &pOriginal);
     void setTranslation(const QString &pTranslation);
     void setStatus(const QString &pStatus);
+    void setStatusByTranslation(const QString &pStatus);
     void setDate(const QString &pDate,
                  const QString &format = QString());
     void setCurrentDate();

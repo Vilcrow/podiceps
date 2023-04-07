@@ -194,6 +194,7 @@ void MainWindow::openUserManual()
         manualWidget->show();
     }
     else {
+        manualWidget->raise();
         showMessage(tr("The user manual is already open"));
     }
 }
