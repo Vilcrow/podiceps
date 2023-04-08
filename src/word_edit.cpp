@@ -28,6 +28,7 @@
 #include "word_edit.h"
 #include "status_spin_box.h"
 #include "word_line.h"
+#include <algorithm>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -36,7 +37,6 @@
 #include <QStatusBar>
 #include <QTextEdit>
 #include <QVBoxLayout>
-#include <algorithm>
 
 QList<WordLine> WordEdit::getWords() const
 {

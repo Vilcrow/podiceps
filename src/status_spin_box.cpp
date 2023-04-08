@@ -28,7 +28,7 @@
 #include "status_spin_box.h"
 #include "word_status.h"
 #include <QKeyEvent>
-#include <QLineEdit>
+#include <QLineEdit>  // For the lineEdit() method in the constructor
 
 QString StatusSpinBox::getValue() const
 {

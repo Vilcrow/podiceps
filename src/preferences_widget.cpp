@@ -36,7 +36,6 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QRadioButton>
-#include <QTextStream>
 #include <QVBoxLayout>
 
 void PreferencesWidget::accept()

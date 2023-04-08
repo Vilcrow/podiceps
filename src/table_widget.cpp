@@ -41,6 +41,7 @@
 #include <QMessageBox>
 #include <QRect>
 #include <QSortFilterProxyModel>
+#include <QTableView>
 
 bool TableWidget::isSaved() const
 {
@@ -233,7 +234,9 @@ WordLine TableWidget::getWord(const QModelIndex &index) const
     value = tableModel->data(idx, Qt::DisplayRole);
     QString comment = value.toString();
 
-    ret = WordLine(original, translation, status, date);
+    ret = WordLine(original, translation);
+    ret.setStatusByTranslation(status);
+    ret.setDate(date);
     ret.setTranscription(transcription);
     ret.setComment(comment);
 
@@ -394,7 +397,13 @@ void TableWidget::openWordEdit(const QModelIndexList &indexes)
     QList<WordLine> words = tableModel->getWords();
     WordEdit wordEdit(words, rows, this);
     if(wordEdit.exec() == QDialog::Accepted) {
-        fillTable(wordEdit.getWords());
+        // Deleted all selected words.
+        if(wordEdit.getWords().isEmpty()) {
+            clear();
+        }
+        else {
+            fillTable(wordEdit.getWords());
+        }
         emit actionCompleted(tr("Changes are fixed"));
     }
     else {
@@ -481,7 +490,8 @@ void TableWidget::openHeaderContextMenu(const QPoint &pos)
 {
     QPoint position(mapToGlobal(pos));
     position.setY(position.y()+20);
-    HeaderMenu(position, this);
+    HeaderMenu menu(this);
+    menu.exec(position);
 
     updateSettings();
 }
@@ -521,7 +531,8 @@ TableWidget::TableWidget(QWidget *parent)
     : QWidget(parent), changesSaved(true),
       visibleColumns(TableModel::ColumnCount-1),
       wordDeleteQueue(QList<QModelIndex>()),
-      tableModel(new TableModel(this)), tableView(new QTableView),
+      tableModel(new TableModel(QList<WordLine>(), this)),
+      tableView(new QTableView),
       proxyModel(new QSortFilterProxyModel(this)), actionLog(new ActionLog())
 {
     proxyModel->setSourceModel(tableModel);

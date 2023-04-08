@@ -236,7 +236,6 @@ void Settings::Settings::setThemePaths()
     settings.endGroup();
 }
 
-
 Settings::Settings()
 {
 

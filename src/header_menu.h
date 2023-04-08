@@ -33,7 +33,7 @@
 class HeaderMenu : public QMenu {
     Q_OBJECT
 public:
-    HeaderMenu(const QPoint &position, QWidget *parent = nullptr);
+    HeaderMenu(QWidget *parent = nullptr);
     virtual ~HeaderMenu();
 private slots:
     void updateSettings(bool checked);

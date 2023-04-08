@@ -30,7 +30,6 @@
 
 #include "word_line.h"
 #include <QCoreApplication>
-#include <QCommandLineOption>
 #include <QFileInfo>
 #include <QList>
 

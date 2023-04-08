@@ -226,11 +226,6 @@ int TableModel::getWordsCount(WordStatus::Status status) const
     return ret;
 }
 
-TableModel::TableModel(QObject *parent) : QAbstractTableModel(parent)
-{
-
-}
-
 TableModel::TableModel(QList<WordLine> pWords, QObject *parent)
             : QAbstractTableModel(parent), words(pWords)
 {

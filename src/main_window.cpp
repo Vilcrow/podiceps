@@ -30,9 +30,9 @@
 #include "dictionary_widget.h"
 #include "file_info_widget.h"
 #include "manual_widget.h"
-#include "settings.h"
 #include "preferences_widget.h"
 #include "save_dialog.h"
+#include "settings.h"
 #include "text_file.h"
 #include <QCloseEvent>
 #include <QDebug>
@@ -44,7 +44,6 @@
 #include <QStatusBar>
 #include <QVBoxLayout>
 
-#include <QWindow>
 void MainWindow::updateActions()
 {
     bool hasFileName = !dictWidget->getLastFileName().isEmpty();
@@ -386,11 +385,6 @@ void MainWindow::createHelpMenu()
     connect(openAboutAct, &QAction::triggered, this, &MainWindow::openAbout);
 }
 
-void MainWindow::readSettings()
-{
-
-}
-
 void MainWindow::writeSettings()
 {
     dictWidget->writeSettings();
@@ -399,8 +393,6 @@ void MainWindow::writeSettings()
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), closeImmediately(false)
 {
-    readSettings();
-
     setWindowTitle("podiceps");
     setMinimumSize(1050, 800);
 

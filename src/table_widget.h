@@ -30,9 +30,9 @@
 
 #include "action_log.h"
 #include "table_model.h"
-#include <QTableView>
 #include <QWidget>
 
+class QTableView;
 class QSortFilterProxyModel;
 
 class TableWidget : public QWidget {

@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  table_model.h                                                         */
+/*  action_log_test.cpp                                                   */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,41 +25,37 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef TABLE_MODEL_VIL_H
-#define TABLE_MODEL_VIL_H
+#include "action_log_test.h"
+#include "action_add.h"
 
-#include "word_line.h"
-#include <QAbstractTableModel>
+void ActionLogTest::addAction()
+{
+    ActionLog log;
+    QVERIFY(log.isEmpty());
 
-class QModelIndex;
+    ActionAdd *addAct = new ActionAdd(WordLine());
+    QVERIFY(log.addAction(addAct));
+    QCOMPARE(log.isEmpty(), false);
+    // Try to add again.
+    QCOMPARE(log.addAction(addAct), false);
+}
 
-class TableModel : public QAbstractTableModel {
-    Q_OBJECT
-public:
-    enum { ColumnCount = 6 };
+void ActionLogTest::erase()
+{
+    ActionLog log;
+    QVERIFY(log.isEmpty());
 
-    int rowCount(const QModelIndex &parent) const override;
-    int columnCount(const QModelIndex &parent) const override;
+    ActionAdd *addAct = new ActionAdd(WordLine());
+    QVERIFY(log.addAction(addAct));
 
-    QVariant data(const QModelIndex &index, int role) const override;
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-
-    bool setData(const QModelIndex &index, const QVariant &value,
-                 int role = Qt::EditRole) override;
-    bool insertRows(int position, int rows,
-                    const QModelIndex &index = QModelIndex()) override;
-    bool removeRows(int position, int rows,
-                    const QModelIndex &index = QModelIndex()) override;
-
-    QList<WordLine> getWords() const;
-    int getWordsCount(WordStatus::Status status) const;
-
-    TableModel(QList<WordLine> pWords, QObject *parent = nullptr);
-    virtual ~TableModel();
-private:
-    QList<WordLine> words;
-};
-
-#endif
+    // Invalid arguments.
+    log.erase(0, 1);
+    QCOMPARE(log.isEmpty(), false);
+    log.erase(-1, 0);
+    QCOMPARE(log.isEmpty(), false);
+    log.erase(-10, 50);
+    QCOMPARE(log.isEmpty(), false);
+    // Valid arguments.
+    log.erase(0, 0);
+    QVERIFY(log.isEmpty());
+}

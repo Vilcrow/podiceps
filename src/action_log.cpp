@@ -31,6 +31,10 @@
 bool ActionLog::addAction(ActionBase *act)
 {
     if(act) {
+        if(log.contains(act)) {
+            qDebug() << "Attempt to re-add the action";
+            return false;
+        }
         if(!isLastAction()) {
             eraseAfterCurrent();
         }
@@ -68,12 +72,11 @@ void ActionLog::erase(int begin, int end)
 
     for(int i = end; i >= begin; --i) {
         delete log[i];
-        log[i] = nullptr;
         log.removeAt(i);
     }
 
     if(pos >= begin) {
-        pos = begin == -1 ? -1 : begin -1;
+        pos = begin == -1 ? -1 : begin - 1;
     }
 }
 

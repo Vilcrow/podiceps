@@ -58,7 +58,7 @@ void HeaderMenu::writeSettings()
     Settings::setDateVisible(showDate);
 }
 
-HeaderMenu::HeaderMenu(const QPoint &position, QWidget *parent)
+HeaderMenu::HeaderMenu(QWidget *parent)
     : QMenu(parent)
 {
     readSettings();
@@ -91,8 +91,6 @@ HeaderMenu::HeaderMenu(const QPoint &position, QWidget *parent)
             this, &HeaderMenu::updateSettings);
     connect(alignAct, &QAction::triggered,
             this, &HeaderMenu::updateSettings);
-
-    exec(position);
 }
 
 HeaderMenu::~HeaderMenu()

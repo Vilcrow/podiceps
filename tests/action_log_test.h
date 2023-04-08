@@ -1,5 +1,5 @@
 /**************************************************************************/
-/*  table_model.h                                                         */
+/*  action_log_test.h                                                     */
 /*                                                                        */
 /*  vim:ts=4:sw=4:expandtab                                               */
 /*                                                                        */
@@ -25,41 +25,17 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
-#ifndef TABLE_MODEL_VIL_H
-#define TABLE_MODEL_VIL_H
+#ifndef ACTION_LOG_TEST_VIL_H
+#define ACTION_LOG_TEST_VIL_H
 
-#include "word_line.h"
-#include <QAbstractTableModel>
+#include "action_log.h"
+#include <QTest>
 
-class QModelIndex;
-
-class TableModel : public QAbstractTableModel {
+class ActionLogTest : public QObject {
     Q_OBJECT
-public:
-    enum { ColumnCount = 6 };
-
-    int rowCount(const QModelIndex &parent) const override;
-    int columnCount(const QModelIndex &parent) const override;
-
-    QVariant data(const QModelIndex &index, int role) const override;
-    QVariant headerData(int section, Qt::Orientation orientation,
-                        int role) const override;
-    Qt::ItemFlags flags(const QModelIndex &index) const override;
-
-    bool setData(const QModelIndex &index, const QVariant &value,
-                 int role = Qt::EditRole) override;
-    bool insertRows(int position, int rows,
-                    const QModelIndex &index = QModelIndex()) override;
-    bool removeRows(int position, int rows,
-                    const QModelIndex &index = QModelIndex()) override;
-
-    QList<WordLine> getWords() const;
-    int getWordsCount(WordStatus::Status status) const;
-
-    TableModel(QList<WordLine> pWords, QObject *parent = nullptr);
-    virtual ~TableModel();
-private:
-    QList<WordLine> words;
+private slots:
+    void addAction();
+    void erase();
 };
 
 #endif

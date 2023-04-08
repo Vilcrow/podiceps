@@ -25,12 +25,13 @@
 /* along with this program. If not, see <http://www.gnu.org/licenses/>.   */
 /**************************************************************************/
 
+#include "action_log_test.h"
 #include "status_spin_box_test.h"
 #include "word_add_test.h"
 #include "word_line_test.h"
 #include "word_status_test.h"
-#include <QTest>
 #include <QApplication>
+#include <QTest>
 
 int main(int argc, char **argv)
 {
@@ -38,6 +39,12 @@ int main(int argc, char **argv)
     QApplication app(argc, argv);
 
     int status = 0;
+
+    // ActionLog.
+    {
+        ActionLogTest test;
+        status |= QTest::qExec(&test, argc, argv);
+    }
 
     // StatusSpinBox.
     {

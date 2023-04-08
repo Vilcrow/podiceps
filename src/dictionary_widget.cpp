@@ -34,6 +34,8 @@
 #include <QDebug>
 #include <QFile>
 #include <QMessageBox>
+// For converting QTableView* to QWidget* in the constructor
+#include <QTableView>
 #include <QTextStream>
 #include <QVBoxLayout>
 
@@ -103,14 +105,11 @@ void DictionaryWidget::writeToFile(const QString &fileName)
 
 bool DictionaryWidget::writeToXmlFile(const QString &fileName)
 {
-    bool success = false;
-
     QFile xmlFile(fileName);
     if(!xmlFile.open(QFile::WriteOnly | QFile::Text)) {
         QMessageBox::information(this, tr("Unable to open file"),
                                  xmlFile.errorString());
-        success = false;
-        return success;
+        return false;
     };
 
     QTextStream xmlContent(&xmlFile);
@@ -127,9 +126,8 @@ bool DictionaryWidget::writeToXmlFile(const QString &fileName)
 
     xmlContent << document.toString();
     xmlFile.close();
-    success = true;
 
-    return success;
+    return true;
 }
 
 void DictionaryWidget::setLastFileName(const QString &newLast)

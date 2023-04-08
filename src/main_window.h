@@ -91,6 +91,7 @@ private:
     QMenu *helpMenu;
     QAction *openManualAct;
     QAction *openAboutAct;
+
     ManualWidget *manualWidget;
 
     void createMenus();
@@ -99,7 +100,6 @@ private:
     void createToolsMenu();
     void createHelpMenu();
 
-    void readSettings();
     void writeSettings();
 };
 

@@ -270,7 +270,10 @@ bool PodicepsCommandLine::setLanguage(const QString &lang)
     if(!result) {
         QString msg = tr("Invalid language. Available:\n");
         for(int l : langs.keys()) {
-            msg += langs[l] + "\n";
+            msg += langs[l];
+            if(l != langs.lastKey()) {
+                msg += "\n";
+            }
         }
 
         errorMessage = msg;

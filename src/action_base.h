@@ -28,8 +28,8 @@
 #ifndef ACTION_BASE_VIL_H
 #define ACTION_BASE_VIL_H
 
-#include <QObject>
 #include "word_line.h"
+#include <QObject>
 
 class ActionBase : public QObject {
     Q_OBJECT
