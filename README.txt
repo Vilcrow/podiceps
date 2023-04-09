@@ -18,7 +18,27 @@ You should have received a copy of the GNU General Public License along with thi
         - cmake 3.16 or later;
 
     Building:
-        1) apt install build-essential qtbase5-dev qttools5-dev cmake
-        2) mkdir build/ && cd build/
-        3) cmake ../
-        4) cmake --build .
+        1. Install the required components:
+
+            apt install build-essential qtbase5-dev qttools5-dev cmake
+
+        2. Generate localizations:
+
+            lrelease resources/translations/*.ts
+
+        3. Create the 'build' directory and navigate to it:
+
+            mkdir build/ && cd build/
+
+        4. Execute next commands:
+            4.1 For debugging:
+
+                cmake ../
+
+            4.2 For release:
+
+                cmake -DDEBUGGING=OFF../
+
+            cmake --build .
+
+        5. The executable file will appear in the 'src' directory.
